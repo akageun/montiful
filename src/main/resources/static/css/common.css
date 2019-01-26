@@ -1,0 +1,39 @@
+body {
+    /*background: #f9f9f9;*/
+    font-size: 13px;
+}
+
+.bg-royalblue {
+    background-color: #4169E1 !important;
+}
+
+
+.card {
+    margin-bottom: 15px;
+    border-radius: 0;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .1);
+}
+
+.header-top {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .1)
+}
+
+.btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .7;
+    border-radius: .2rem;
+}
+
+main > .container-fluid {
+    padding: 60px 15px 0;
+}
+
+.footer {
+    background-color: #f5f5f5;
+}
+
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
