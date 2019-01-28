@@ -4,14 +4,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- *
+ * Dashboard Web Controller
  *
  * @author akageun
  */
 @Controller
 public class DashboardWeb {
 
-    @GetMapping(value = {"/", "/dashboard"})
+    /**
+     * Dashboard
+     *
+     * @return
+     */
+    @GetMapping(value = {"/"})
     public String dashboard() {
         return "dashboard";
     }
