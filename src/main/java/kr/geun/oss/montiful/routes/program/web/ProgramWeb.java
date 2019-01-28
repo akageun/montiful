@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * Program Web Controller
@@ -56,5 +57,39 @@ public class ProgramWeb {
 
         modelAndView.setViewName("programManage");
         return modelAndView;
+    }
+
+    /**
+     * Program Single View
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @GetMapping(value = "/program/{programIdx}")
+    public ModelAndView getProgramSingleView(@Valid ProgramDTO.GetReq param, BindingResult result) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (result.hasErrors()) {
+            modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+            modelAndView.setViewName("/err/notFound");
+            return modelAndView;
+        }
+
+        Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
+        if (optionalProgramEntity.isPresent() == false) {
+            modelAndView.setStatus(HttpStatus.NOT_FOUND);
+            modelAndView.setViewName("/err/notFound");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("result", optionalProgramEntity.get());
+
+        //TODO : URL 관련 소스 추가해야함.
+
+        modelAndView.setViewName("programSingle");
+
+        return modelAndView;
+
     }
 }

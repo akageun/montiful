@@ -24,4 +24,11 @@ public class ProgramDTO {
     public static class PageRes {
 
     }
+
+    @Data
+    @NoArgsConstructor
+    public static class GetReq {
+        @Min(0)
+        private Long programIdx;
+    }
 }
