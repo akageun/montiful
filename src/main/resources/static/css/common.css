@@ -7,7 +7,6 @@ body {
     background-color: #4169E1 !important;
 }
 
-
 .card {
     margin-bottom: 15px;
     border-radius: 0;
@@ -36,4 +35,8 @@ main > .container-fluid {
 .footer > .container {
     padding-right: 15px;
     padding-left: 15px;
+}
+
+.modal-footer.btn-footer {
+    padding: 0px;
 }

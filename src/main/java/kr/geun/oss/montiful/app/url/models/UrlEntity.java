@@ -61,7 +61,7 @@ public class UrlEntity {
 	@Column(name = "notify", nullable = false)
 	private boolean notify; //알림여부
 
-	@Column(name = "created_user_id", nullable = false)
+	@Column(name = "created_user_id", nullable = false, updatable = false)
 	private String createdUserId;
 
 	@Column(name = "updated_user_id", nullable = false)

@@ -18,41 +18,42 @@ import static org.mockito.BDDMockito.given;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {ProgramServiceImpl.class})
+@SpringBootTest(classes = { ProgramServiceImpl.class })
 public class ProgramServiceImplTest {
 
-    @MockBean
-    private ProgramRepo programRepo;
+	@MockBean
+	private ProgramRepo programRepo;
 
-    @Autowired
-    private ProgramService programService;
+	@Autowired
+	private ProgramService programService;
 
-    @Test
-    public void pageTest() {
+//	@Test
+	//	public void pageTest() {
+	//
+	//	}
 
-    }
+	@Test
+	public void getTest() {
+		final Long programIdx = 1L;
+		ProgramEntity param;
 
-    @Test
-    public void getTest() {
-        final Long programIdx = 1L;
-        ProgramEntity param;
-        GIVEN:
-        {
-            param = ProgramEntity.builder().programName("Test").memo("Memo Text").build();
-            given(programRepo.findById(programIdx)).willReturn(Optional.of(param));
-        }
+		GIVEN:
+		{
+			param = ProgramEntity.builder().programName("Test").memo("Memo Text").build();
+			given(programRepo.findById(programIdx)).willReturn(Optional.of(param));
+		}
 
-        Optional<ProgramEntity> optionalProgramEntity;
+		Optional<ProgramEntity> optionalProgramEntity;
 
-        WHEN:
-        {
-            optionalProgramEntity = programService.get(programIdx);
-        }
+		WHEN:
+		{
+			optionalProgramEntity = programService.get(programIdx);
+		}
 
-        THEN:
-        {
-            Assert.assertTrue(optionalProgramEntity.isPresent());
-            Assert.assertEquals(param.getProgramName(), optionalProgramEntity.get().getProgramName());
-        }
-    }
+		THEN:
+		{
+			Assert.assertTrue(optionalProgramEntity.isPresent());
+			Assert.assertEquals(param.getProgramName(), optionalProgramEntity.get().getProgramName());
+		}
+	}
 }
