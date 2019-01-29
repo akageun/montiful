@@ -6,6 +6,8 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Program Manage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"/>
+    <link href="/webjars/select2/4.0.5/css/select2.min.css" rel="stylesheet"/>
 </head>
 <div layout:fragment="page_content" id="page_content">
     <div class="container-fluid">
@@ -107,6 +109,11 @@
                                    class="form-control form-control-sm">
                         </div>
 
+                        <div class="form-group">
+                            <select id="url_idxs" name="urlIdxs" class="form-control select2-multiple select2-bind"
+                                    multiple></select>
+                        </div>
+
                         <!-- Textarea -->
                         <div class="form-group">
                             <textarea class="form-control form-control-sm" rows="5" id="memo" name="memo"
@@ -138,12 +145,48 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="includeScripts">
+    <script src="/webjars/select2/4.0.5/js/select2.min.js"></script>
+</th:block>
 <th:block layout:fragment="scripts">
     <script>
+        function bindSelect2() {
+            $(".select2-bind").select2({
+                placeholder: "연결할 URL 이름을 검색하세요.",
+                theme: "bootstrap",
+                minimumInputLength: 1,
+                delay: 250,
+                ajax: {
+                    type: 'GET',
+                    url: '/api/v1/program/url/search',
+                    dataType: "json",
+                    contentType: 'application/json;',
+                    data: function (params) {
+                        return {
+                            keyword: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+
+                            results: $.map(data.data, function (item) {
+                                return {
+                                    text: item.urlName,
+                                    id: item.urlIdx
+                                }
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
         function addOpenModal() {
             $("#programFrm")[0].reset();
             $("#programModal #modifyData").hide();
             $("#programModal").modal();
+
+            bindSelect2();
         }
 
         function save() {
@@ -198,6 +241,9 @@
                     $("#programFrm [name='programIdx']").val(data.data.programIdx);
                     $("#programFrm [name='programName']").val(data.data.programName);
                     $("#programFrm [name='memo']").val(data.data.memo);
+                    $("#programFrm [name='urlIdxs']").val(data.data.urlIdxs);
+
+
 
                     $("#programFrm #createdAt").text(data.data.createdAt);
                     $("#programFrm #createdUserId").text(data.data.createdUserId);
@@ -206,6 +252,8 @@
 
                     $("#programModal #modifyData").show();
                     $("#programModal").modal();
+
+                    bindSelect2();
                 }
             });
 

@@ -3,6 +3,8 @@ package kr.geun.oss.montiful.routes.program.api;
 import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
+import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,9 @@ public class ProgramV1Api {
 
 	@Autowired
 	private ProgramService programService;
+
+	@Autowired
+	private UrlService urlService;
 
 	/**
 	 * Single Data
@@ -123,6 +128,24 @@ public class ProgramV1Api {
 		ProgramEntity dbInfo = programService.modify(modifyParam);
 
 		return ResponseEntity.status(HttpStatus.OK).body(Res.of(true, "SUCCESS", dbInfo));
+	}
+
+	/**
+	 * Search API
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	@GetMapping("/url/search")
+	public ResponseEntity<Res> urlSearch(@Valid ProgramDTO.UrlSearch param, BindingResult result) {
+		if (result.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
+		}
+
+		List<UrlEntity> searchList = Optional.ofNullable(urlService.urlNameSearch(param.getKeyword())).orElseGet(Collections::emptyList);
+
+		return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
 	}
 
 	/**

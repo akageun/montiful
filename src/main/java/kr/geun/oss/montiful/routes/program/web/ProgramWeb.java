@@ -5,6 +5,7 @@ import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
+import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,16 +40,15 @@ public class ProgramWeb {
 	 */
 	@GetMapping(value = "/program")
 	public ModelAndView getProgramPage(@Valid ProgramDTO.PageReq param, BindingResult result) {
-		ModelAndView modelAndView = new ModelAndView();
 
 		if (result.hasErrors()) {
-			modelAndView.setStatus(HttpStatus.BAD_REQUEST);
-			modelAndView.setViewName("/err/notFound");
-			return modelAndView;
+			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "/err/notFound");
 		}
 
 		Page<ProgramEntity> rtnList = programService.page(
 			PageRequestWrapper.of(param.getPageNumber(), 1, Sort.by(Sort.Direction.DESC, "programIdx")));
+
+		ModelAndView modelAndView = new ModelAndView();
 
 		modelAndView.addObject("paramInfo", param);
 		modelAndView.addObject("resultList", rtnList);

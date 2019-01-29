@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Program DTO
@@ -36,6 +37,8 @@ public class ProgramDTO {
 		@Size(min = 1, max = 100)
 		private String programName;
 		private String memo;
+
+		private List<Long> urlIdxs;
 	}
 
 	@Data
@@ -48,6 +51,17 @@ public class ProgramDTO {
 		@Size(min = 1, max = 100)
 		private String programName;
 		private String memo;
+
+		private List<Long> urlIdxs;
+	}
+
+	@Data
+	@NoArgsConstructor
+	public static class UrlSearch {
+		@NotBlank
+		@Size(min = 1, max = 100)
+		private String keyword;
+
 	}
 
 	@Data

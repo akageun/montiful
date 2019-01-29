@@ -1,16 +1,14 @@
 package kr.geun.oss.montiful.app.program.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -24,30 +22,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "program_url",
-	indexes = {
-		@Index (
-			name = "IDX_program_url",
-			columnList = "program_idx, url_idx",
-			unique = true
-			)
-		}
-	)
+@Table(name = "program_url")
+@IdClass(ProgramUrlEntity.CompositeKey.class)
 //@formatter:on
 public class ProgramUrlEntity {
 
 	@Id
-	@Column(name = "program_url_idx", nullable = false)
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long programUrlIdx;
-
 	@Column(name = "program_idx", nullable = false)
 	private Long programIdx;
 
+	@Id
 	@Column(name = "url_idx", nullable = false)
 	private Long urlIdx;
 
-	@Column(name = "created_user_id", nullable = false)
+	@Column(name = "created_user_id", nullable = false, updatable = false)
 	private String createdUserId;
 
 	@Column(name = "updated_user_id", nullable = false)
@@ -72,6 +60,15 @@ public class ProgramUrlEntity {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	@Getter
+	@NoArgsConstructor
+	public static class CompositeKey implements Serializable {
+		private static final long serialVersionUID = 1L; //TODO : 수정해야함.
+
+		private Long programIdx;
+		private Long urlIdx;
 	}
 
 }
