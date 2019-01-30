@@ -8,6 +8,9 @@ package kr.geun.oss.montiful.core.constants;
 public class Conts {
 
 	public static class Redis {
+		public static final String REDIS_TEMPLATE_BEAN_NM = "redisTemplate";
+		public static final String URL_CHECK_ID = "url:check:id";
+		public static final String URL_HIST_PREFIX = "url:hist:";
 
 	}
 

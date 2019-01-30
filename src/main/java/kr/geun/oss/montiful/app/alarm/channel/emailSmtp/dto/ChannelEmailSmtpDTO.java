@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.alarm.channel.emailSmtp.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -48,6 +49,7 @@ public class ChannelEmailSmtpDTO {
 
 	@Data
 	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class AlarmValue {
 		private String hostname;
 		private int smtpPort;

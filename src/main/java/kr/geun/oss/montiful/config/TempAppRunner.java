@@ -168,12 +168,6 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
 
-
-		AlarmEntity eeee =
-			alarmRepo.save(AlarmEntity.builder().alarmChannel(AlarmChannelCd.LINE_NOTIFY.name()).alarmValue(
-				"{\"accessToken\":\"1234\"}").alarmName(
-			"11").createdUserId(userId).updatedUserId(userId).build());
-		urlAlarmRepo.save(UrlAlarmEntity.builder().alarmIdx(eeee.getAlarmIdx()).urlIdx(14L).createdUserId(userId).updatedUserId(userId).build());
         //@formatter:on
 
 	}

@@ -1,6 +1,7 @@
 package kr.geun.oss.montiful.app.alarm.common.service;
 
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
+import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,4 +24,13 @@ public interface AlarmService {
 	AlarmEntity add(AlarmEntity param);
 
 	AlarmEntity modify(AlarmEntity param);
+
+	/**
+	 * Alarm Register
+	 *
+	 * @param list
+	 */
+	void alarmRegister(List<MonitorDTO.CheckRes> list);
+
+	void sendAlarm(MonitorDTO.CheckRes checkRes);
 }
