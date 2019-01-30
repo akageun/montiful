@@ -22,8 +22,8 @@ public class AsyncConfig {
 	 *
 	 * @return
 	 */
-	@Bean(name = "worker")
-	public TaskExecutor getAsyncExecutor() {
+	@Bean
+	public TaskExecutor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setThreadNamePrefix("worker-");
 		executor.setCorePoolSize(10); //min
