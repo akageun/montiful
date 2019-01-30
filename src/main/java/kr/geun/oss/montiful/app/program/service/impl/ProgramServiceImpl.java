@@ -38,7 +38,7 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	/**
-	 * Get
+	 * GetReq
 	 *
 	 * @param programIdx
 	 * @return

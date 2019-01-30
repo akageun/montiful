@@ -27,41 +27,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = ProgramWeb.class)
 public class ProgramWebTest {
 
-    @Autowired
-    private MockMvc mvc;
+	@Autowired
+	private MockMvc mvc;
 
-    @MockBean
-    private ProgramService programService;
+	@MockBean
+	private ProgramService programService;
 
-    //    @Test
-    //    public void programWeb404Test() throws Exception {
-    //        //@formatter:off
+	//    @Test
+	//    public void programWeb404Test() throws Exception {
+	//        //@formatter:off
 //		mvc.perform(get("/program"))
 //			.andExpect(status().isBadRequest())
 //			;
 //		//@formatter:on
-    //    }
+	//    }
 
-    @Test
-    public void programWebTest() throws Exception {
+	@Test
+	public void programWebTest() throws Exception {
 
-        //@formatter:off
-        Pageable pageable = PageRequestWrapper.of(0, 10, new Sort(Sort.Direction.DESC, "programIdx"));
+		//@formatter:off
+        Pageable pageable = PageRequestWrapper.of(1, 20, Sort.by(Sort.Direction.DESC, "programIdx"));
 
         List<ProgramEntity> programEntityList = new ArrayList<>();
         programEntityList.add(ProgramEntity.builder().programName("Test").build());
 
-        given(programService.page(pageable)).willReturn(new PageImpl<>(programEntityList, pageable , 1));
+        given(programService.page(pageable)).willReturn(new PageImpl<>(programEntityList, pageable , programEntityList.size()));
 
 		mvc.perform(
 		        get("/program")
-                    .param("pageNumber", "0")
+                    .param("pageNumber", "1")
         )
 			.andExpect(status().isOk())
-			.andExpect(view().name("programManage"))
+			.andExpect(view().name("program/programManage"))
             .andExpect(model().attributeExists("resultList", "paramInfo", "pagination"))
 			;
 		//@formatter:on
-    }
+	}
 
 }

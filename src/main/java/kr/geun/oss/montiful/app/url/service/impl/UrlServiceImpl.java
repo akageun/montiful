@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.url.service.impl;
 
+import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
@@ -41,7 +42,7 @@ public class UrlServiceImpl implements UrlService {
 	}
 
 	/**
-	 * Get
+	 * GetReq
 	 *
 	 * @param urlIdx
 	 * @return
@@ -90,13 +91,14 @@ public class UrlServiceImpl implements UrlService {
 	}
 
 	/**
-	 * Program Mapping URL List
+	 * Url Mapping Alarm List
 	 *
-	 * @param programIdx
+	 * @param urlIdx
 	 * @return
 	 */
 	@Override
-	public List<UrlEntity> programUrlList(Long programIdx) {
-		return programUrlRepo.findByProgramUrlList(programIdx);
+	public List<AlarmEntity> urlAlarmList(Long urlIdx) {
+		return urlRepo.findUrlAlarmList(urlIdx);
 	}
+
 }

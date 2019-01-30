@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.url.service;
 
+import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public interface UrlService {
 	Page<UrlEntity> page(Pageable pageable);
 
 	/**
-	 * Get
+	 * GetReq
 	 *
 	 * @param urlIdx
 	 * @return
@@ -55,11 +56,11 @@ public interface UrlService {
 	List<UrlEntity> urlNameSearch(String keyword);
 
 	/**
-	 * Program Mapping URL List
+	 * Url Mapping Alarm List
 	 *
-	 * @param programIdx
+	 * @param urlIdx
 	 * @return
 	 */
-	List<UrlEntity> programUrlList(Long programIdx);
+	List<AlarmEntity> urlAlarmList(Long urlIdx);
 
 }

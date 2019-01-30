@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum NotificationChannelCd {
+public enum AlarmChannelCd {
 
 	//@formatter:off
 	LINE_NOTIFY("Line Notify","LineNotifyChannelService"),

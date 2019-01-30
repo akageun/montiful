@@ -18,4 +18,20 @@ public class UrlDTO {
 		@Min(0)
 		private int pageNumber;
 	}
+
+	@Data
+	@NoArgsConstructor
+	public static class GetReq {
+
+		@Min(0)
+		private Long urlIdx;
+
+	}
+
+	@Data
+	@NoArgsConstructor
+	public static class ModifyPage {
+		@Min(0)
+		private Long urlIdx;
+	}
 }

@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.core.utils;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,5 +23,12 @@ public class CmnUtils {
         mav.setStatus(status);
         mav.setViewName(viewName);
         return mav;
+    }
+
+    public static <T> T copyProperties(Object param, Class<T> tClass) throws IllegalAccessException, InstantiationException {
+        T newInstance = tClass.newInstance();
+        BeanUtils.copyProperties(param, newInstance);
+
+        return newInstance;
     }
 }

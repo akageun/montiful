@@ -2,6 +2,8 @@ package kr.geun.oss.montiful.app.program.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +18,6 @@ import java.time.LocalDateTime;
  *
  * @author akageun
  */
-//@formatter:off
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,7 +25,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "program_url")
 @IdClass(ProgramUrlEntity.CompositeKey.class)
-//@formatter:on
 public class ProgramUrlEntity {
 
 	@Id
@@ -69,6 +69,23 @@ public class ProgramUrlEntity {
 
 		private Long programIdx;
 		private Long urlIdx;
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (obj != null && getClass().isAssignableFrom(obj.getClass())) {
+				CompositeKey other = (CompositeKey) obj;
+				return new EqualsBuilder().append(programIdx, other.programIdx).append(urlIdx, other.urlIdx).build();
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return new HashCodeBuilder().append(programIdx).append(urlIdx).build();
+		}
 	}
 
 }

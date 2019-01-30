@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Getter
 @AllArgsConstructor

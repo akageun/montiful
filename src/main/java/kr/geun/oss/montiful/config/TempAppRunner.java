@@ -1,12 +1,17 @@
 package kr.geun.oss.montiful.config;
 
+import kr.geun.oss.montiful.app.alarm.common.cd.AlarmChannelCd;
+import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
+import kr.geun.oss.montiful.app.alarm.common.repo.AlarmRepo;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
+import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +40,12 @@ public class TempAppRunner implements CommandLineRunner {
 
 	@Autowired
 	private ProgramUrlRepo programUrlRepo;
+
+	@Autowired
+	private AlarmRepo alarmRepo;
+
+	@Autowired
+	private UrlAlarmRepo urlAlarmRepo;
 
 	@Autowired
 	private Environment env;
@@ -113,7 +124,7 @@ public class TempAppRunner implements CommandLineRunner {
 			.urlName("테스트 23525235")
                     .connectionTimeout(200)
                     .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
+                    .healthStatusCd(HealthStatusCd.ERROR.name())
                     .method(HttpMethod.POST.name())
                     .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHK.name())
                     .createdUserId(userId)
@@ -126,7 +137,7 @@ public class TempAppRunner implements CommandLineRunner {
 			.urlName("테스트 ㅁㄴㄹㅇㅁㄴㅇㄻㄴ")
                     .connectionTimeout(200)
                     .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
+                    .healthStatusCd(HealthStatusCd.ERROR.name())
                     .method(HttpMethod.GET.name())
                     .statusCheckTypeCd(StatusCheckTypeCd.SUCCESS_2XX_CHK.name())
                     .createdUserId(userId)
@@ -139,7 +150,7 @@ public class TempAppRunner implements CommandLineRunner {
 			  	.urlName("테스트 11")
                     .connectionTimeout(200)
                     .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
+                    .healthStatusCd(HealthStatusCd.WARNING.name())
                     .method(HttpMethod.POST.name())
                     .statusCheckTypeCd(StatusCheckTypeCd.SAME_TEXT.name())
                     .statusCheckValue("OK")
@@ -157,6 +168,12 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
 
+
+		AlarmEntity eeee =
+			alarmRepo.save(AlarmEntity.builder().alarmChannel(AlarmChannelCd.LINE_NOTIFY.name()).alarmValue(
+				"{\"accessToken\":\"1234\"}").alarmName(
+			"11").createdUserId(userId).updatedUserId(userId).build());
+		urlAlarmRepo.save(UrlAlarmEntity.builder().alarmIdx(eeee.getAlarmIdx()).urlIdx(14L).createdUserId(userId).updatedUserId(userId).build());
         //@formatter:on
 
 	}

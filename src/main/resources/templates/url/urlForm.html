@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>URL Manage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"/>
+    <link href="/webjars/select2/4.0.5/css/select2.min.css" rel="stylesheet"/>
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">URL Manage</h5>
+                        <p class="card-text">
+                            테테테테테텥 테테테테테텥 테테테테테텥 테테테테테텥
+                        </p>
+                        <form id="frm" onsubmit="return false;" class="form-horizontal">
+                            <input type="hidden" name="urlIdx" th:if="${result != null}" th:value="${result.urlIdx}"/>
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-sm" name="urlName" placeholder="URL Name"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-sm" name="url" placeholder="URL"/>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="connection_timeout">Connection Timeout</label>
+                                        <select class="form-control form-control-sm" id="connection_timeout" name="connectionTimeout">
+                                            <option th:each="to : ${timeout}" th:value="${to}" th:text="|${to}ms|"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12  col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="read_timeout">Read Timeout</label>
+                                        <select class="form-control form-control-sm" id="read_timeout" name="readTimeout">
+                                            <option th:each="to : ${timeout}" th:value="${to}" th:text="|${to}ms|"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12  col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="method">Method</label>
+                                        <select class="form-control form-control-sm" id="method" name="method">
+                                            <option value="GET">GET</option>
+                                            <option value="POST">POST</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12  col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="status_check_type_cd">Status Check Type</label>
+                                        <select class="form-control form-control-sm" id="status_check_type_cd" name="statusCheckTypeCd">
+                                            <option th:each="sct : ${statusCheckTypeCd}" th:value="${sct}" th:text="|${sct}|"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group align-middle">
+                                <label class="control-label" for="url_alarm">Alarm Link</label>
+                                <label class="control-label">
+                                    <button class="badge badge-primary dismiss" role="button"
+                                            data-toggle="popover" data-trigger="focus"
+                                            title="Alarm" data-content="Alarm Manage로 가서 알림을 먼저 등록하셔야합니다."
+                                    >
+                                        <i class="fas fa-question-circle"></i>
+                                    </button>
+                                </label>
+
+                                <select id="url_alarm" name="alarmIdx" class="form-control form-control-sm select2-bind"
+                                        multiple></select>
+                            </div>
+                            <div class="form-group">
+                                    <textarea class="form-control form-control-sm" id="memo" name="memo" rows="10" placeholder="Memo"
+                                              style="resize: none;"></textarea>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-outline-success btn-sm" onclick="save(); return false;">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<th:block layout:fragment="includeScripts">
+    <script src="/webjars/select2/4.0.5/js/select2.min.js"></script>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script th:if="${result != null}">
+        $(document).ready(function () {
+            getData();
+        });
+
+        function getData() {
+            var urlIdx = $("#frm [name='urlIdx']").val();
+
+            $.ajax({
+                url: "/api/v1/url/" + urlIdx,
+                type: 'GET',
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+                    $.each(data.data.alarmList, function (i, item) {
+                        console.log(item);
+                        $('#url_alarm').append($('<option>', {
+                            value: item.alarmIdx,
+                            text: item.alarmName
+                        }).attr("selected", 'selected'));
+                    });
+
+                    console.log(data.data.result);
+
+                    $("#frm [name='urlName']").val(data.data.result.urlName);
+                    $("#frm [name='url']").val(data.data.result.url);
+                    $("#frm [name='connectionTimeout']").val(data.data.result.connectionTimeout);
+                    $("#frm [name='readTimeout']").val(data.data.result.readTimeout);
+                    $("#frm [name='method']").val(data.data.result.method);
+                    $("#frm [name='statusCheckTypeCd']").val(data.data.result.statusCheckTypeCd);
+                    //$("#frm [name='alarmIdx']").val(data.data.result.alarmIdx);
+                    $("#frm [name='memo']").val(data.data.result.memo);
+
+
+                    $("#frm #createdAt").text(data.data.result.createdAt);
+                    $("#frm #createdUserId").text(data.data.result.createdUserId);
+                    $("#frm #updatedAt").text(data.data.result.updatedAt);
+                    $("#frm #updatedUserId").text(data.data.result.updatedUserId);
+
+                    $("#frm #modifyData").show();
+                    runSelect2();
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function save() {
+            $.ajax({
+                url: "/api/v1/url",
+                data: $("#frm").serialize(),
+                type: 'POST',
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+                    location.href = '/url';
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('.dismiss').popover({
+                trigger: 'focus'
+            });
+
+            runSelect2();
+        });
+
+        function runSelect2() {
+            $(".select2-bind").select2({
+                placeholder: "검색 후 알림을 선택해주세요.",
+                theme: "bootstrap",
+                minimumInputLength: 1,
+                delay: 250,
+                ajax: {
+                    type: 'GET',
+                    url: '/api/v1/alarm/search',
+                    dataType: "json",
+                    contentType: 'application/json;',
+                    data: function (params) {
+                        return {
+                            keyword: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+
+                            results: $.map(data.data, function (item) {
+                                return {
+                                    text: item.alarmName,
+                                    id: item.alarmIdx
+                                }
+                            })
+                        };
+                    }
+                }
+            });
+        }
+    </script>
+</th:block>
+</html>

@@ -46,17 +46,17 @@ public class ProgramWeb {
 		}
 
 		Page<ProgramEntity> rtnList = programService.page(
-			PageRequestWrapper.of(param.getPageNumber(), 1, Sort.by(Sort.Direction.DESC, "programIdx")));
+			PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "programIdx")));
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
 
-		modelAndView.addObject("paramInfo", param);
-		modelAndView.addObject("resultList", rtnList);
-		modelAndView.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 1));
+		mav.addObject("paramInfo", param);
+		mav.addObject("resultList", rtnList);
+		mav.addObject("pagination",
+			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
 
-		modelAndView.setViewName("program/programManage");
-		return modelAndView;
+		mav.setViewName("program/programManage");
+		return mav;
 	}
 
 	/**
@@ -68,28 +68,24 @@ public class ProgramWeb {
 	 */
 	@GetMapping(value = "/program/{programIdx}")
 	public ModelAndView getProgramSingleView(@Valid ProgramDTO.GetReq param, BindingResult result) {
-		ModelAndView modelAndView = new ModelAndView();
-
 		if (result.hasErrors()) {
-			modelAndView.setStatus(HttpStatus.BAD_REQUEST);
-			modelAndView.setViewName("/err/notFound");
-			return modelAndView;
+			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "/err/notFound");
 		}
 
 		Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
 		if (optionalProgramEntity.isPresent() == false) {
-			modelAndView.setStatus(HttpStatus.NOT_FOUND);
-			modelAndView.setViewName("/err/notFound");
-			return modelAndView;
+			return CmnUtils.mav(HttpStatus.NOT_FOUND, "/err/notFound");
 		}
 
-		modelAndView.addObject("result", optionalProgramEntity.get());
+		ModelAndView mav = new ModelAndView();
+
+		mav.addObject("result", optionalProgramEntity.get());
 
 		//TODO : URL 관련 소스 추가해야함.
 
-		modelAndView.setViewName("program/programSingle");
+		mav.setViewName("program/programSingle");
 
-		return modelAndView;
+		return mav;
 
 	}
 }

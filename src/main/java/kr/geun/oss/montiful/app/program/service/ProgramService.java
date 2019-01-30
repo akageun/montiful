@@ -24,7 +24,7 @@ public interface ProgramService {
 	Page<ProgramEntity> page(Pageable pageable);
 
 	/**
-	 * Get
+	 * GetReq
 	 *
 	 * @param programIdx
 	 * @return

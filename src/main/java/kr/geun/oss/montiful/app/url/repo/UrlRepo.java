@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author akageun
  */
-public interface UrlRepo extends JpaRepository<UrlEntity, Long> {
+public interface UrlRepo extends JpaRepository<UrlEntity, Long>, UrlRepoSupt {
 
     /**
      * urlName Like Search
