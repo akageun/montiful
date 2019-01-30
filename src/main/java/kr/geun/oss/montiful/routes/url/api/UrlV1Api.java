@@ -1,17 +1,17 @@
 package kr.geun.oss.montiful.routes.url.api;
 
+import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.response.Res;
+import kr.geun.oss.montiful.core.utils.SecUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
@@ -45,5 +45,66 @@ public class UrlV1Api {
 		rtnMap.put("alarmList", urlService.urlAlarmList(param.getUrlIdx()));
 
 		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", rtnMap));
+	}
+
+	@PostMapping(value = "")
+	public ResponseEntity<UrlEntity> addUrl(@Valid UrlDTO.Add param, BindingResult result) {
+		if (result.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UrlEntity());
+		}
+
+		//TODO : 중복된 이름 검색
+
+		String userId = SecUtils.userId();
+
+		//@formatter:off
+		UrlEntity dbInfo = UrlEntity.builder()
+				.urlName(param.getUrlName())
+                .url(param.getUrl())
+				.memo(param.getMemo())
+                .healthStatusCd(HealthStatusCd.HEALTH.name())
+                .connectionTimeout(param.getConnectionTimeout())
+                .readTimeout(param.getReadTimeout())
+                .statusCheckTypeCd(param.getStatusCheckTypeCd())
+                .statusCheckValue(param.getStatusCheckValue())
+                .method(param.getMethod())
+
+				.createdUserId(userId)
+				.updatedUserId(userId)
+			.build();
+		//@formatter:on
+
+		urlService.add(dbInfo, param.getAlarmIdxs());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(new UrlEntity());
+	}
+
+	@PutMapping(value = "")
+	public ResponseEntity<UrlEntity> modifyUrl(@RequestBody @Valid UrlDTO.Modify param, BindingResult result) {
+		if (result.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UrlEntity());
+		}
+
+		String userId = SecUtils.userId();
+
+		//@formatter:off
+		UrlEntity dbInfo = UrlEntity.builder()
+                .urlIdx(param.getUrlIdx())
+				.urlName(param.getUrlName())
+                .url(param.getUrl())
+				.memo(param.getMemo())
+                .connectionTimeout(param.getConnectionTimeout())
+                .readTimeout(param.getReadTimeout())
+                .statusCheckTypeCd(param.getStatusCheckTypeCd())
+                .statusCheckValue(param.getStatusCheckValue())
+                .method(param.getMethod())
+
+				.updatedUserId(userId)
+			.build();
+		//@formatter:on
+
+		urlService.modify(dbInfo, param.getAlarmIdxs());
+
+		return ResponseEntity.status(HttpStatus.OK).body(new UrlEntity());
 	}
 }

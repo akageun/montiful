@@ -3,7 +3,7 @@ package kr.geun.oss.montiful.core.web;
 /**
  * Base Controller 
  *
- * @author 김형근
+ * @author akageun
  */
 public class BaseController {
 

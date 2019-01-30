@@ -78,6 +78,8 @@ public class UrlWeb {
 			return CmnUtils.mav(HttpStatus.NOT_FOUND, "/err/notFound");
 		}
 
+		//TODO : PK 체크
+
 		mav.addObject("result", optionalProgramEntity.get());
 		mav.addObject("timeout", getTimeout());
 		mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());

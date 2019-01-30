@@ -17,14 +17,14 @@ import javax.validation.Valid;
  */
 @Slf4j
 @Controller
-@RequestMapping("/manage/system")
+@RequestMapping("/system")
 public class SysConfWeb {
 
-    @GetMapping("/config")
-    public ModelAndView systemConfigPage(@Valid SysConfDTO.PageReq param, BindingResult result) {
+	@GetMapping("/configuration")
+	public ModelAndView systemConfigPage(@Valid SysConfDTO.PageReq param, BindingResult result) {
 
-        ModelAndView mav = new ModelAndView();
-
-        return mav;
-    }
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("system/configuration");
+		return mav;
+	}
 }

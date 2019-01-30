@@ -5,7 +5,7 @@ import kr.geun.oss.montiful.app.alarm.common.repo.AlarmRepoSupt;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 public class AlarmRepoImpl implements AlarmRepoSupt {
 }
