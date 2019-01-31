@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:paging="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>URL Manage</title>
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">alarm Manage</h5>
+                        <p class="card-text">
+                            테테테테테텥 테테테테테텥 테테테테테텥 테테테테테텥
+                        </p>
+                        <form id="frmSearch" class="form-inline mb-3">
+                            <input type="hidden" name="pageNumber" value="0">
+                            <div class="form-group pr-1">
+                                <select class="form-control form-control-sm">
+                                    <option>테스트</option>
+                                    <option>테스트2222</option>
+                                </select>
+                            </div>
+                            <div class="form-group pr-1">
+                                <input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>
+                            </div>
+                        </form>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="First group">
+                            <button type="button"
+                                    th:each="channel : ${alarmChannelCd}"
+                                    class="btn btn-outline-success btn-sm"
+                                    th:text="${channel.cdNm}"
+                                    th:data-channel="${channel}"
+                                    onclick="openModal(this);"
+                            >
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>IDX</th>
+                                    <th>alarm Name</th>
+                                    <th>alarm Type</th>
+                                    <th>Memo</th>
+                                    <th>Updated User Id</th>
+                                    <th>Updated At</th>
+                                    <th>Function</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="result : ${resultList}">
+                                    <td th:text="${result.alarmIdx}"></td>
+                                    <td th:text="${result.alarmName}"></td>
+                                    <td th:text="${result.alarmChannel}"></td>
+                                    <div th:with="condition=${#strings.isEmpty(result.memo)} == false and ${#strings.length(result.memo)} > 30"
+                                         th:remove="tag">
+                                        <td th:if="${condition}" th:text="|${#strings.substring(result.memo, 0, 30)}...|"></td>
+                                        <td th:unless="${condition}" th:text="${result.memo}"></td>
+                                    </div>
+
+                                    <td th:text="${result.updatedUserId}"></td>
+                                    <td th:text="${result.updatedAt}"></td>
+                                    <td>
+                                        <button class="btn btn-outline-warning btn-xs"
+                                                th:data-channel="${result.alarmChannel}"
+                                                th:data-alarm_idx="${result.alarmIdx}"
+                                                onclick="getData(this)">
+                                            MODIFY
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom">
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div th:replace="manage/alarm/lineNotifyPart :: lineNotifyModal"></div>
+    <div th:replace="manage/alarm/emailSmtpPart :: emailSmtpModal"></div>
+    <div th:replace="manage/alarm/slackIncomingPart :: slackIncomingModal"></div>
+
+
+</div>
+<th:block layout:fragment="scripts">
+    <script>
+        var functionModule = {};
+
+        $(document).ready(function () {
+            $(".saveBtn").click(function () {
+                var channel = $(this).data('channel');
+                var tmpFunc = functionModule[channel];
+                if (tmpFunc === undefined) {
+                    alert("지원되지 않은 채널입니다.");
+                    return;
+                }
+
+                if (commonValid(tmpFunc.frmName) === false) {
+                    return false;
+                }
+
+                if (tmpFunc.valid() === false) {
+                    return false;
+
+                }
+
+                var url = tmpFunc.url;
+                var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                var method = "POST";
+                var data = $(tmpFunc.frmName).serialize();
+
+                if ($(tmpFunc.frmName + " [name='alarmIdx']").val().length !== 0) {
+                    method = "PUT";
+                    contentType = "application/json;";
+                    data = JSON.stringify($(tmpFunc.frmName).serializeObject());
+                }
+
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: method,
+                    contentType: contentType,
+                    async: false,
+                    dataType: 'json',
+                    error: function (error) {
+                        alert("실패");
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            })
+        });
+
+        function openModal(thisDom) {
+            var tmpFunc = functionModule[thisDom.dataset.channel];
+            if (tmpFunc === undefined) {
+                alert("지원되지 않은 채널입니다.");
+                return;
+            }
+            $(tmpFunc.frmName)[0].reset();
+            tmpFunc.open(thisDom.dataset.channel);
+        }
+
+        function getData(thisDom) {
+            var alarmIdx = thisDom.dataset.alarm_idx;
+            var channel = thisDom.dataset.channel;
+
+            var tmpFunc = functionModule[channel];
+            if (tmpFunc === undefined) {
+                alert("지원되지 않은 채널입니다.");
+                return;
+            }
+
+            $.ajax({
+                url: '/manage/alarm/api/v1' + alarmIdx,
+                type: 'GET',
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+
+                    $(tmpFunc.frmName + " [name='alarmIdx']").val(data.data.alarmIdx);
+                    $(tmpFunc.frmName + " [name='alarmName']").val(data.data.alarmName);
+                    $(tmpFunc.frmName + " [name='memo']").val(data.data.memo);
+
+                    var dataJson = JSON.parse(data.data.alarmValue);
+
+                    tmpFunc.get(channel, alarmIdx, dataJson);
+                }
+            });
+
+
+        }
+
+        function commonValid(frmName) {
+            if ($(frmName + " [name='alarmName']").val().length === 0) {
+                alert("Please, Entered alarm Name");
+                return false;
+            }
+
+            return true;
+        }
+
+
+    </script>
+
+    <script th:include="manage/alarm/lineNotifyPart :: lineNotifyScript"></script>
+    <script th:include="manage/alarm/emailSmtpPart :: emailSmtpScript"></script>
+    <script th:include="manage/alarm/slackIncomingPart :: slackIncomingScript"></script>
+</th:block>
+</html>

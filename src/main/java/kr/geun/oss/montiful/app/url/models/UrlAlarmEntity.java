@@ -39,9 +39,6 @@ public class UrlAlarmEntity {
 	@Column(name = "created_user_id", nullable = false, updatable = false)
 	private String createdUserId;
 
-	@Column(name = "updated_user_id", nullable = false)
-	private String updatedUserId;
-
 	/**
 	 * 생성일시
 	 */
@@ -49,14 +46,6 @@ public class UrlAlarmEntity {
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
-
-	/**
-	 * 수정일시
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@UpdateTimestamp
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
 
 	@Override
 	public String toString() {

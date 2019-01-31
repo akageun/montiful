@@ -57,6 +57,14 @@ public interface UrlService {
 	List<UrlEntity> urlNameSearch(String keyword);
 
 	/**
+	 * Url Program
+	 *
+	 * @param programIdx
+	 * @return
+	 */
+	List<UrlEntity> urlProgramList(Long programIdx);
+
+	/**
 	 * Url Mapping Alarm List
 	 *
 	 * @param urlIdx

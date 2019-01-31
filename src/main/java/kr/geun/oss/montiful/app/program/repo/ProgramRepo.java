@@ -18,7 +18,7 @@ public interface ProgramRepo extends JpaRepository<ProgramEntity, Long>, Program
 	 * @param programName
 	 * @return
 	 */
-	boolean existsByProgramName(String programName);
+	ProgramEntity findByProgramName(String programName);
 
 	/**
 	 * Search

@@ -13,6 +13,8 @@ import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
+import kr.geun.oss.montiful.app.user.models.UserEntity;
+import kr.geun.oss.montiful.app.user.service.UserService;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class TempAppRunner implements CommandLineRunner {
 
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -159,17 +164,16 @@ public class TempAppRunner implements CommandLineRunner {
               .build();
 		urlRepo.save(u6);
 
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u2.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u3.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u2.getUrlIdx()).createdUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u3.getUrlIdx()).createdUserId(userId).build());
 
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u4.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u5.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).updatedUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u4.getUrlIdx()).createdUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u5.getUrlIdx()).createdUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).build());
+		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-
+		userService.save(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("1234").build());
 	}
 
 }
