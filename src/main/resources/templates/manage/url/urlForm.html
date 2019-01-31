@@ -5,8 +5,8 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>URL Manage</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"/>
-    <link href="/webjars/select2/4.0.5/css/select2.min.css" rel="stylesheet"/>
+    <link th:href="@{/webjars/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css}"  rel="stylesheet"/>
+    <link th:href="@{/webjars/select2/4.0.5/css/select2.min.css}" rel="stylesheet"/>
 </head>
 <div layout:fragment="page_content" id="page_content">
     <div class="container-fluid">

@@ -47,6 +47,11 @@
             <artifactId>axios</artifactId>
             <version>0.18.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>select2-bootstrap-theme</artifactId>
+            <version>0.1.0-beta.10</version>
+        </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
