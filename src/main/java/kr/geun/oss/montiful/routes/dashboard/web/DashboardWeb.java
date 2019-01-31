@@ -16,7 +16,7 @@ public class DashboardWeb {
      *
      * @return
      */
-    @GetMapping(value = {"/"})
+    @GetMapping(value = {"/dashboard"})
     public String dashboard() {
         return "dashboard";
     }

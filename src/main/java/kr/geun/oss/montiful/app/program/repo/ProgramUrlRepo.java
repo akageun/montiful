@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ProgramUrlRepo extends JpaRepository<ProgramUrlEntity, ProgramUrlEntity.CompositeKey>, ProgramUrlRepoSupt {
 
-
+	void deleteByProgramIdx(Long programIdx);
 }

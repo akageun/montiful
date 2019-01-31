@@ -6,21 +6,20 @@
       class="h-100"
 >
 <head>
-    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">B.M</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Montiful</title>
     <meta charset="utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.6.3/css/all.css}"/>
     <!--https://material.io/tools/icons/?style=baseline-->
     <link th:href="@{/static/css/common.css}" rel="stylesheet"/>
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100 bg-light">
 <nav class="navbar header-top fixed-top navbar-expand-lg navbar-dark bg-royalblue text-cornflowerblue">
-    <a class="navbar-brand" href="/">Montiful</a>
+    <a class="navbar-brand" href="/dashboard">Montiful</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,18 +27,28 @@
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto" style="font-size:16px;">
             <li class="nav-item">
-                <a class="nav-link" href="/">Home
+                <a class="nav-link" href="/dashboard">Home
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="program_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                <a class="nav-link dropdown-toggle" href="#" id="monitor_dropdown" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded="false">Monitoring
                 </a>
-                <div class="dropdown-menu " aria-labelledby="program_dropdown">
+                <div class="dropdown-menu " aria-labelledby="monitor_dropdown">
                     <a class="dropdown-item" href="/url">Url Manage</a>
                     <a class="dropdown-item" href="/program">Program Manage</a>
                     <a class="dropdown-item" href="/alarm">Alarm Manage</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="manage_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false">Manage
+                </a>
+                <div class="dropdown-menu " aria-labelledby="manage_dropdown">
+                    <a class="dropdown-item" href="/manage/url">Url Manage</a>
+                    <a class="dropdown-item" href="/manage/program">Program Manage</a>
+                    <a class="dropdown-item" href="/manage/alarm">Alarm Manage</a>
                 </div>
             </li>
             <li class="nav-item dropdown">

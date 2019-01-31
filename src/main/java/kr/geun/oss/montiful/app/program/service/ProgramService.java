@@ -35,25 +35,28 @@ public interface ProgramService {
 	 * Validation
 	 *
 	 * @param programName
+	 * @param programIdx
 	 * @return
 	 */
-	Res valid(String programName);
+	Res valid(String programName, Long programIdx);
 
 	/**
 	 * Add Program
 	 *
 	 * @param param
+	 * @param urlIdxs
 	 * @return
 	 */
-	ProgramEntity add(ProgramEntity param);
+	ProgramEntity add(ProgramEntity param, List<Long> urlIdxs);
 
 	/**
 	 * Update Program
 	 *
 	 * @param param
+	 * @param urlIdxs
 	 * @return
 	 */
-	ProgramEntity modify(ProgramEntity param);
+	ProgramEntity modify(ProgramEntity param, List<Long> urlIdxs);
 
 	/**
 	 * For Search API

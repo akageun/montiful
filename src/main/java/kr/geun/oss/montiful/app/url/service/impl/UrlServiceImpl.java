@@ -113,6 +113,17 @@ public class UrlServiceImpl implements UrlService {
 	}
 
 	/**
+	 * Url Program
+	 *
+	 * @param programIdx
+	 * @return
+	 */
+	@Override
+	public List<UrlEntity> urlProgramList(Long programIdx) {
+		return programUrlRepo.findByProgramUrlList(programIdx);
+	}
+
+	/**
 	 * Url Mapping Alarm List
 	 *
 	 * @param urlIdx

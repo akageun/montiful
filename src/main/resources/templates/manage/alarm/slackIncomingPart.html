@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="modal" id="slackIncomingModal" th:fragment="slackIncomingModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Slack Incoming</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="slackIncomingFrm" class="form-horizontal">
+                    <input type="hidden" name="alarmIdx">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="alarmName" placeholder="Notify Name" value=""/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="webHookUrl" placeholder="WebHook Url" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="channel" placeholder="Channel" value=""/>
+                    </div>
+                    <!-- Textarea -->
+                    <div class="form-group">
+                            <textarea class="form-control form-control-sm" rows="5" name="memo"
+                                      style="resize: none;" placeholder="Memo"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary btn-sm saveBtn" data-channel="">Save</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script th:fragment="slackIncomingScript">
+    var SLACK_INCOMING = {
+        frmName: "#slackIncomingFrm",
+        modalName: "#slackIncomingModal",
+        url: "/manage/alarm/api/v1/slack/incoming",
+
+        open: function (channel) {
+            $(this.modalName + " .saveBtn").data("channel", channel);
+            $(this.modalName).modal();
+        },
+        get: function (channel, alarmIdx, dataJson) {
+
+            $(this.frmName + " [name='webHookUrl']").val(dataJson.webHookUrl);
+            $(this.frmName + " [name='channel']").val(dataJson.channel);
+
+            this.open(channel);
+        },
+        valid: function () {
+            var webhookUrl = $(this.frmName + " [name='webHookUrl']");
+            if (webhookUrl.val().length === 0) {
+                alert("WebHook URL 을 입력해주세요.");
+                webhookUrl.focus();
+                return false;
+            }
+
+            var channel = $(this.frmName + " [name='channel']");
+            if (channel.val().length === 0) {
+                channel.focus();
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    functionModule.SLACK_INCOMING = SLACK_INCOMING;
+</script>
+</html>

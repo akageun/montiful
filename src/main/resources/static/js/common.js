@@ -1,19 +1,18 @@
 $.fn.serializeObject = function () {
-    var obj = null;
-    try {
-        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
-            var arr = this.serializeArray();
-            if (arr) {
-                obj = {};
-                jQuery.each(arr, function () {
-                    obj[this.name] = this.value;
-                });
-            }//if ( arr ) {
-        }
-    } catch (e) {
-        alert(e.message);
-    } finally {
-    }
+    "use strict";
+    var result = {};
+    $.each(this.serializeArray(), function (i, element) {
+        var node = result[element.name];
+        if ("undefined" !== typeof node && node !== null) {
 
-    return obj;
+            if ($.isArray(node)) {
+                node.push(element.value)
+            } else {
+                result[element.name] = [node, element.value]
+            }
+        } else {
+            result[element.name] = element.value
+        }
+    });
+    return result
 };

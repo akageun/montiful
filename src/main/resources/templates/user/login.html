@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/emptyLayout}">
+<head>
+    <title>LOGIN</title>
+
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container">
+        <div class="justify-content-center h-100">
+            <div class="card border-royalblue">
+                <div class="card-body ">
+                    <!--<h5 class="card-title text-center mb-5">Login</h5>-->
+                    <form id="frmLogin" class="form-horizontal" onsubmit="return false;">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                </div>
+                                <input id="login_user_id" name="userId" type="text" placeholder="User Id" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                </div>
+                                <input id="login_user_pwd" name="passWd" type="password" placeholder="Password"
+                                       class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            REMEMBER ME <input type="checkbox" name="remember" value="true">
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="card-footer btn-footer bg-royalblue">
+                    <div class="btn-group btn-block ">
+                        <button type="button" class="btn text-white" onclick="login(); return false;">Login</button>
+                        <button type="button" class="btn text-white" onclick="openSignUp(); return false;">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="signUpModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content fadeInDown">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Sign Up</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body fadeIn first">
+                    <form id="signUpFrm" class="form-horizontal">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <input id="signUp_user_id" name="userId" type="text" placeholder="User Id" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="signUp_user_pwd" name="passWd" type="password" placeholder="Password" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="signUp_user_confirm_pwd" type="password" placeholder="Confirm Password" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="signUp_user_email" type="email" name="email" placeholder="Email" class="form-control form-control-sm">
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer btn-footer fadeIn second">
+                    <div class="btn-group btn-block">
+                        <button type="button" class="btn" onclick="signUp(); return false;">Save</button>
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="includeScripts">
+</th:block>
+<th:block layout:fragment="scripts">
+    <script>
+        function login() {
+            var userId = $("#frmLogin [name='userId']");
+            if (userId.val().length === 0) {
+                alert("User ID를 입력해주세요.");
+                userId.focus();
+                return;
+            }
+
+            var passWd = $("#frmLogin [name='passWd']");
+            if (passWd.val().length === 0) {
+                alert("비밀번호를 입력해주세요.");
+                passWd.focus();
+                return;
+            }
+
+            var url = "/api/v1/user/login";
+            var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            var method = "POST";
+            var data = $("#frmLogin").serialize();
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: method,
+                contentType: contentType,
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+                    location.href = "/dashboard";
+                }
+            });
+        }
+
+        function openSignUp() {
+            $("#signUpFrm")[0].reset();
+            $("#signUpModal").modal();
+        }
+
+        function signUp() {
+            var userId = $("#signUpFrm [name='userId']");
+            if (userId.val().length === 0) {
+                alert("User ID를 입력해주세요.");
+                userId.focus();
+                return;
+            }
+
+            var passWd = $("#signUpFrm [name='passWd']");
+            if (passWd.val().length === 0) {
+                alert("비밀번호를 입력해주세요.");
+                passWd.focus();
+                return;
+            }
+
+            var confirmPassword = $("#signUpFrm #signUp_user_confirm_pwd").val();
+            console.log(passWd.val(), confirmPassword);
+            if (passWd.val() !== confirmPassword) {
+                alert("입력하신 비밀번호가 다릅니다.");
+                return;
+            }
+
+            var email = $("#signUpFrm [name='email']");
+            if (email.val().length === 0) {
+                alert("이메일을 입력해주세요.");
+                email.focus();
+                return;
+            }
+
+            var url = "/api/v1/user/signup";
+            var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            var method = "POST";
+            var data = $("#signUpFrm").serialize();
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: method,
+                contentType: contentType,
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</th:block>
+</html>
