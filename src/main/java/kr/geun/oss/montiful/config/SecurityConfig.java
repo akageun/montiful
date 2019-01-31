@@ -7,10 +7,10 @@ import kr.geun.oss.montiful.app.user.security.jwt.filter.JwtAuthenticationFilter
 import kr.geun.oss.montiful.app.user.security.jwt.impl.JwtProviderImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,6 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
+	public void configure(WebSecurity web) throws Exception {
+		//@formatter:off
+		web.ignoring()
+			.antMatchers("/resources/**")
+			.antMatchers("/webjars/**")
+			.antMatchers("/static/**")
+			.antMatchers("/favicon.ico"); // #3
+		//@formatter:on
+	}
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//@formatter:off
 		http
@@ -42,26 +53,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					UsernamePasswordAuthenticationFilter.class)
 			.cors()
 			.and()
+				.formLogin().loginPage("/login")
+
+			.and()
 			.csrf()
 				.disable()
 			.authorizeRequests()
 				.antMatchers("/h2-console/**").permitAll()
-				.antMatchers("/url*")
+				.antMatchers("/user/api/v1/logout")
+					.authenticated()
+				.antMatchers("/login")
+					.permitAll()
+				.antMatchers("/user/**")
+					.permitAll()
+				.antMatchers("/","/dashboard")
+					.hasAnyRole(AuthorityCd.NORMAL.name(), AuthorityCd.MANAGER.name(), AuthorityCd.SUPER_ADMIN.name())
+				.antMatchers("/monitor*")
 					.hasAnyRole(AuthorityCd.NORMAL.name())
-				.antMatchers("/program*")
+				.antMatchers("/manage*")
+					.hasAnyRole(AuthorityCd.MANAGER.name())
+				.antMatchers("/system*")
 					.hasAnyRole(AuthorityCd.SUPER_ADMIN.name())
-//				.antMatchers("/api/admin/**")
-//					.hasAnyRole(AuthorityCd.SUPER_ADMIN.name())
 			.anyRequest()
-				.permitAll()
+				.authenticated()
 			.and()
 				.headers().frameOptions().disable()
 			.and()
 				.exceptionHandling()
-					.authenticationEntryPoint((req, res, e) -> {
-						res.sendRedirect("/login");
-						res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-					}) ;
+					.accessDeniedPage("/403");
 		//@formatter:on
 
 		//super.configure(http);

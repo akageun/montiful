@@ -11,14 +11,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardWeb {
 
-    /**
-     * Dashboard
-     *
-     * @return
-     */
-    @GetMapping(value = {"/dashboard"})
-    public String dashboard() {
-        return "dashboard";
-    }
+	@GetMapping(value = {"/403"})
+	public String welcome403() {
+		return "/dashboard";
+	}
+
+	/**
+	 * Dashboard
+	 *
+	 * @return
+	 */
+	@GetMapping(value = {"/"})
+	public String welcome() {
+		return "redirect:/dashboard";
+	}
+
+	/**
+	 * Dashboard
+	 *
+	 * @return
+	 */
+	@GetMapping(value = {"/dashboard"})
+	public String dashboard() {
+		return "dashboard";
+	}
 
 }

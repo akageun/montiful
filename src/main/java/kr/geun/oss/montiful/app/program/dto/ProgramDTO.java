@@ -38,7 +38,7 @@ public class ProgramDTO {
 		private String programName;
 		private String memo;
 
-		private List<Long> urlIdxs;
+		private List<String> urlIdxs;
 	}
 
 	@Data
@@ -52,7 +52,7 @@ public class ProgramDTO {
 		private String programName;
 		private String memo;
 
-		private List<Long> urlIdxs;
+		private List<String> urlIdxs;
 	}
 
 	@Data

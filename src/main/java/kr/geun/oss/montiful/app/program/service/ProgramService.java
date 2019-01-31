@@ -47,7 +47,7 @@ public interface ProgramService {
 	 * @param urlIdxs
 	 * @return
 	 */
-	ProgramEntity add(ProgramEntity param, List<Long> urlIdxs);
+	ProgramEntity add(ProgramEntity param, List<String> urlIdxs);
 
 	/**
 	 * Update Program
@@ -56,7 +56,7 @@ public interface ProgramService {
 	 * @param urlIdxs
 	 * @return
 	 */
-	ProgramEntity modify(ProgramEntity param, List<Long> urlIdxs);
+	ProgramEntity modify(ProgramEntity param, List<String> urlIdxs);
 
 	/**
 	 * For Search API

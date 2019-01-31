@@ -57,7 +57,7 @@ public class TempAppRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		final String userId = SecUtils.userId();
+		final String userId = "akageun";
 		final String urlPrefix = "http://localhost:%s";
 
 		//@formatter:off
@@ -173,7 +173,7 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-		userService.save(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("1234").build());
+		userService.save(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("akageun").build());
 	}
 
 }

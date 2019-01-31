@@ -44,6 +44,7 @@
                                 <tr>
                                     <th class="text-center">IDX</th>
                                     <th class="text-center">Status Code</th>
+                                    <th>URL Name</th>
                                     <th>URL</th>
                                     <th class="text-center">Function</th>
                                 </tr>
@@ -63,6 +64,7 @@
                                             <i class="fas fa-skull-crossbones fa-2x" style="color: #f70404;"></i>
                                         </span>
                                     </td>
+                                    <td th:text="${result.urlName}"></td>
                                     <td th:text="${result.url}"></td>
                                     <td class="text-center">
                                         <a class="btn btn-outline-warning btn-sm" th:href="|/manage/url/form/${result.urlIdx}|">

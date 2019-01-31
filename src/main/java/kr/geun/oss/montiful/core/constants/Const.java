@@ -5,7 +5,7 @@ package kr.geun.oss.montiful.core.constants;
  *
  * @author akageun
  */
-public class Conts {
+public class Const {
 
 	public static class Redis {
 		public static final String REDIS_TEMPLATE_BEAN_NM = "redisTemplate";

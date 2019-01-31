@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -83,15 +82,15 @@ public class ProgramServiceImpl implements ProgramService {
 	 */
 	@Transactional
 	@Override
-	public ProgramEntity add(ProgramEntity param, List<Long> urlIdxs) {
+	public ProgramEntity add(ProgramEntity param, List<String> urlIdxs) {
 		ProgramEntity programEntity = programRepo.save(param);
 
-		if (urlIdxs.isEmpty() == false) {
+		if (urlIdxs != null && urlIdxs.isEmpty() == false) {
 			List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream().map(idx ->
 					//@formatter:off
 					ProgramUrlEntity.builder()
 						.programIdx(programEntity.getProgramIdx())
-						.urlIdx(idx)
+						.urlIdx(Long.parseLong(idx))
 						.createdUserId(param.getCreatedUserId())
 						.build()
 					//@formatter:on
@@ -111,17 +110,17 @@ public class ProgramServiceImpl implements ProgramService {
 	 */
 	@Transactional
 	@Override
-	public ProgramEntity modify(ProgramEntity param, List<Long> urlIdxs) {
+	public ProgramEntity modify(ProgramEntity param, List<String> urlIdxs) {
 		ProgramEntity programEntity = programRepo.save(param);
 
 		programUrlRepo.deleteByProgramIdx(param.getProgramIdx());
 
-		if (urlIdxs.isEmpty() == false) {
+		if (urlIdxs != null && urlIdxs.isEmpty() == false) {
 			List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream().map(idx ->
 					//@formatter:off
 					ProgramUrlEntity.builder()
 						.programIdx(param.getProgramIdx())
-						.urlIdx(idx)
+						.urlIdx(Long.parseLong(idx))
 						.createdUserId(param.getUpdatedUserId())
 						.build()
 					//@formatter:on

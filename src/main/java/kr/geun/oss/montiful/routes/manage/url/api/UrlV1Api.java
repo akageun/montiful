@@ -32,7 +32,7 @@ public class UrlV1Api {
 	private UrlService urlService;
 
 	@GetMapping(value = "/{urlIdx}")
-	public ResponseEntity<Res> getProgram(@Valid UrlDTO.GetReq param, BindingResult result) {
+	public ResponseEntity<Res> getUrl(@Valid UrlDTO.GetReq param, BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}
@@ -92,6 +92,7 @@ public class UrlV1Api {
 				.urlName(param.getUrlName())
                 .url(param.getUrl())
 				.memo(param.getMemo())
+				.healthStatusCd(param.getHealthStatusCd())
                 .connectionTimeout(param.getConnectionTimeout())
                 .readTimeout(param.getReadTimeout())
                 .statusCheckTypeCd(param.getStatusCheckTypeCd())

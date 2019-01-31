@@ -1,7 +1,9 @@
 package kr.geun.oss.montiful.core.utils;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,12 +19,16 @@ public class SecUtils {
 
 	/**
 	 * get User Id By Spring Security Session
-	 * TODO : Add Spring Security
 	 *
 	 * @return
 	 */
 	public static String userId() {
-		return "akageun";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return "";
+		}
+
+		return authentication.getName();
 	}
 
 	/**

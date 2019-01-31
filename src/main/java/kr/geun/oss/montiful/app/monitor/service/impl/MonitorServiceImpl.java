@@ -4,7 +4,7 @@ import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.monitor.service.AsyncMonitorService;
 import kr.geun.oss.montiful.app.monitor.service.MonitorService;
 import kr.geun.oss.montiful.app.url.service.UrlService;
-import kr.geun.oss.montiful.core.constants.Conts;
+import kr.geun.oss.montiful.core.constants.Const;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -47,14 +47,14 @@ public class MonitorServiceImpl implements MonitorService {
 
         Long runTime = new Date().getTime();
 
-        Long urlCheckIdCnt = redisTemplate.opsForList().size(Conts.Redis.URL_CHECK_ID);
+        Long urlCheckIdCnt = redisTemplate.opsForList().size(Const.Redis.URL_CHECK_ID);
         urlCheckIdCnt = urlCheckIdCnt == null ? 0 : urlCheckIdCnt;
 
         if (urlCheckIdCnt > 10) {
-            redisTemplate.opsForList().rightPop(Conts.Redis.URL_CHECK_ID); //하나를 빼고
+            redisTemplate.opsForList().rightPop(Const.Redis.URL_CHECK_ID); //하나를 빼고
         }
 
-        redisTemplate.opsForList().leftPush(Conts.Redis.URL_CHECK_ID, Conts.Redis.URL_HIST_PREFIX + runTime);
+        redisTemplate.opsForList().leftPush(Const.Redis.URL_CHECK_ID, Const.Redis.URL_HIST_PREFIX + runTime);
 
         for (int i = 0; i < maxRunThread; i++) {
             asyncMonitorService.asyncMonitorCheck(runTime, URL_ALL_KEY);

@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/user/api/v1")
 public class UserV1Api {
 
 	@Autowired
@@ -40,7 +40,7 @@ public class UserV1Api {
 
 		try {
 			userService.login(param.getUserId(), param.getPassWd(), param.isRemember(), req, res);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -66,7 +66,7 @@ public class UserV1Api {
 		return ResponseEntity.ok(Res.of(true, "SUCCESS"));
 	}
 
-	@GetMapping("/logout")
+	@PostMapping("/logout")
 	public ResponseEntity<Res> logout(HttpServletRequest req, HttpServletResponse res) {
 		userService.logout(req, res);
 

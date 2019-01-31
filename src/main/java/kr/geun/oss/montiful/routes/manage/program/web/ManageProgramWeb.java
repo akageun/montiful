@@ -89,6 +89,5 @@ public class ManageProgramWeb {
 		mav.setViewName("manage/program/programSingle");
 
 		return mav;
-
 	}
 }

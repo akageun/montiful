@@ -3,10 +3,13 @@ package kr.geun.oss.montiful.app.url.service.impl;
 import com.google.common.base.Stopwatch;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
+import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +53,9 @@ public class UrlServiceImpl implements UrlService {
 	private ProgramUrlRepo programUrlRepo;
 
 	@Autowired
+	private UrlAlarmRepo urlAlarmRepo;
+
+	@Autowired
 	private RestTemplate restTemplate;
 
 	/**
@@ -84,7 +90,22 @@ public class UrlServiceImpl implements UrlService {
 	@Override
 	public UrlEntity add(UrlEntity param, List<Long> alarmIdxs) {
 
-		return null;
+		UrlEntity urlEntity = urlRepo.save(param);
+		if (alarmIdxs != null && alarmIdxs.isEmpty() == false) {
+			List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
+					//@formatter:off
+					UrlAlarmEntity.builder()
+						.alarmIdx(idx)
+						.urlIdx(param.getUrlIdx())
+						.createdUserId(param.getUpdatedUserId())
+						.build()
+					//@formatter:on
+			).collect(Collectors.toList());
+
+			urlAlarmRepo.saveAll(programUrlEntities);
+		}
+
+		return urlEntity;
 	}
 
 	/**
@@ -97,7 +118,25 @@ public class UrlServiceImpl implements UrlService {
 	@Override
 	public UrlEntity modify(UrlEntity param, List<Long> alarmIdxs) {
 
-		return null;
+		UrlEntity urlEntity = urlRepo.save(param);
+
+		urlAlarmRepo.deleteByUrlIdx(param.getUrlIdx());
+
+		if (alarmIdxs != null && alarmIdxs.isEmpty() == false) {
+			List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
+					//@formatter:off
+					UrlAlarmEntity.builder()
+						.alarmIdx(idx)
+						.urlIdx(param.getUrlIdx())
+						.createdUserId(param.getUpdatedUserId())
+						.build()
+					//@formatter:on
+			).collect(Collectors.toList());
+
+			urlAlarmRepo.saveAll(programUrlEntities);
+		}
+
+		return urlEntity;
 	}
 
 	/**

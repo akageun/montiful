@@ -2,6 +2,7 @@ $.fn.serializeObject = function () {
     "use strict";
     var result = {};
     $.each(this.serializeArray(), function (i, element) {
+
         var node = result[element.name];
         if ("undefined" !== typeof node && node !== null) {
 
@@ -16,3 +17,20 @@ $.fn.serializeObject = function () {
     });
     return result
 };
+
+function logout() {
+    //
+
+    $.ajax({
+        url: '/user/api/v1/logout',
+        type: 'POST',
+        async: false,
+        dataType: 'json',
+        error: function (error) {
+            alert("실패");
+        },
+        success: function (data) {
+            location.href = "/login";
+        }
+    });
+}

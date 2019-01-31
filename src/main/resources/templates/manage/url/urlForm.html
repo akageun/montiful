@@ -19,7 +19,9 @@
                             테테테테테텥 테테테테테텥 테테테테테텥 테테테테테텥
                         </p>
                         <form id="frm" onsubmit="return false;" class="form-horizontal">
+                            <input type="hidden" name="healthStatusCd" th:if="${result != null}" th:value="${result.healthStatusCd}"/>
                             <input type="hidden" name="urlIdx" th:if="${result != null}" th:value="${result.urlIdx}"/>
+                            <input type="hidden" name="urlIdx" th:unless="${result != null}"/>
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-sm" name="urlName" placeholder="URL Name"/>
                             </div>
@@ -72,7 +74,7 @@
                                     </button>
                                 </label>
 
-                                <select id="url_alarm" name="alarmIdx" class="form-control form-control-sm select2-bind"
+                                <select id="url_alarm" name="alarmIdxs" class="form-control form-control-sm select2-bind"
                                         multiple></select>
                             </div>
                             <div class="form-group">
@@ -93,7 +95,7 @@
     </div>
 </div>
 <th:block layout:fragment="includeScripts">
-    <script src="/webjars/select2/4.0.5/js/select2.min.js"></script>
+    <script th:src="@{/webjars/select2/4.0.5/js/select2.min.js}"></script>
 </th:block>
 <th:block layout:fragment="scripts">
     <script th:if="${result != null}">
@@ -144,19 +146,35 @@
 
     <script>
         function save() {
+            var url = "/manage/url/api/v1";
+            var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            var method = "POST";
+            var data = $("#frm").serialize();
+
+            if ($("#frm [name='urlIdx']").val().length !== 0) {
+                method = "PUT";
+                contentType = "application/json;";
+
+                var tmpData = $("#frm").serializeObject();
+                tmpData['alarmIdxs'] = $("#frm [name='alarmIdxs']").val();
+                data = JSON.stringify(tmpData);
+            }
+
             $.ajax({
-                url: "/manage/url/api/v1",
-                data: $("#frm").serialize(),
-                type: 'POST',
+                url: url,
+                data: data,
+                type: method,
+                contentType: contentType,
                 async: false,
                 dataType: 'json',
                 error: function (error) {
-                    alert("실패");
+                    alert("실패 : " + error);
                 },
                 success: function (data) {
                     location.href = '/manage/url';
                 }
             });
+
         }
 
         $(document).ready(function () {
