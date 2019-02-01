@@ -5,10 +5,64 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Dashboard</title>
+    <style>
+        .my-card
+        {
+            position:absolute;
+            left:40%;
+            top:-20px;
+            border-radius:50%;
+        }
+    </style>
 </head>
 <div layout:fragment="page_content" id="page_content">
     <div class="container-fluid">
-        DASHBOARD
+
+        <div class="row">
+            <!--<div class="col-sm-6 col-xs-12">-->
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">URL Status</h3>
+                        <div class="row">
+                            <div th:each="statusCnt : ${statusCntList}" th:remove="tag">
+                                <div class="col-sm-4">
+                                    <div class="card ">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="text-info text-center mt-3">
+                                                    <h1 th:if="${statusCnt.healthStatusCd.toString().equals('HEALTH')}">
+                                                        <i class="fas fa-smile-wink  fa-2x" style="color: #659bf2;"></i>
+                                                    </h1>
+                                                    <h1 th:if="${statusCnt.healthStatusCd.toString().equals('WARNING')}">
+                                                        <i class="fas fa-exclamation-circle  fa-2x" style="color: #f7a151;"></i>
+                                                    </h1>
+                                                    <h1 th:if="${statusCnt.healthStatusCd.toString().equals('ERROR')}">
+                                                        <i class="fas fa-skull-crossbones fa-2x" style="color: #f70404;"></i>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-info text-center mt-3"><h4 th:text="${statusCnt.healthStatusCd}"></h4></div>
+                                                <div class="text-info text-center mt-2" ><h1 th:text="${statusCnt.urlCnt}"></h1></div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+        </div>
     </div>
 </div>
 <th:block layout:fragment="scripts">

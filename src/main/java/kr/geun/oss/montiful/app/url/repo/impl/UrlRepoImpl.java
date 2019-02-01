@@ -1,10 +1,13 @@
 package kr.geun.oss.montiful.app.url.repo.impl;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.models.QAlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.QUrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.QUrlEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlRepoSupt;
@@ -76,6 +79,29 @@ public class UrlRepoImpl implements UrlRepoSupt {
 				)
 			)
             .from(qUrlEntity)
+            .fetch();
+        //@formatter:on
+	}
+
+	@Override
+	public List<UrlDTO.StatusCnt> findGroupByStatusCntForDashboard() {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+
+		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
+
+		NumberPath<Long> aliasQuantity = Expressions.numberPath(Long.class, "urlCnt");
+
+		//@formatter:off
+        return jpaQueryFactory
+            .select(
+            	Projections.fields(UrlDTO.StatusCnt.class,
+					qUrlEntity.healthStatusCd,
+					qUrlEntity.urlIdx.count().as(aliasQuantity)
+				)
+			)
+            .from(qUrlEntity)
+			.groupBy(qUrlEntity.healthStatusCd)
+			.orderBy(aliasQuantity.desc())
             .fetch();
         //@formatter:on
 	}

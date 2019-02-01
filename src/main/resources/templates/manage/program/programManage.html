@@ -6,7 +6,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Program Manage</title>
-    <link th:href="@{/webjars/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css}"  rel="stylesheet"/>
+    <link th:href="@{/webjars/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/webjars/select2/4.0.5/css/select2.min.css}" rel="stylesheet"/>
 </head>
 <div layout:fragment="page_content" id="page_content">
@@ -254,11 +254,25 @@
                     $("#programModal").modal();
 
                     bindSelect2();
-
-                    console.log(response);
                 })
                 .catch(function (error) {
-                    alert("실패 : " + error);
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
+                    if (error.response.status === 401) {
+                        console.log(error);
+                        alert("실패 401: " + error);
+                        location.href = "/login";
+                    } else if (error.response.status === 403) {
+                        console.log(error);
+                        alert("실패 403: " + error);
+                    } else {
+                        console.log("error : ", error);
+                        alert("실패 Else : " + error);
+                    }
                 });
         }
 

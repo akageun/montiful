@@ -3,10 +3,10 @@ package kr.geun.oss.montiful.app.url.service.impl;
 import com.google.common.base.Stopwatch;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
-import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
+import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
@@ -14,6 +14,7 @@ import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -268,6 +271,32 @@ public class UrlServiceImpl implements UrlService {
 				urlRepo.updateStatusCheckCdInUrlIdx(key.name(), values.stream().map(MonitorDTO.CheckRes::getUrlIdx).collect(Collectors.toList()))
 			);
 		//@formatter:on
+	}
+
+	@Override
+	public List<UrlDTO.StatusCnt> getStatusCntForDashboard() {
+		List<UrlDTO.StatusCnt> rtnList = new ArrayList<>();
+		List<UrlDTO.StatusCnt> ttt = urlRepo.findGroupByStatusCntForDashboard();
+
+		List<String> codeList = HealthStatusCd.getList();
+		for (String code : codeList) {
+
+			UrlDTO.StatusCnt tmpStatusCnt = null;
+			for (UrlDTO.StatusCnt statusCnt : ttt) {
+				if (StringUtils.equals(code, statusCnt.getHealthStatusCd())) {
+					tmpStatusCnt = statusCnt;
+				}
+			}
+
+			if (tmpStatusCnt == null) {
+				tmpStatusCnt = UrlDTO.StatusCnt.builder().healthStatusCd(code).urlCnt(0L).build();
+			}
+
+			rtnList.add(tmpStatusCnt);
+
+		}
+
+		return rtnList;
 	}
 
 }

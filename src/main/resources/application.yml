@@ -1,6 +1,6 @@
 server:
   port: 9998
-  connection-timeout: 60000
+  connection-timeout: 60s
   tomcat:
     max-threads: 500
 

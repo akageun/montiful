@@ -1,6 +1,9 @@
 package kr.geun.oss.montiful.routes.dashboard.web;
 
+import kr.geun.oss.montiful.app.url.service.UrlService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardWeb {
 
-	@GetMapping(value = {"/403"})
+	@GetMapping(value = { "/403" })
 	public String welcome403() {
 		return "/dashboard";
 	}
@@ -21,18 +24,24 @@ public class DashboardWeb {
 	 *
 	 * @return
 	 */
-	@GetMapping(value = {"/"})
+	@GetMapping(value = { "/" })
 	public String welcome() {
 		return "redirect:/dashboard";
 	}
+
+	@Autowired
+	private UrlService urlService;
 
 	/**
 	 * Dashboard
 	 *
 	 * @return
 	 */
-	@GetMapping(value = {"/dashboard"})
-	public String dashboard() {
+	@GetMapping(value = { "/dashboard" })
+	public String dashboard(Model model) {
+
+		model.addAttribute("statusCntList", urlService.getStatusCntForDashboard());
+
 		return "dashboard";
 	}
 

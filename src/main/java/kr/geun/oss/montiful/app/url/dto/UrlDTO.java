@@ -1,5 +1,7 @@
 package kr.geun.oss.montiful.app.url.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -69,5 +71,15 @@ public class UrlDTO {
 		private String statusCheckValue;
 
 		private List<Long> alarmIdxs;
+	}
+
+	@Data
+	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class StatusCnt {
+
+		private Long urlCnt;
+		private String healthStatusCd;
 	}
 }

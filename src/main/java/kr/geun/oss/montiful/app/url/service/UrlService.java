@@ -2,6 +2,7 @@ package kr.geun.oss.montiful.app.url.service;
 
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +81,11 @@ public interface UrlService {
 	 */
 	Optional<MonitorDTO.CheckRes> healthCheck(MonitorDTO.CheckReq param);
 
+	/**
+	 * Get Health Check List
+	 *
+	 * @return
+	 */
 	List<MonitorDTO.CheckReq> getHealthCheckTargetList();
 
 	/**
@@ -88,4 +94,6 @@ public interface UrlService {
 	 * @param list
 	 */
 	void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list);
+
+	List<UrlDTO.StatusCnt> getStatusCntForDashboard();
 }
