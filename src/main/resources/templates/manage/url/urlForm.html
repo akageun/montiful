@@ -5,7 +5,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>URL Manage</title>
-    <link th:href="@{/webjars/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css}"  rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"  rel="stylesheet"/>
     <link th:href="@{/webjars/select2/4.0.5/css/select2.min.css}" rel="stylesheet"/>
 </head>
 <div layout:fragment="page_content" id="page_content">
@@ -84,7 +84,9 @@
                         </form>
                         <div class="row">
                             <div class="col">
-                                <button class="btn btn-outline-success btn-sm" onclick="save(); return false;">SAVE</button>
+                                <button class="btn btn-outline-success btn-sm" onclick="save(); return false;">
+                                    <i class="far fa-paper-plane"></i> SAVE
+                                </button>
                             </div>
                         </div>
                     </div>

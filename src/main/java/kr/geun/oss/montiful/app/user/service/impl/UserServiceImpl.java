@@ -10,11 +10,12 @@ import kr.geun.oss.montiful.app.user.security.jwt.JwtProvider;
 import kr.geun.oss.montiful.app.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,18 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
 	private JwtProvider jwtProvider;
 
 	@Autowired
 	private SimpleDetailSecurityService simpleDetailSecurityService;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	@Override
+	public Page<UserEntity> page(Pageable pageable) {
+		return userRepo.findAll(pageable);
+	}
 
 	@Override
 	public Optional<UserEntity> get(String userId) {

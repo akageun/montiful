@@ -34,7 +34,9 @@
                             <!--<input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>-->
                             <!--</div>-->
                             <div class="form-group pr-1">
-                                <a class="btn btn-outline-primary btn-sm" href="/manage/url/form">ADD</a>
+                                <a class="btn btn-outline-primary btn-sm" href="/manage/url/form">
+                                    <i class="far fa-plus-square"></i> ADD
+                                </a>
                             </div>
                         </form>
                         <br>
@@ -68,7 +70,7 @@
                                     <td th:text="${result.url}"></td>
                                     <td class="text-center">
                                         <a class="btn btn-outline-warning btn-sm" th:href="|/manage/url/form/${result.urlIdx}|">
-                                            MODIFY
+                                            <i class="far fa-edit"></i> MODIFY
                                         </a>
                                     </td>
                                 </tr>

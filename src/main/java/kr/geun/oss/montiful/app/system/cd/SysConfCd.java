@@ -17,9 +17,8 @@ import java.util.List;
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum SysConfCd {
-	//@formatter:off
-	HEALTH_CHECK_RUN_THREAD("","") {
+public enum SysConfCd {//@formatter:off
+	HEALTH_CHECK_RUN_THREAD("","", "3") {
 		private final List<Integer> allowList = Arrays.asList(1,2,3,4,5);
 
 		@Override
@@ -35,14 +34,14 @@ public enum SysConfCd {
 			return true;
 		}
     },
-	HEALTH_CHECK_RUN_YN("","") {
+	HEALTH_CHECK_RUN_YN("","", "Y") {
 
 		@Override
 		public boolean valid(String value) {
 			return this.strValid(value);
 		}
 	},
-	GLOBAL_NOTIFY("","") {
+	GLOBAL_NOTIFY("","", "Y") {
 
 		@Override
 		public boolean valid(String value) {
@@ -53,6 +52,7 @@ public enum SysConfCd {
 	;
 	private String cdNm;
 	private String description;
+	private String defaultValue;
 
 	public abstract boolean valid(String value);
 
@@ -68,6 +68,5 @@ public enum SysConfCd {
 		}
 
 		return true;
-	}
-}
+	}}
 
