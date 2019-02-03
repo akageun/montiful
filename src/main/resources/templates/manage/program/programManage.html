@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:paging="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Program Manage</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet"/>
+    <link th:href="@{/webjars/select2/4.0.5/css/select2.min.css}" rel="stylesheet"/>
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Program Manage</h5>
+                        <p class="card-text">
+                            프로그램 등록/수정이 가능한 관리 페이지 입니다.
+                        </p>
+                        <div class="form-inline">
+                            <div class="form-group pr-1">
+                                <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">ADD</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="frmSearch" class="form-inline w-100 justify-content-end border border-bottom-0">
+                            <input type="hidden" name="pageNumber" value="1">
+                            <div class="form-group">
+                                <select class="form-control form-control-sm">
+                                    <option>Idx</option>
+                                    <option>Program Name</option>
+                                    <option>Created At</option>
+                                    <option>Updated At</option>
+                                </select>
+                            </div>
+                            <div class="form-group mr-2">
+                                <select class="form-control form-control-sm">
+                                    <option>20 Row</option>
+                                    <option>50 Row</option>
+                                    <option>100 Row</option>
+                                </select>
+                            </div>
+                            <div class=" form-group">
+                                <select class="form-control form-control-sm">
+                                    <option>==Search Type==</option>
+                                    <option>Created User Id</option>
+                                    <option>Updated User Id</option>
+                                    <option>Program Name</option>
+                                    <option>Memo</option>
+                                </select>
+                            </div>
+                            <div class=" form-group">
+                                <input type="text" class="form-control w-100 form-control-sm" placeholder="Entered Program Name"/>
+                            </div>
+                            <div class=" form-group">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <colgroup>
+                                    <col width="5%">
+                                    <col width="*">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">IDX</th>
+                                    <th style="min-width: 180px;">Program Name</th>
+                                    <!--<th class="text-center">Memo</th>-->
+                                    <th class="text-center">Created User Id</th>
+                                    <th class="text-center">Created At</th>
+                                    <th class="text-center">Updated User Id</th>
+                                    <th class="text-center">Updated At</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="result : ${resultList}">
+                                    <td class="text-center" th:text="${result.programIdx}"></td>
+                                    <td>
+                                        <div th:with="condition=${#strings.isEmpty(result.programName)} == false and ${#strings.length(result.programName)} > 30"
+                                             th:remove="tag">
+                                                <span th:if="${condition}" th:text="|${#strings.substring(result.programName, 0, 30)}...|"
+                                                      th:remove="tag"></span>
+                                            <span th:unless="${condition}" th:text="${result.programName}"></span>
+                                        </div>
+
+                                        <a class="btn btn-outline-danger btn-xs float-right"
+                                           th:data-program_idx="${result.programIdx}"
+                                           onclick="openModifyProgram(this)">
+                                            <i class="fas fa-edit"></i> EDIT
+                                        </a>
+                                    </td>
+
+                                    <td class="text-center" th:text="${result.createdUserId}"></td>
+                                    <td class="text-center" th:text="${result.createdAt}"></td>
+                                    <td class="text-center" th:text="${result.updatedUserId}"></td>
+                                    <td class="text-center" th:text="${result.updatedAt}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom">
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="programModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Program Manage</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="programFrm" class="form-horizontal">
+                        <input type="hidden" name="programIdx">
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <input id="program_name" name="programName" type="text" placeholder="Program Name!"
+                                   class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group">
+                            <select id="url_idxs" name="urlIdxs" class="form-control select2-multiple select2-bind"
+                                    multiple></select>
+                        </div>
+
+                        <!-- Textarea -->
+                        <div class="form-group">
+                            <textarea class="form-control form-control-sm" rows="5" id="memo" name="memo"
+                                      style="resize: none;" placeholder="Memo"></textarea>
+                        </div>
+
+                        <div class="row" id="modifyData" style="display: none;">
+                            <div class="col">
+                                Created User Id : <span id="createdUserId"></span>
+                                Created Time : <span id="createdAt"></span>
+                            </div>
+                            <div class="col">
+                                Updated User Id : <span id="updatedUserId"></span>
+                                Updated Time : <span id="updatedAt"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer btn-footer">
+                    <div class="btn-group btn-block">
+                        <button type="button" class="btn" onclick="save(); return false;">
+                            <i class="far fa-save"></i> Save
+                        </button>
+                        <button type="button" class="btn" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="includeScripts">
+    <script th:src="@{/webjars/select2/4.0.5/js/select2.min.js}"></script>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script>
+        function bindSelect2() {
+            $(".select2-bind").select2({
+                placeholder: "연결할 URL 이름을 검색하세요.",
+                theme: "bootstrap",
+                minimumInputLength: 2,
+                delay: 250,
+                ajax: {
+                    type: 'GET',
+                    url: '/manage/program/api/v1/url/search',
+                    dataType: "json",
+                    contentType: 'application/json;',
+                    data: function (params) {
+                        return {
+                            keyword: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+
+                            results: $.map(data.data, function (item) {
+                                return {
+                                    text: item.urlName,
+                                    id: item.urlIdx
+                                }
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        function addOpenModal() {
+            $("#programFrm")[0].reset();
+            $('#url_idxs').find('option').remove();
+
+            $("#programModal #modifyData").hide();
+            $("#programModal").modal();
+
+            bindSelect2();
+        }
+
+        function save() {
+            var programName = $("#programFrm [name='programName']");
+            if (programName.val().length === 0) {
+                alert("프로그램 명을 입력해주세요.");
+                programName.focus();
+                return;
+            }
+
+            var url = "/manage/program/api/v1";
+
+            if ($("#programFrm [name='programIdx']").val().length !== 0) {
+                var tmpData = $("#programFrm").serializeObject();
+                tmpData['urlIdxs'] = $("#programFrm [name='urlIdxs']").val();
+
+                axios.put(url, JSON.stringify(tmpData), {headers: {"Content-type": "application/json"}})
+                    .then(function (response) {
+                        console.log(response);
+                        location.reload();
+                    })
+                    .catch(function (error) {
+                        alert("실패 : " + error);
+                    });
+
+            } else {
+                axios.post(url, $("#programFrm").serialize())
+                    .then(function (response) {
+                        console.log(response);
+                        location.reload();
+                    })
+                    .catch(function (error) {
+                        alert("실패 : " + error);
+                    });
+            }
+        }
+
+        function openModifyProgram(thisDom) {
+            var programIdx = thisDom.dataset.program_idx;
+
+            $("#programFrm")[0].reset();
+            $('#url_idxs').find('option').remove();
+
+            var url = "/manage/program/api/v1/" + programIdx;
+
+            axios.get(url, $("#programFrm").serialize())
+                .then(function (response) {
+                    var data = response.data;
+
+                    $.each(data.data.urlList, function (i, item) {
+                        $('#url_idxs').append($('<option>', {
+                            value: item.urlIdx,
+                            text: item.urlName
+                        }).attr("selected", 'selected'));
+                    });
+
+                    $("#programFrm [name='programIdx']").val(data.data.result.programIdx);
+                    $("#programFrm [name='programName']").val(data.data.result.programName);
+                    $("#programFrm [name='memo']").val(data.data.result.memo);
+
+                    $("#programFrm #createdAt").text(data.data.result.createdAt);
+                    $("#programFrm #createdUserId").text(data.data.result.createdUserId);
+                    $("#programFrm #updatedAt").text(data.data.result.updatedAt);
+                    $("#programFrm #updatedUserId").text(data.data.result.updatedUserId);
+
+                    $("#programModal #modifyData").show();
+                    $("#programModal").modal();
+
+                    bindSelect2();
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
+                    if (error.response.status === 401) {
+                        console.log(error);
+                        alert("실패 401: " + error);
+                        location.href = "/login";
+                    } else if (error.response.status === 403) {
+                        console.log(error);
+                        alert("실패 403: " + error);
+                    } else {
+                        console.log("error : ", error);
+                        alert("실패 Else : " + error);
+                    }
+                });
+        }
+
+        function movePageCustom(pageNo) {
+            $("#frmSearch [name='pageNumber']").val(pageNo);
+            $("#frmSearch").submit();
+        }
+    </script>
+</th:block>

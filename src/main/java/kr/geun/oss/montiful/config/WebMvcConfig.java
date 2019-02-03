@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.config;
 
+import kr.geun.oss.montiful.core.pagination.dialect.PaginationDialect;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +24,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
-
-	@Bean
-	public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
-		return new ResourceUrlEncodingFilter();
-	}
 
 	/**
 	 * 정적 자원에 대한 설정
@@ -65,6 +61,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		//@formatter:on
 	}
 
+	@Bean
+	public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
+		return new ResourceUrlEncodingFilter();
+	}
+
 	/**
 	 * @Value 어노테이션을 사용하기 위한 설정
 	 *
@@ -94,7 +95,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	) {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(springResourceTemplateResolver);
-		//templateEngine.addDialect(new PaginationDialect());
+		templateEngine.addDialect(new PaginationDialect());
 		templateEngine.addDialect(layoutDialect);
 		templateEngine.setEnableSpringELCompiler(true);
 		return templateEngine;
