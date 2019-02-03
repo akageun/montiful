@@ -26,31 +26,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto" style="font-size:16px;">
-                <!--<li class="nav-item">-->
-                    <!--<a class="nav-link" href="/dashboard">-->
-                        <!--<i class="fas fa-home"></i>-->
-                        <!--Home-->
-                        <!--<span class="sr-only">(current)</span>-->
-                    <!--</a>-->
-                <!--</li>-->
-
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="user_dropdown" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        <i class="fas fa-user" style="font-size: 1.4em;"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
-                        <a class="dropdown-item" onclick="logout()">Logout</a>
-                    </div>
-
-                </li>
-            </ul>
             <ul class="navbar-nav side-nav bg-royalblue text-cornflowerblue" style="font-size:16px;">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home
+                    <a class="nav-link" href="/dashboard">Home
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -92,17 +70,30 @@
                     </div>
                 </li>
             </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="user_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-user" style="font-size: 1.4em;"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
+                        <a class="dropdown-item" onclick="logout()">Logout</a>
+                    </div>
+
+                </li>
+            </ul>
         </div>
     </nav>
     <main role="main" class="flex-shrink-0">
         <div layout:fragment="page_content"></div>
     </main>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <span class="text-muted">Place sticky footer content here.</span>
+        </div>
+    </footer>
 </div>
-<footer class="footer mt-auto py-3">
-    <div class="container">
-        <span class="text-muted">Place sticky footer content here.</span>
-    </div>
-</footer>
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>

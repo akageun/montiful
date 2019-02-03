@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.routes.dashboard.web;
 
+import kr.geun.oss.montiful.app.url.service.UrlHistService;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class DashboardWeb {
 	@Autowired
 	private UrlService urlService;
 
+	@Autowired
+	private UrlHistService urlHistService;
+
 	/**
 	 * Dashboard
 	 *
@@ -40,6 +44,7 @@ public class DashboardWeb {
 	@GetMapping(value = { "/dashboard" })
 	public String dashboard(Model model) {
 
+		model.addAttribute("histList", urlHistService.getUrlHistList());
 		model.addAttribute("statusCntList", urlService.getStatusCntForDashboard());
 
 		return "dashboard";

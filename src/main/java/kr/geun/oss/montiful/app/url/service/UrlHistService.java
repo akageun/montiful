@@ -10,5 +10,7 @@ import java.util.List;
  * @author akageun
  */
 public interface UrlHistService {
+    List<String> getUrlHistList();
+
     void urlAppendHealthCheckHist(Long runTime, List<MonitorDTO.CheckRes> allList);
 }
