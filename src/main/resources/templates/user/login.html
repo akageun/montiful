@@ -21,7 +21,8 @@
                                         <i class="fas fa-user"></i>
                                     </span>
                                 </div>
-                                <input id="login_user_id" name="userId" type="text" placeholder="User Id" class="form-control form-control-sm">
+                                <input id="login_user_id" name="userId" type="text" placeholder="User Id"
+                                       class="form-control form-control-sm" onkeydown="enterLogin();">
                             </div>
                         </div>
 
@@ -33,7 +34,7 @@
                                     </span>
                                 </div>
                                 <input id="login_user_pwd" name="passWd" type="password" placeholder="Password"
-                                       class="form-control form-control-sm">
+                                       class="form-control form-control-sm" onkeydown="enterLogin();">
                             </div>
                         </div>
 
@@ -101,6 +102,12 @@
 </th:block>
 <th:block layout:fragment="scripts">
     <script>
+        function enterLogin() {
+            if (event.keyCode == 13) {
+                login();
+            }
+        }
+
         function login() {
             var userId = $("#frmLogin [name='userId']");
             if (userId.val().length === 0) {
@@ -117,24 +124,31 @@
             }
 
             var url = "/user/api/v1/login";
-            var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            var method = "POST";
-            var data = $("#frmLogin").serialize();
 
-            $.ajax({
-                url: url,
-                data: data,
-                type: method,
-                contentType: contentType,
-                async: false,
-                dataType: 'json',
-                error: function (error) {
-                    alert("실패");
-                },
-                success: function (data) {
+            axios.post(url, $("#frmLogin").serialize())
+                .then(function (response) {
+                    console.log(response);
                     location.href = "/dashboard";
-                }
-            });
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
+                    if (error.response.status === 401) {
+                        console.log(error);
+                        alert("실패 401: " + error);
+                        location.href = "/login";
+                    } else if (error.response.status === 403) {
+                        console.log(error);
+                        alert("실패 403: " + error);
+                    } else {
+                        console.log("error : ", error);
+                        alert("실패 Else : " + error);
+                    }
+                });
         }
 
         function openSignUp() {
@@ -158,7 +172,6 @@
             }
 
             var confirmPassword = $("#signUpFrm #signUp_user_confirm_pwd").val();
-            console.log(passWd.val(), confirmPassword);
             if (passWd.val() !== confirmPassword) {
                 alert("입력하신 비밀번호가 다릅니다.");
                 return;
@@ -172,24 +185,30 @@
             }
 
             var url = "/user/api/v1/signup";
-            var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
-            var method = "POST";
-            var data = $("#signUpFrm").serialize();
 
-            $.ajax({
-                url: url,
-                data: data,
-                type: method,
-                contentType: contentType,
-                async: false,
-                dataType: 'json',
-                error: function (error) {
-                    alert("실패");
-                },
-                success: function (data) {
+            axios.post(url, $("#signUpFrm").serialize())
+                .then(function (response) {
                     location.reload();
-                }
-            });
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
+                    if (error.response.status === 401) {
+                        console.log(error);
+                        alert("실패 401: " + error);
+                        location.href = "/login";
+                    } else if (error.response.status === 403) {
+                        console.log(error);
+                        alert("실패 403: " + error);
+                    } else {
+                        console.log("error : ", error);
+                        alert("실패 Else : " + error);
+                    }
+                });
         }
     </script>
 </th:block>

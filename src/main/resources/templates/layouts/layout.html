@@ -18,76 +18,86 @@
 </head>
 
 <body class="d-flex flex-column h-100 bg-light">
-<nav class="navbar header-top fixed-top navbar-expand-lg navbar-dark bg-royalblue text-cornflowerblue">
-    <a class="navbar-brand" href="/dashboard">Montiful</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto" style="font-size:16px;">
-            <li class="nav-item">
-                <a class="nav-link" href="/dashboard">
-                    <i class="fas fa-home"></i>
-                    Home
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="monitor_dropdown" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    <i class="fas fa-desktop"></i>
-                    Monitoring
-                </a>
-                <div class="dropdown-menu " aria-labelledby="monitor_dropdown">
-                    <a class="dropdown-item" href="#">Url Manage</a>
-                    <a class="dropdown-item" href="#">Program Manage</a>
-                    <a class="dropdown-item" href="#">Alarm Manage</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="manage_dropdown" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    <i class="fas fa-tools"></i>
-                    Manage
-                </a>
-                <div class="dropdown-menu " aria-labelledby="manage_dropdown">
-                    <a class="dropdown-item" href="/manage/url">Url Manage</a>
-                    <a class="dropdown-item" href="/manage/program">Program Manage</a>
-                    <a class="dropdown-item" href="/manage/alarm">Alarm Manage</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="system_dropdown" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    <i class="fas fa-cog"></i>
-                    System
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="system_dropdown">
-                    <a class="dropdown-item" href="/system/configuration">Configuration</a>
-                    <a class="dropdown-item" href="/system/user">User Manage</a>
-                    <!--<a class="dropdown-item" href="#">Another action</a>-->
-                    <!--<a class="dropdown-item" href="#">Something else here</a>-->
-                </div>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="user_dropdown" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    <i class="fas fa-user" style="font-size: 1.4em;"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
-                    <a class="dropdown-item" onclick="logout()">Logout</a>
-                </div>
+<div id="wrapper">
+    <nav class="navbar header-top fixed-top navbar-expand-lg navbar-dark bg-royalblue text-cornflowerblue">
+        <a class="navbar-brand" href="/dashboard">Montiful</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto" style="font-size:16px;">
+                <!--<li class="nav-item">-->
+                    <!--<a class="nav-link" href="/dashboard">-->
+                        <!--<i class="fas fa-home"></i>-->
+                        <!--Home-->
+                        <!--<span class="sr-only">(current)</span>-->
+                    <!--</a>-->
+                <!--</li>-->
 
-            </li>
-        </ul>
-    </div>
-</nav>
-<main role="main" class="flex-shrink-0">
-    <div layout:fragment="page_content" style="padding-top: 70px;"></div>
-</main>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="user_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-user" style="font-size: 1.4em;"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
+                        <a class="dropdown-item" onclick="logout()">Logout</a>
+                    </div>
+
+                </li>
+            </ul>
+            <ul class="navbar-nav side-nav bg-royalblue text-cornflowerblue" style="font-size:16px;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="monitor_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-desktop"></i>
+                        Monitoring
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="monitor_dropdown">
+                        <a class="dropdown-item" href="#">Url Manage</a>
+                        <a class="dropdown-item" href="#">Program Manage</a>
+                        <a class="dropdown-item" href="#">Alarm Manage</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="manage_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-tools"></i>
+                        Manage
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="manage_dropdown">
+                        <a class="dropdown-item" href="/manage/url">Url Manage</a>
+                        <a class="dropdown-item" href="/manage/program">Program Manage</a>
+                        <a class="dropdown-item" href="/manage/alarm">Alarm Manage</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="system_dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        System
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="system_dropdown">
+                        <a class="dropdown-item" href="/system/configuration">Configuration</a>
+                        <a class="dropdown-item" href="/system/user">User Manage</a>
+                        <!--<a class="dropdown-item" href="#">Another action</a>-->
+                        <!--<a class="dropdown-item" href="#">Something else here</a>-->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main role="main" class="flex-shrink-0">
+        <div layout:fragment="page_content"></div>
+    </main>
+</div>
 <footer class="footer mt-auto py-3">
     <div class="container">
         <span class="text-muted">Place sticky footer content here.</span>
