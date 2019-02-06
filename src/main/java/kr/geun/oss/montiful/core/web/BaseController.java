@@ -1,5 +1,9 @@
 package kr.geun.oss.montiful.core.web;
 
+import kr.geun.oss.montiful.core.pagination.PaginationInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.web.servlet.ModelAndView;
+
 /**
  * Base Controller 
  *
@@ -7,5 +11,9 @@ package kr.geun.oss.montiful.core.web;
  */
 public class BaseController {
 
-	//protected void
+	protected void setPage(ModelAndView mav, Page rtnList, int pageBlockSize) {
+		mav.addObject("pagination",
+			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(),
+				pageBlockSize));
+	}
 }

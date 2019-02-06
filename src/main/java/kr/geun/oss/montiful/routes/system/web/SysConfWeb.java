@@ -4,8 +4,8 @@ import kr.geun.oss.montiful.app.system.dto.SysConfDTO;
 import kr.geun.oss.montiful.app.system.models.SysConfEntity;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
-import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/system")
-public class SysConfWeb {
+public class SysConfWeb extends BaseController {
 
 	@Autowired
 	private SysConfService sysConfService;
@@ -44,8 +44,7 @@ public class SysConfWeb {
 
 		mav.addObject("resultList", rtnList);
 		mav.addObject("paramInfo", param);
-		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+		setPage(mav, rtnList, 3);
 
 		mav.setViewName("system/configuration");
 		return mav;
