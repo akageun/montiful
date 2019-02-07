@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  *
  *
@@ -44,6 +46,20 @@ public class MonitorDTO {
         private Long runtime;
 
         private String preHealthStatusCheckCd;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MonitorHistRes {
+        private Long monitorHistIdx;
+        private Long urlIdx;
+        private String urlName;
+        private String healthStatusCd;
+        private String preHealthStatusCheckCd;
+
+        private LocalDateTime createdAt;
     }
 
 }

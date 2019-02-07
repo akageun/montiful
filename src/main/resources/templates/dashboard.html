@@ -5,6 +5,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.css"/>
     <style>
         ul.timeline {
             list-style-type: none;
@@ -48,7 +49,6 @@
                 <li class="breadcrumb-item"><a href="#" class="">Dashboard</a></li>
             </ol>
         </nav>
-
         <div class="row">
             <div class="col-sm-6 col-md-4" th:each="statusCnt : ${statusCntList}">
                 <div class="card ">
@@ -75,15 +75,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">Program List</h5>
-
+                        <h5 class="card-title mb-3">Lately Status change List</h5>
+                        <table class="table table-sm">
+                            <tr th:each="hist : ${urlMonitorHistList}">
+                                <th th:text="${hist.monitorHistIdx}"></th>
+                                <th th:text="${hist.urlIdx}"></th>
+                                <td th:text="${hist.urlName}"></td>
+                                <td th:text="${hist.preHealthStatusCheckCd}"></td>
+                                <td th:text="${hist.healthStatusCd}"></td>
+                                <td th:text="${hist.createdAt}"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-3">Batch List</h5>
@@ -92,6 +106,16 @@
                                 <a href="#" th:text="${hist}"></a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Batch List</h5>
+
                     </div>
                 </div>
             </div>
@@ -113,6 +137,10 @@
 
     </div>
 </div>
+<th:block layout:fragment="includeScripts">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.js"></script>
+</th:block>
 <th:block layout:fragment="scripts">
     <script>
     </script>

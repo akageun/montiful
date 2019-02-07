@@ -3,6 +3,7 @@ package kr.geun.oss.montiful.app.monitor.service.impl;
 import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.monitor.service.AsyncMonitorService;
+import kr.geun.oss.montiful.app.monitor.service.MonitorHistService;
 import kr.geun.oss.montiful.app.url.service.UrlHistService;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,56 +26,59 @@ import java.util.Optional;
 @Service
 public class AsyncMonitorServiceImpl implements AsyncMonitorService {
 
-    @Autowired
-    private RedisTemplate<String, MonitorDTO.CheckReq> checkReqRedisTemplate;
+	@Autowired
+	private RedisTemplate<String, MonitorDTO.CheckReq> checkReqRedisTemplate;
 
-    @Autowired
-    private UrlService urlService;
+	@Autowired
+	private UrlService urlService;
 
-    @Autowired
-    private AlarmService alarmService;
+	@Autowired
+	private AlarmService alarmService;
 
-    @Autowired
-    private UrlHistService urlHistService;
+	@Autowired
+	private UrlHistService urlHistService;
 
-    @Async
-    @Override
-    public void asyncMonitorCheck(Long runTime, String redisKey) {
-        log.debug("Execute method asynchronously - {}", Thread.currentThread().getName());
+	@Autowired
+	private MonitorHistService monitorHistService;
 
-        MonitorDTO.CheckReq entity;
-        List<MonitorDTO.CheckRes> allList = new ArrayList<>();
-        List<MonitorDTO.CheckRes> chgTargetList = new ArrayList<>();
+	@Async
+	@Override
+	public void asyncMonitorCheck(Long runTime, String redisKey) {
+		log.debug("Execute method asynchronously - {}", Thread.currentThread().getName());
 
-        do {
-            entity = checkReqRedisTemplate.opsForList().rightPop(redisKey);
-            if (entity == null) {
-                break;
+		MonitorDTO.CheckReq entity;
+		List<MonitorDTO.CheckRes> allList = new ArrayList<>();
+		List<MonitorDTO.CheckRes> chgTargetList = new ArrayList<>();
 
-            }
-            String preHealthStatusCheckCd = entity.getHealthStatusCd();
+		do {
+			entity = checkReqRedisTemplate.opsForList().rightPop(redisKey);
+			if (entity == null) {
+				break;
 
-            Optional<MonitorDTO.CheckRes> optionalUrlEntity = urlService.healthCheck(entity);
-            if (optionalUrlEntity.isPresent() == false) {
-                continue;
-            }
+			}
+			String preHealthStatusCheckCd = entity.getHealthStatusCd();
 
-            MonitorDTO.CheckRes urlEntity = optionalUrlEntity.get();
-            urlEntity.setRuntime(System.currentTimeMillis());
-            urlEntity.setUrlIdx(entity.getUrlIdx());
-            urlEntity.setUrlName(entity.getUrlName());
-            urlEntity.setPreHealthStatusCheckCd(preHealthStatusCheckCd);
+			Optional<MonitorDTO.CheckRes> optionalUrlEntity = urlService.healthCheck(entity);
+			if (optionalUrlEntity.isPresent() == false) {
+				continue;
+			}
 
-            if (StringUtils.equals(urlEntity.getHealthStatusCd().name(), preHealthStatusCheckCd) == false) {
-                chgTargetList.add(urlEntity);
-            }
+			MonitorDTO.CheckRes urlEntity = optionalUrlEntity.get();
+			urlEntity.setRuntime(System.currentTimeMillis());
+			urlEntity.setUrlIdx(entity.getUrlIdx());
+			urlEntity.setUrlName(entity.getUrlName());
+			urlEntity.setPreHealthStatusCheckCd(preHealthStatusCheckCd);
 
-            allList.add(urlEntity);
+			if (StringUtils.equals(urlEntity.getHealthStatusCd().name(), preHealthStatusCheckCd) == false) {
+				chgTargetList.add(urlEntity);
+			}
 
-        } while (entity != null);
+			allList.add(urlEntity);
 
-        urlService.modifyHealthStatusCheck(chgTargetList); //IN Query로 현재 상태 업데이트
-        alarmService.alarmRegister(chgTargetList); //알림용 publisher에 등록
-        urlHistService.urlAppendHealthCheckHist(runTime, allList); //TTL 지정해서 redis에 추가함.
-    }
+		} while (entity != null);
+
+		urlService.modifyHealthStatusCheck(chgTargetList); //IN Query로 현재 상태 업데이트
+		alarmService.alarmRegister(chgTargetList); //알림용 publisher에 등록
+		monitorHistService.saveMonitorAllHist(runTime, allList); //TTL 지정해서 redis에 추가함.
+	}
 }

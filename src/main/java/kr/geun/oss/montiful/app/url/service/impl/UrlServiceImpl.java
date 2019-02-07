@@ -9,7 +9,9 @@ import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.app.url.models.UrlMonitorHistEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
+import kr.geun.oss.montiful.app.url.repo.UrlMonitorHistRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +36,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -57,6 +58,9 @@ public class UrlServiceImpl implements UrlService {
 
 	@Autowired
 	private UrlAlarmRepo urlAlarmRepo;
+
+	@Autowired
+	private UrlMonitorHistRepo urlMonitorHistRepo;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -257,6 +261,7 @@ public class UrlServiceImpl implements UrlService {
 	 *
 	 * @param list
 	 */
+	@Transactional
 	@Override
 	public void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list) {
 		if (list.isEmpty()) {
@@ -270,7 +275,18 @@ public class UrlServiceImpl implements UrlService {
 			.forEach((key, values) ->
 				urlRepo.updateStatusCheckCdInUrlIdx(key.name(), values.stream().map(MonitorDTO.CheckRes::getUrlIdx).collect(Collectors.toList()))
 			);
+
+		urlMonitorHistRepo.saveAll(
+		list.stream()
+			.map(info ->
+				UrlMonitorHistEntity.builder()
+					.urlIdx(info.getUrlIdx())
+					.healthStatusCd(info.getHealthStatusCd().name())
+					.preHealthStatusCheckCd(info.getPreHealthStatusCheckCd())
+				.build()
+			).collect(Collectors.toList()));
 		//@formatter:on
+
 	}
 
 	@Override

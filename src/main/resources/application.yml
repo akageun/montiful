@@ -24,14 +24,14 @@ spring:
     password:
     driverClassName: org.h2.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        use_sql_comments: true
-        format_sql: true
+        use_sql_comments: false
+        format_sql: false
   h2:
     console:
       enabled: true

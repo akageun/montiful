@@ -24,30 +24,4 @@ import java.util.stream.Collectors;
 @Service
 public class UrlHistServiceImpl implements UrlHistService {
 
-	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
-
-	@Autowired
-	private RedisTemplate<String, MonitorDTO.CheckRes> checkResRedisTemplate;
-
-	@Autowired
-	private RedisConnectionFactory redisConnectionFactory;
-
-	@Override
-	public List<String> getUrlHistList() {
-		//return checkResRedisTemplate.opsForZSet().range(Const.Redis.URL_HIST_PREFIX + "*");
-
-		return RedisUtils.getRedisKeyList(redisConnectionFactory.getConnection(), Const.Redis.URL_HIST_PREFIX);
-	}
-
-	@Override
-	public void urlAppendHealthCheckHist(Long runTime, List<MonitorDTO.CheckRes> allList) {
-		String redisKey = Const.Redis.URL_HIST_PREFIX + runTime;
-
-		Map<Long, List<MonitorDTO.CheckRes>> l = allList.stream().collect(Collectors.groupingBy(MonitorDTO.CheckRes::getUrlIdx));
-		l.forEach((key, value) -> value.forEach(i -> checkResRedisTemplate.opsForZSet().add(redisKey, i, i.getRuntime())));
-
-		final int ttl = 1; //TODO SysConfig로 변경해야함.
-		checkResRedisTemplate.expire(redisKey, ttl, TimeUnit.HOURS);
-	}
 }

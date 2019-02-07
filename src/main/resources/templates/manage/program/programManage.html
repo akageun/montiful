@@ -10,6 +10,13 @@
 </head>
 <div layout:fragment="page_content" id="page_content">
     <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">(Manage) Program Manage</li>
+            </ol>
+        </nav>
+
         <div class="row">
             <div class="col">
                 <div class="card">
@@ -31,42 +38,52 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <form id="frmSearch" class="form-inline w-100">
+                        <form id="frmSearch" class="mb-4">
                             <input type="hidden" name="pageNumber" value="1">
-                            <div class="form-group">
-                                <select class="form-control form-control-sm">
-                                    <option>Idx</option>
-                                    <option>Program Name</option>
-                                    <option>Created At</option>
-                                    <option>Updated At</option>
-                                </select>
+                            <div class="form-inline w-100 mb-2">
+                                <div class="form-group">
+                                    <select class="form-control form-control-sm">
+                                        <option>Idx</option>
+                                        <option>Program Name</option>
+                                        <option>Created At</option>
+                                        <option>Updated At</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control form-control-sm">
+                                        <option>Desc</option>
+                                        <option>Asc</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mr-2">
+                                    <select class="form-control form-control-sm">
+                                        <option>20 Row</option>
+                                        <option>50 Row</option>
+                                        <option>100 Row</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group mr-2">
-                                <select class="form-control form-control-sm">
-                                    <option>20 Row</option>
-                                    <option>50 Row</option>
-                                    <option>100 Row</option>
-                                </select>
-                            </div>
-                            <div class=" form-group">
-                                <select class="form-control form-control-sm">
-                                    <option>==Search Type==</option>
-                                    <option>Created User Id</option>
-                                    <option>Updated User Id</option>
-                                    <option>Program Name</option>
-                                    <option>Memo</option>
-                                </select>
-                            </div>
-                            <div class=" form-group">
-                                <input type="text" class="form-control w-100 form-control-sm" placeholder="Entered Program Name"/>
-                            </div>
-                            <div class=" form-group">
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-search"></i> Search
-                                </button>
+                            <div class="form-inline w-100">
+                                <div class=" form-group">
+                                    <select class="form-control form-control-sm">
+                                        <option>==Search Type==</option>
+                                        <option>Created User Id</option>
+                                        <option>Updated User Id</option>
+                                        <option>Program Name</option>
+                                        <option>Memo</option>
+                                    </select>
+                                </div>
+                                <div class=" form-group">
+                                    <input type="text" class="form-control w-100 form-control-sm" placeholder="Entered Program Name"/>
+                                </div>
+                                <div class=" form-group">
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
                             </div>
                         </form>
-                        <br>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <colgroup>
