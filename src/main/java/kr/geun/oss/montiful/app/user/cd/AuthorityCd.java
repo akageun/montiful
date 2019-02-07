@@ -3,7 +3,7 @@ package kr.geun.oss.montiful.app.user.cd;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 public enum AuthorityCd {
 	NORMAL, MANAGER, SUPER_ADMIN,

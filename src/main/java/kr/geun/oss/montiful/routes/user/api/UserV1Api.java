@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +25,7 @@ import java.util.Optional;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Slf4j
 @RestController
@@ -41,8 +44,18 @@ public class UserV1Api {
 		try {
 			userService.login(param.getUserId(), param.getPassWd(), param.isRemember(), req, res);
 
+		} catch (BadCredentialsException be) {
+			log.debug("BadCredentialsException :param: {}, msg: {}, ex: {} ", param.toString(), be.getMessage(), be);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "유효하지 않은 계정정보입니다.\nID 또는 암호를 확인해주세요."));
+		} catch (UsernameNotFoundException ue) {
+			log.debug("BadCredentialsException :param: {}, msg: {}, ex: {} ", param.toString(), ue.getMessage(), ue);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "유효하지 않은 계정정보입니다.\nID 또는 암호를 확인해주세요."));
+		} catch (DisabledException de) {
+			log.debug("BadCredentialsException :param: {}, msg: {}, ex: {} ", param.toString(), de.getMessage(), de);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Res.of(false, "사용할 수 없는 계정 정보 입니다."));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug("BadCredentialsException :param: {}, msg: {}, ex: {} ", param.toString(), e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "서버에러"));
 		}
 
 		return ResponseEntity.ok(Res.of(true, "SUCCESS"));

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Slf4j
 @Controller

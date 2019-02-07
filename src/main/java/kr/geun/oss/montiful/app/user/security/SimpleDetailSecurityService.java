@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 public class SimpleDetailSecurityService implements UserDetailsService {
 

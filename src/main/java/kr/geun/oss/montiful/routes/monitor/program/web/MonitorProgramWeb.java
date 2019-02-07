@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Slf4j
 @Controller

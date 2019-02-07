@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Configuration
 @EnableWebSecurity

@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Slf4j
 @Service("LineNotifyChannelService")
