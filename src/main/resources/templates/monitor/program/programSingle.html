@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:paging="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Program Monitor</title>
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">(Monitor) Program</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Program</h5>
+                        <p class="card-text">
+                            <!--프로그램 등록/수정이 가능한 관리 페이지 입니다.-->
+                        </p>
+                        <div class="form-inline">
+                            <div class="form-group pr-1">
+                                <!--<button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">-->
+                                    <!--<i class="far fa-plus-square"></i> ADD-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="includeScripts">
+</th:block>
+<th:block layout:fragment="scripts">
+    <script>
+        function movePageCustom(pageNo) {
+            $("#frmSearch [name='pageNumber']").val(pageNo);
+            $("#frmSearch").submit();
+        }
+    </script>
+</th:block>

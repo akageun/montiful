@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 /**
@@ -14,6 +15,21 @@ import java.time.LocalDateTime;
  * @author akageun
  */
 public class MonitorDTO {
+
+	@Data
+	@NoArgsConstructor
+	public static class ProgramPageReq {
+		@Min(0)
+		private int pageNumber;
+	}
+
+
+    @Data
+    @NoArgsConstructor
+    public static class ProgramSingleReq {
+        @Min(0)
+        private Long programIdx;
+    }
 
     @Data
     @NoArgsConstructor

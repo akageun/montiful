@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/monitor/url/api/v1")
-public class UrlMonitorV1Api {
+public class MonitorUrlV1Api {
 
     @Autowired
     private MonitorHistService monitorHistService;
