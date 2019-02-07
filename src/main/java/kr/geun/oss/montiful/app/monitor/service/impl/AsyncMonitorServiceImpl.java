@@ -36,9 +36,6 @@ public class AsyncMonitorServiceImpl implements AsyncMonitorService {
 	private AlarmService alarmService;
 
 	@Autowired
-	private UrlHistService urlHistService;
-
-	@Autowired
 	private MonitorHistService monitorHistService;
 
 	@Async

@@ -15,4 +15,6 @@ public interface MonitorHistService {
     void saveMonitorAllHist(Long runTime, List<MonitorDTO.CheckRes> allList);
 
     List<Object> getUrlHistList();
+
+    List<MonitorDTO.CheckRes> getList();
 }

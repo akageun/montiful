@@ -76,7 +76,16 @@
         </div>
         <div class="row">
             <div class="col">
-
+                <div class="card">
+                    <div class="card-body">
+                        <div class="float-right">
+                            <i class="far fa-play-circle fa-3x"></i>
+                            <i class="far fa-pause-circle fa-3x"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div id="chart"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -143,5 +152,60 @@
 </th:block>
 <th:block layout:fragment="scripts">
     <script>
+        $(document).ready(function () {
+            getChartData();
+
+            setInterval(function () {
+                getChartData();
+            }, 15000);
+        });
+
+        //TODO : 로컬스토리지를 사용하여 자동갱신 멈춤
+
+        function getChartData() {
+            $.ajax({
+                url: "/monitor/url/api/v1/hist",
+                type: 'GET',
+                async: false,
+                dataType: 'json',
+                error: function (error) {
+                    alert("실패");
+                },
+                success: function (data) {
+
+                    var rtnData = [];
+                    for (var tmpIndex in data) {
+                        var subRtnData = [];
+                        subRtnData.push(tmpIndex);
+
+                        for (var subTmpIndex in data[tmpIndex]) {
+                            subRtnData.push(data[tmpIndex][subTmpIndex].responseTime);
+                        }
+
+                        rtnData.push(subRtnData);
+                    }
+
+                    initChart(rtnData);
+                }
+            });
+        }
+
+        function initChart(rtnData) {
+            bb.generate({
+                bindto: "#chart",
+                grid: {
+                    x: {
+                        show: true
+                    },
+                    y: {
+                        show: true
+                    }
+                },
+                data: {
+                    // type: "spline",
+                    columns: rtnData
+                }
+            });
+        }
     </script>
 </th:block>
