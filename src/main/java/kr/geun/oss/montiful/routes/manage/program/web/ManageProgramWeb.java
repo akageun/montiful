@@ -59,34 +59,4 @@ public class ManageProgramWeb {
 		mav.setViewName("manage/program/programManage");
 		return mav;
 	}
-
-	/**
-	 * Program Single View
-	 *  TODO : Move monitoring
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping(value = "/program/{programIdx}")
-	public ModelAndView getProgramSingleView(@Valid ProgramDTO.GetReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
-
-		Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
-		if (optionalProgramEntity.isPresent() == false) {
-			return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
-		}
-
-		ModelAndView mav = new ModelAndView();
-
-		mav.addObject("result", optionalProgramEntity.get());
-
-		//TODO : URL 관련 소스 추가해야함.
-
-		mav.setViewName("manage/program/programSingle");
-
-		return mav;
-	}
 }

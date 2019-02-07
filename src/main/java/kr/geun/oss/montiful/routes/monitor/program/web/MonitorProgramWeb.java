@@ -2,6 +2,7 @@ package kr.geun.oss.montiful.routes.monitor.program.web;
 
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
+import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
@@ -53,6 +54,9 @@ public class MonitorProgramWeb {
 		return mav;
 	}
 
+	@Autowired
+	private ProgramUrlRepo programUrlRepo;
+
 	@GetMapping("/program/{programIdx}")
 	public ModelAndView getMonitorProgram(@Valid MonitorDTO.ProgramSingleReq param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -67,6 +71,7 @@ public class MonitorProgramWeb {
 		ModelAndView mav = new ModelAndView();
 
 		mav.addObject("result", optionalProgramEntity.get());
+		mav.addObject("urlList", programUrlRepo.findByProgramUrlList(param.getProgramIdx()));
 		mav.addObject("paramInfo", param);
 
 		//URL 리스트 가져오기.
