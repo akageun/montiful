@@ -5,7 +5,7 @@ import kr.geun.oss.montiful.app.user.models.UserAuthorityEntity;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.repo.UserAuthorityRepo;
 import kr.geun.oss.montiful.app.user.repo.UserRepo;
-import kr.geun.oss.montiful.app.user.security.SimpleDetailSecurityService;
+import kr.geun.oss.montiful.app.user.security.service.SimpleDetailSecurityService;
 import kr.geun.oss.montiful.app.user.security.jwt.JwtProvider;
 import kr.geun.oss.montiful.app.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void save(UserEntity param) {
+	public void add(UserEntity param) {
 
 		param.setPassWd(passwordEncoder.encode(param.getPassWd()));
 
@@ -72,8 +72,8 @@ public class UserServiceImpl implements UserService {
 			UserAuthorityEntity.builder()
 				.userId(param.getUserId())
 				.authorityCd(AuthorityCd.NORMAL.roleCd())
-				.createdUserId("SYSTEM")
-				.updatedUserId("SYSTEM")
+				.createdUserId(param.getUserId())
+				.updatedUserId(param.getUserId())
 				.build()
 		);
 		//@formatter:on
@@ -93,5 +93,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void logout(HttpServletRequest req, HttpServletResponse res) {
 		jwtProvider.logout(req, res);
+		SecurityContextHolder.clearContext();
 	}
 }

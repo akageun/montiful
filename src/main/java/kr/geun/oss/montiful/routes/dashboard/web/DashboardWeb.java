@@ -16,21 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardWeb {
 
-	@GetMapping(value = {"/403"})
-	public String welcome403() {
-		return "/dashboard";
-	}
-
-	/**
-	 * Dashboard
-	 *
-	 * @return
-	 */
-	@GetMapping(value = {"/"})
-	public String welcome() {
-		return "redirect:/dashboard";
-	}
-
 	@Autowired
 	private UrlService urlService;
 
@@ -40,12 +25,27 @@ public class DashboardWeb {
 	@Autowired
 	private UrlMonitorHistRepo urlMonitorHistRepo;
 
+//	@GetMapping(value = { "/403" })
+	//	public String welcome403() {
+	//		return "/dashboard";
+	//	}
+
 	/**
 	 * Dashboard
 	 *
 	 * @return
 	 */
-	@GetMapping(value = {"/dashboard"})
+	@GetMapping(value = { "/" })
+	public String welcome() {
+		return "redirect:/dashboard";
+	}
+
+	/**
+	 * Dashboard
+	 *
+	 * @return
+	 */
+	@GetMapping(value = { "/dashboard" })
 	public String dashboard(Model model) {
 
 		model.addAttribute("histList", monitorHistService.getUrlHistList());

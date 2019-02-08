@@ -4,7 +4,7 @@ import kr.geun.oss.montiful.app.user.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- *
+ * User Repository
  *
  * @author akageun
  */

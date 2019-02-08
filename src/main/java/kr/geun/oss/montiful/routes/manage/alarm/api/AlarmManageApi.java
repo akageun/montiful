@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * Alarm Manage Api Controller
  *
  * @author akageun
  */
@@ -26,6 +26,13 @@ import java.util.Optional;
 @RequestMapping("/manage/alarm/api/v1")
 public class AlarmManageApi extends AlarmCommonModule {
 
+	/**
+	 * Single item search function
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/{alarmIdx}")
 	public ResponseEntity<Res> get(@Valid AlarmDTO.Get param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -38,8 +45,15 @@ public class AlarmManageApi extends AlarmCommonModule {
 		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", notifyEntity.get()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/search")
-	public ResponseEntity<Res> get(@Valid AlarmDTO.Search param, BindingResult result) {
+	public ResponseEntity<Res> search(@Valid AlarmDTO.Search param, BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}

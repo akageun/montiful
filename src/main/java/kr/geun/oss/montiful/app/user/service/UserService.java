@@ -19,7 +19,7 @@ public interface UserService {
 
 	Optional<UserEntity> get(String userId);
 
-	void save(UserEntity param);
+	void add(UserEntity param);
 
 	void login(String userId, String passWd, boolean remember, HttpServletRequest req, HttpServletResponse res) throws Exception;
 

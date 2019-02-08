@@ -44,7 +44,7 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	/**
-	 * GetReq
+	 * Get Req
 	 *
 	 * @param programIdx
 	 * @return
@@ -71,7 +71,7 @@ public class ProgramServiceImpl implements ProgramService {
 			}
 		}
 
-		return Res.of(true, "SUCCESS");
+		return Res.ok();
 	}
 
 	/**

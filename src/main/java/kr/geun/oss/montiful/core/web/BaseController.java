@@ -12,8 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class BaseController {
 
 	protected void setPage(ModelAndView mav, Page rtnList, int pageBlockSize) {
+		//@formatter:off
 		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(),
-				pageBlockSize));
+			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), pageBlockSize));
+		//@formatter:on
 	}
 }

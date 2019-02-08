@@ -42,4 +42,8 @@ public class Res<T> {
 		this.msg = msg;
 		this.data = data;
 	}
+
+	public static Res ok() {
+		return Res.of(true, "SUCCESS");
+	}
 }

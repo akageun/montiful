@@ -30,7 +30,7 @@ public class EmailSmtpChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity alarmEntity = initNotification(param.getAlarmName(), AlarmChannelCd.EMAIL_SMTP,
+			AlarmEntity alarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.EMAIL_SMTP,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelEmailSmtpDTO.AlarmValue.class)), param.getMemo());
 
 			AlarmEntity alarmEntity1 = alarmService.add(alarmEntity);
@@ -51,7 +51,7 @@ public class EmailSmtpChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity AlarmEntity = initNotification(param.getAlarmName(), AlarmChannelCd.EMAIL_SMTP,
+			AlarmEntity AlarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.EMAIL_SMTP,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelEmailSmtpDTO.AlarmValue.class)), param.getMemo(), param.getAlarmIdx());
 
 			AlarmEntity alarmEntity1 = alarmService.modify(AlarmEntity);

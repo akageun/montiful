@@ -4,7 +4,6 @@ import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.monitor.service.AsyncMonitorService;
 import kr.geun.oss.montiful.app.monitor.service.MonitorHistService;
-import kr.geun.oss.montiful.app.url.service.UrlHistService;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +74,7 @@ public class AsyncMonitorServiceImpl implements AsyncMonitorService {
 		} while (entity != null);
 
 		urlService.modifyHealthStatusCheck(chgTargetList); //IN Query로 현재 상태 업데이트
-		alarmService.alarmRegister(chgTargetList); //알림용 publisher에 등록
+		alarmService.alarmPublisher(chgTargetList); //알림용 publisher에 등록
 		monitorHistService.saveMonitorAllHist(runTime, allList); //TTL 지정해서 redis에 추가함.
 	}
 }

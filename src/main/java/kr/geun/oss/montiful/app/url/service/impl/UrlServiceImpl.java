@@ -35,9 +35,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -313,6 +311,26 @@ public class UrlServiceImpl implements UrlService {
 		}
 
 		return rtnList;
+	}
+
+	@Override
+	public Map<String, Object> getListByProgramIdx(Long programIdx) {
+		Map<String, Object> rtnMap = new HashMap<>();
+
+		List<UrlEntity> urlList = programUrlRepo.findByProgramUrlList(programIdx);
+
+		final int urlListTotalCnt = urlList.size();
+
+		Map<String, String> urlHealthCount = urlList.stream().collect(
+			Collectors.groupingBy(UrlEntity::getHealthStatusCd, Collectors.collectingAndThen(Collectors.counting(), value -> {
+				double t = (double) value / (double) urlListTotalCnt;
+				return String.format("%.2f", t * 100.0);  //%.2f" 는 소수점 이하 2자리까지 출력
+			})));
+
+		rtnMap.put("urlHealthCount", urlHealthCount);
+		rtnMap.put("urlList", urlList);
+
+		return rtnMap;
 	}
 
 }

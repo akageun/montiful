@@ -36,7 +36,7 @@ public class ManageProgramWebTest {
 	//    @Test
 	//    public void programWeb404Test() throws Exception {
 	//        //@formatter:off
-//		mvc.perform(get("/program"))
+//		mvc.perform(search("/program"))
 //			.andExpect(status().isBadRequest())
 //			;
 //		//@formatter:on

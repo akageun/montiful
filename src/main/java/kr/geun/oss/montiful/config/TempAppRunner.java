@@ -87,7 +87,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.HEALTH.name())
                     .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHK.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
                     .createdUserId(userId)
                     .updatedUserId(userId)
               .build();
@@ -100,7 +100,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.HEALTH.name())
                     .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHK.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
                     .createdUserId(userId)
                     .updatedUserId(userId)
               .build();
@@ -113,7 +113,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.HEALTH.name())
                     .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_TEXT.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
                     .statusCheckValue("OK")
                     .createdUserId(userId)
                     .updatedUserId(userId)
@@ -127,7 +127,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.ERROR.name())
                     .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHK.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
                     .createdUserId(userId)
                     .updatedUserId(userId)
               .build();
@@ -140,7 +140,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.ERROR.name())
                     .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SUCCESS_2XX_CHK.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.SUCCESS_2XX_CHECK.name())
                     .createdUserId(userId)
                     .updatedUserId(userId)
               .build();
@@ -153,7 +153,7 @@ public class TempAppRunner implements CommandLineRunner {
                     .readTimeout(500)
                     .healthStatusCd(HealthStatusCd.WARNING.name())
                     .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_TEXT.name())
+                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
                     .statusCheckValue("OK")
                     .createdUserId(userId)
                     .updatedUserId(userId)
@@ -169,7 +169,7 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-		userService.save(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("akageun").build());
+		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("akageun").build());
 	}
 
 }

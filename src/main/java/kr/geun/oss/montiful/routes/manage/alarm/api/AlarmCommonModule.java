@@ -27,15 +27,29 @@ public class AlarmCommonModule extends BaseController {
 	//@formatter:on
 
 	/**
-	 * init
+	 * init Alarm Entity
 	 *
+	 * @param alarmName
+	 * @param alarmChannelCd
+	 * @param alarmValue
+	 * @param memo
 	 * @return
 	 */
-	protected AlarmEntity initNotification(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
-		return initNotification(alarmName, alarmChannelCd, alarmValue, memo, null);
+	protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
+		return initAlarm(alarmName, alarmChannelCd, alarmValue, memo, null);
 	}
 
-	protected AlarmEntity initNotification(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
+	/**
+	 * init Alarm Entity
+	 *
+	 * @param alarmName
+	 * @param alarmChannelCd
+	 * @param alarmValue
+	 * @param memo
+	 * @param alarmIdx
+	 * @return
+	 */
+	protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
 		String userId = SecUtils.userId();
 		//@formatter:off
         AlarmEntity alarmEntity = AlarmEntity.builder()

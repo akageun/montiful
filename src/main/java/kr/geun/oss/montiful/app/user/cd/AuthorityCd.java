@@ -1,13 +1,16 @@
 package kr.geun.oss.montiful.app.user.cd;
 
 /**
- *
+ * Authority Code Enum
  *
  * @author akageun
  */
 public enum AuthorityCd {
-	NORMAL, MANAGER, SUPER_ADMIN,
-
+	//@formatter:off
+	NORMAL,
+	MANAGER,
+	SUPER_ADMIN,
+	//@formatter:on
 	;
 
 	public String roleCd() {

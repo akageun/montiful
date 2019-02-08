@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class SecUtils {
 
 	/**
-	 * get User Id By Spring Security Session
+	 * search User Id By Spring Security Session
 	 *
 	 * @return
 	 */

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 /**
- *
+ * User Entity
  *
  * @author akageun
  */

@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @AllArgsConstructor
 public enum StatusCheckTypeCd {//@formatter:off
-	ONLY_200_CHK("", ""){
+	ONLY_200_CHECK("", ""){
 
 		@Override
 		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
@@ -31,7 +31,7 @@ public enum StatusCheckTypeCd {//@formatter:off
     		return checkRes;
     	}
     },
-	SUCCESS_2XX_CHK("", ""){
+	SUCCESS_2XX_CHECK("", ""){
 
 		@Override
 		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
@@ -47,7 +47,7 @@ public enum StatusCheckTypeCd {//@formatter:off
 			return checkRes;
 		}
 	},
-	SAME_TEXT("", ""){
+	SAME_STRING("", ""){
 
 		@Override
 		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {

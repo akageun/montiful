@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			}
 
 		} catch (ExpiredJwtException e) {
-			log.error("e : {}, {}", e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			SecurityContextHolder.clearContext();
 		}
 

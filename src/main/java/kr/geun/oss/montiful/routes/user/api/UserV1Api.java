@@ -12,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,7 +73,7 @@ public class UserV1Api {
 
 		UserEntity userEntity = UserEntity.builder().userId(param.getUserId()).passWd(param.getPassWd()).email(param.getEmail()).build();
 
-		userService.save(userEntity);
+		userService.add(userEntity);
 
 		return ResponseEntity.ok(Res.of(true, "SUCCESS"));
 	}

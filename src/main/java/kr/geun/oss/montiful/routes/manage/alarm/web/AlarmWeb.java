@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 /**
- *
+ * Alarm Manage Web Controller
  *
  * @author akageun
  */
@@ -33,6 +33,13 @@ public class AlarmWeb extends BaseController {
 	@Autowired
 	private AlarmService alarmService;
 
+	/**
+	 * Alarm Page
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/alarm")
 	public ModelAndView getAlarmPage(@Valid AlarmDTO.Page param, BindingResult result) {
 		if (result.hasErrors()) {

@@ -4,6 +4,7 @@ import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
+import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
@@ -19,7 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -54,9 +60,6 @@ public class MonitorProgramWeb {
 		return mav;
 	}
 
-	@Autowired
-	private ProgramUrlRepo programUrlRepo;
-
 	@GetMapping("/program/{programIdx}")
 	public ModelAndView getMonitorProgram(@Valid MonitorDTO.ProgramSingleReq param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -69,9 +72,7 @@ public class MonitorProgramWeb {
 		}
 
 		ModelAndView mav = new ModelAndView();
-
 		mav.addObject("result", optionalProgramEntity.get());
-		mav.addObject("urlList", programUrlRepo.findByProgramUrlList(param.getProgramIdx()));
 		mav.addObject("paramInfo", param);
 
 		//URL 리스트 가져오기.
