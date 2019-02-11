@@ -13,7 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * URL Monitor Hist
+ * URL Monitor History Entity
  *
  * @author akageun
  */

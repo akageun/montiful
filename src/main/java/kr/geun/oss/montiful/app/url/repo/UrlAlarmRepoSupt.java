@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface UrlAlarmRepoSupt {
 
-    List<AlarmEntity> findUrlNotificationListByUrlIdx(Long urlIdx);
+    List<AlarmEntity> findUrlAlarmListByUrlIdx(Long urlIdx);
 }

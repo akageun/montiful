@@ -87,7 +87,7 @@ public class AlarmServiceImpl implements AlarmService {
 	 */
 	@Override
 	public void sendAlarm(MonitorDTO.CheckRes checkRes) {
-		List<AlarmEntity> notifyEntities = urlAlarmRepo.findUrlNotificationListByUrlIdx(checkRes.getUrlIdx());
+		List<AlarmEntity> notifyEntities = urlAlarmRepo.findUrlAlarmListByUrlIdx(checkRes.getUrlIdx());
 		if (notifyEntities.isEmpty()) {
 			log.debug("등록된 알람이 없습니다.");
 			return;

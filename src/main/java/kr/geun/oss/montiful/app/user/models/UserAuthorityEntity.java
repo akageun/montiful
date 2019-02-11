@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * User-Authority Mapping
+ * User-Authority Mapping Entity
  *
  * @author akageun
  */

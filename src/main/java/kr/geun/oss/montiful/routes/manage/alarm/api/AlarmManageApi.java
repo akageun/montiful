@@ -39,10 +39,12 @@ public class AlarmManageApi extends AlarmCommonModule {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}
 
-		Optional<AlarmEntity> notifyEntity = alarmService.get(param.getAlarmIdx());
-		//TODO : 방어로직 추가해야함.
+		Optional<AlarmEntity> alarmEntity = alarmService.get(param.getAlarmIdx());
+		if (alarmEntity.isPresent() == false) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "없는 Alarm Idx 입니다."));
+		}
 
-		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", notifyEntity.get()));
+		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", alarmEntity.get()));
 	}
 
 	/**

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- *
+ * Email Smtp Channel Api
  *
  * @author akageun
  */
@@ -23,6 +23,13 @@ import javax.validation.Valid;
 @RequestMapping("/manage/alarm/api/v1/email/smtp")
 public class EmailSmtpChannelApi extends AlarmCommonModule {
 
+	/**
+	 * Add
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@PostMapping(value = "")
 	public ResponseEntity<Res> add(@Valid ChannelEmailSmtpDTO.Add param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -44,6 +51,13 @@ public class EmailSmtpChannelApi extends AlarmCommonModule {
 
 	}
 
+	/**
+	 * Modify
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@PutMapping(value = "")
 	public ResponseEntity<Res> modify(@RequestBody @Valid ChannelEmailSmtpDTO.Modify param, BindingResult result) {
 		if (result.hasErrors()) {

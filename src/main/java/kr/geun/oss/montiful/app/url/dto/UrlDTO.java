@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 /**
- *
+ * URL DTO
  *
  * @author akageun
  */
