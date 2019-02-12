@@ -5,6 +5,9 @@ import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
+import kr.geun.oss.montiful.app.system.cd.SysConfCd;
+import kr.geun.oss.montiful.app.system.models.SysConfEntity;
+import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
@@ -12,6 +15,7 @@ import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.service.UserService;
+import kr.geun.oss.montiful.core.constants.Const;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +23,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -53,7 +58,7 @@ public class TempAppRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		final String userId = "akageun";
+		final String userId = Const.System.systemAdminUserId;
 		final String urlPrefix = "http://localhost:%s";
 
 		//@formatter:off
@@ -73,8 +78,8 @@ public class TempAppRunner implements CommandLineRunner {
 
         ProgramEntity rtnProgramInfo2 = programRepo.save(programParam2);
 
-        IntStream.range(3, 10).forEach(i->programRepo.save(ProgramEntity.builder()
-			.programName("Test Program Num "+i)
+        IntStream.range(3, 10).forEach(i -> programRepo.save(ProgramEntity.builder()
+			.programName("Test Program Num " + i)
 			.createdUserId(userId)
 			.updatedUserId(userId)
 			.build())
@@ -169,7 +174,31 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId("akageun").build());
+		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId(Const.System.systemAdminUserId).enable(true).locked(true).build());
+
+		initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.
+	}
+
+	@Autowired
+	private SysConfService sysConfService;
+
+	private void initSystemConfig() {
+		for (SysConfCd value : SysConfCd.values()) {
+			Optional<SysConfEntity> dbInfo = sysConfService.get(value.name());
+			if (dbInfo.isPresent()) {
+				continue;
+			}
+			//@formatter:off
+			SysConfEntity sysConfEntity = SysConfEntity.builder()
+				.confCd(value.name())
+				.confValue(value.getDefaultValue())
+				.createdUserId(Const.System.systemAdminUserId)
+				.updatedUserId(Const.System.systemAdminUserId)
+				.build();
+			//@formatter:on
+
+			sysConfService.add(sysConfEntity);
+		}
 	}
 
 }

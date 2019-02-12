@@ -96,7 +96,13 @@ public interface UrlService {
 	 */
 	void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list);
 
+	/**
+	 * Status Cnt
+	 *  - For Dashboard
+	 *
+	 * @return
+	 */
 	List<UrlDTO.StatusCnt> getStatusCntForDashboard();
 
-	Map<String, Object> getListByProgramIdx(Long programIdx);
+	Map<String, Object> getUrlInfoListByProgramIdx(Long programIdx);
 }

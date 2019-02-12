@@ -3,6 +3,8 @@ package kr.geun.oss.montiful.app.monitor.service.impl;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.monitor.service.AsyncMonitorService;
 import kr.geun.oss.montiful.app.monitor.service.MonitorService;
+import kr.geun.oss.montiful.app.system.cd.SysConfCd;
+import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.constants.Const;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,9 @@ public class MonitorServiceImpl implements MonitorService {
 
 	private final String URL_ALL_KEY = "program:url:allList";
 
+	@Autowired
+	private SysConfService sysConfService;
+
 	@Override
 	public void run() {
 		if (initHealthCheckList() == false) {
@@ -42,7 +47,7 @@ public class MonitorServiceImpl implements MonitorService {
 			return;
 		}
 
-		final int maxRunThread = 3; //TODO : 디비에서 가져오는 형태!
+		int confValue = Integer.parseInt(sysConfService.getValue(SysConfCd.URL_HEALTH_CHECK_RUN_THREAD));
 
 		Long runTime = new Date().getTime();
 
@@ -55,7 +60,7 @@ public class MonitorServiceImpl implements MonitorService {
 
 		redisTemplate.opsForList().leftPush(Const.Redis.URL_CHECK_ID, Const.Redis.URL_HIST_PREFIX + runTime);
 
-		for (int i = 0; i < maxRunThread; i++) {
+		for (int i = 0; i < confValue; i++) {
 			asyncMonitorService.asyncMonitorCheck(runTime, URL_ALL_KEY);
 		}
 	}

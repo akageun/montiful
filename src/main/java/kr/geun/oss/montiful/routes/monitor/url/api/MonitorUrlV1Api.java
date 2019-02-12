@@ -28,15 +28,7 @@ import java.util.stream.Collectors;
 public class MonitorUrlV1Api {
 
 	@Autowired
-	private MonitorHistService monitorHistService;
-
-	@Autowired
 	private UrlService urlService;
-
-	@GetMapping(value = "/hist")
-	public ResponseEntity<Map> getUrlHist() {
-		return ResponseEntity.ok().body(monitorHistService.getList().stream().collect(Collectors.groupingBy(MonitorDTO.CheckRes::getUrlName)));
-	}
 
 	@GetMapping(value = "/list")
 	public ResponseEntity<Res> getUrlList(@Valid MonitorDTO.UrlListReq param, BindingResult result) {
@@ -44,7 +36,7 @@ public class MonitorUrlV1Api {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}
 
-		Map<String, Object> rtnMap = urlService.getListByProgramIdx(param.getProgramIdx());
+		Map<String, Object> rtnMap = urlService.getUrlInfoListByProgramIdx(param.getProgramIdx());
 		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", rtnMap));
 	}
 }

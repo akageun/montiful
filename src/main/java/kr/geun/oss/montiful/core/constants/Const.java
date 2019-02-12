@@ -7,6 +7,10 @@ package kr.geun.oss.montiful.core.constants;
  */
 public class Const {
 
+	public static class System {
+		public static final String systemAdminUserId = "system_admin";
+	}
+
 	/**
 	 * Redis Constants
 	 *

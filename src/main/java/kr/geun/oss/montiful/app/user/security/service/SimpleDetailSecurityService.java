@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Spring Security Detail Service
  *
  * @author akageun
  */
@@ -34,7 +34,7 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		Optional<UserEntity> optUserInfo = userRepo.findById(userId);
 		if (optUserInfo.isPresent() == false) {
-			throw new UsernameNotFoundException("NOT Found User");
+			throw new UsernameNotFoundException("Not Found User");
 		}
 
 		List<UserAuthorityEntity> authList = userAuthorityRepo.findByUserId(userId);
@@ -43,9 +43,14 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 		}
 
 		UserEntity userEntity = optUserInfo.get();
-
+		//@formatter:off
 		List<GrantedAuthority> grantedAuthorities = SecUtils.mapToGrantedAuthorities(
-			authList.stream().map(UserAuthorityEntity::getAuthorityCd).collect(Collectors.toList()));
+			authList
+				.stream()
+				.map(UserAuthorityEntity::getAuthorityCd)
+				.collect(Collectors.toList())
+		);
+		//@formatter:on
 
 		return new User(userEntity.getUserId(), userEntity.getPassWd(), grantedAuthorities);
 	}

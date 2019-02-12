@@ -8,6 +8,8 @@ import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
 import kr.geun.oss.montiful.app.redis.publisher.service.RedisPublisher;
+import kr.geun.oss.montiful.app.system.cd.SysConfCd;
+import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -40,6 +42,9 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	private SysConfService sysConfService;
 
 	@Override
 	public Page<AlarmEntity> page(Pageable pageable) {
@@ -74,6 +79,11 @@ public class AlarmServiceImpl implements AlarmService {
 	@Override
 	public void alarmPublisher(List<MonitorDTO.CheckRes> list) {
 		if (list.isEmpty()) {
+			return;
+		}
+
+		String confValue = sysConfService.getValue(SysConfCd.GLOBAL_ALARM_YN);
+		if ("N".equals(confValue)) {
 			return;
 		}
 

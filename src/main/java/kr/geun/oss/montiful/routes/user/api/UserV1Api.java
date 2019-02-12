@@ -22,7 +22,8 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 /**
- *
+ * User Api Controller
+ *  - V1
  *
  * @author akageun
  */
@@ -34,6 +35,15 @@ public class UserV1Api {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * Login Api
+	 *
+	 * @param param
+	 * @param result
+	 * @param req
+	 * @param res
+	 * @return
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<Res> login(@Valid UserDTO.LoginReq param, BindingResult result, HttpServletRequest req, HttpServletResponse res) {
 		if (result.hasErrors()) {
@@ -42,6 +52,8 @@ public class UserV1Api {
 
 		try {
 			userService.login(param.getUserId(), param.getPassWd(), param.isRemember(), req, res);
+
+			//TODO : 5회 이상 잘못된 로그인 시도시 잠금
 
 		} catch (BadCredentialsException be) {
 			log.debug("BadCredentialsException :param: {}, msg: {}, ex: {} ", param.toString(), be.getMessage(), be);
@@ -57,9 +69,16 @@ public class UserV1Api {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "서버에러"));
 		}
 
-		return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+		return ResponseEntity.ok(Res.ok());
 	}
 
+	/**
+	 * Sign Up
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<Res> signUp(@Valid UserDTO.SingUpReq param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -75,9 +94,16 @@ public class UserV1Api {
 
 		userService.add(userEntity);
 
-		return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+		return ResponseEntity.ok(Res.ok());
 	}
 
+	/**
+	 * Logout
+	 *
+	 * @param req
+	 * @param res
+	 * @return
+	 */
 	@PostMapping("/logout")
 	public ResponseEntity<Res> logout(HttpServletRequest req, HttpServletResponse res) {
 		userService.logout(req, res);

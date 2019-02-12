@@ -7,7 +7,7 @@ import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import java.util.List;
 
 /**
- *
+ * Url Repository Custom Interface
  *
  * @author akageun
  */
@@ -19,5 +19,11 @@ public interface UrlRepoSupt {
 
 	List<MonitorDTO.CheckReq> findByCheckList();
 
-	List<UrlDTO.StatusCnt> findGroupByStatusCntForDashboard();
+	/**
+	 * Health Status Code Count
+	 *  - Group By
+	 *
+	 * @return
+	 */
+	List<UrlDTO.StatusCnt> findGroupByStatusCnt();
 }

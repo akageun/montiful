@@ -37,6 +37,12 @@ public class UserEntity {
 	@Column(name = "email", nullable = false)
 	private String email;
 
+	@Column(name = "enable", nullable = false)
+	private Boolean enable;
+
+	@Column(name = "locked", nullable = false)
+	private Boolean locked;
+
 	/**
 	 * 생성일시
 	 */
