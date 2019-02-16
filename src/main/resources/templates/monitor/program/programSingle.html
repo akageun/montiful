@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:paging="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Program Monitor</title>
@@ -24,7 +24,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Program</h5>
-                        <p class="card-text">
+                        <p class="card-text" th:text="${result.memo}">
                             <!--프로그램 등록/수정이 가능한 관리 페이지 입니다.-->
                         </p>
                         <div class="form-inline">
@@ -50,6 +50,14 @@
         </div>
     </div>
 
+</div>
+<th:block layout:fragment="includeScripts">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
+</th:block>
+<th:block layout:fragment="scripts">
     <script id="url-info-template" type="text/x-handlebars-template">
         {{#items}}
         <div class="col-sm-12 col-md-6">
@@ -70,14 +78,6 @@
         {{/items}}
     </script>
 
-</div>
-<th:block layout:fragment="includeScripts">
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
-</th:block>
-<th:block layout:fragment="scripts">
     <script>
         Handlebars.registerHelper('status_icon', function () {
             var healthStatusCd = Handlebars.escapeExpression(this.healthStatusCd);
@@ -103,6 +103,7 @@
 
                     chart(data.urlHealthCount);
                     urlCard(data.urlList);
+
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -126,6 +127,11 @@
         });
 
         function chart(urlHealthCount) {
+
+            if (isEmpty(urlHealthCount)) {
+                $("#PieChart").html('<h5>No Data!!</h5>');
+                return;
+            }
 
             var rtnData = [];
             for (var tmpIndex in urlHealthCount) {
@@ -167,11 +173,6 @@
             var html = template(data);
 
             document.getElementById("result-url-info-template").innerHTML = html;
-        }
-
-        function movePageCustom(pageNo) {
-            $("#frmSearch [name='pageNumber']").val(pageNo);
-            $("#frmSearch").submit();
         }
     </script>
 </th:block>

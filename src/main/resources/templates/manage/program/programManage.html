@@ -42,58 +42,76 @@
                     <div class="card-body">
                         <form id="frmSearch" class="mb-2">
                             <input type="hidden" name="pageNumber" value="1">
-                            <div class="form-inline w-100 mb-1">
-                                <div class="form-group">
-                                    <select class="form-control form-control-sm">
-                                        <option>Idx</option>
-                                        <option>Program Name</option>
-                                        <option>Created At</option>
-                                        <option>Updated At</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control form-control-sm">
-                                        <option>Desc</option>
-                                        <option>Asc</option>
-                                    </select>
+                            <div class="row search-row">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="form-inline ">
+                                        <div class=" form-group">
+                                            <select class="form-control form-control-sm" name="searchType">
+                                                <option value="">==Search Type==</option>
+                                                <option th:each="typeCd : ${searchTypeCd}"
+                                                        th:value="${typeCd.name()}"
+                                                        th:text="${typeCd.cdNm}"
+                                                        th:selected="${typeCd eq paramInfo.searchType}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class=" form-group">
+                                            <input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="form-group mr-2">
-                                    <select class="form-control form-control-sm">
-                                        <option>20 Row</option>
-                                        <option>50 Row</option>
-                                        <option>100 Row</option>
-                                    </select>
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="form-inline float-right">
+                                        <div class="form-group">
+
+                                            <select class="form-control form-control-sm" name="sortType" onchange="search();">
+                                                <option th:each="typeCd : ${sortTypeCd}"
+                                                        th:value="${typeCd.name()}"
+                                                        th:text="${typeCd.name()}"
+                                                        th:selected="${typeCd == paramInfo.sortType}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="form-control form-control-sm" name="sortDirection" onchange="search();">
+                                                <option th:each="directionCd : ${sortDirectionCd}"
+                                                        th:value="${directionCd.name()}"
+                                                        th:text="${directionCd.name()}"
+                                                        th:selected="${directionCd eq paramInfo.sortDirection}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <select class="form-control form-control-sm" name="elementSize" onchange="search();">
+                                                <option>20 Row</option>
+                                                <option>50 Row</option>
+                                                <option>100 Row</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-inline w-100">
-                                <div class=" form-group">
-                                    <select class="form-control form-control-sm">
-                                        <option>==Search Type==</option>
-                                        <option>Created User Id</option>
-                                        <option>Updated User Id</option>
-                                        <option>Program Name</option>
-                                        <option>Memo</option>
-                                    </select>
-                                </div>
-                                <div class=" form-group">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>
-                                </div>
-                                <div class="form-group ml-2">
-                                    <button class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-search"></i> Search
-                                    </button>
-                                </div>
-                            </div>
+
+
                         </form>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <colgroup>
                                     <col width="5%">
                                     <col width="*">
-                                    <col width="10%">
+                                    <col width="12%">
                                     <col width="15%">
-                                    <col width="10%">
+                                    <col width="12%">
                                     <col width="15%">
                                 </colgroup>
                                 <thead>
@@ -126,9 +144,10 @@
                                     </td>
 
                                     <td class="text-center" th:text="${result.createdUserId}"></td>
-                                    <td class="text-center" th:text="${result.createdAt}"></td>
+                                    <!--<td class="text-center" th:text="${result.createdAt}"></td>-->
+                                    <td class="text-center" th:text="${#temporals.format(result.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                     <td class="text-center" th:text="${result.updatedUserId}"></td>
-                                    <td class="text-center" th:text="${result.updatedAt}"></td>
+                                    <td class="text-center" th:text="${#temporals.format(result.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -341,6 +360,35 @@
         function movePageCustom(pageNo) {
             $("#frmSearch [name='pageNumber']").val(pageNo);
             $("#frmSearch").submit();
+        }
+
+        function search() {
+            var frmSearch = document.getElementById('frmSearch');
+
+            frmSearch.action = '/manage/program';
+
+            removeNotUsedElement(frmSearch);
+            frmSearch.submit();
+        }
+
+        /**
+         * Form 내부에 있는 미사용 value 삭제
+         *
+         * - GET일 경우에만 동작함.
+         *
+         * @param frm
+         */
+        function removeNotUsedElement(frm) {
+
+            if (frm.method.toUpperCase() === 'GET') {
+                for (var i = 0; i < frm.elements.length; i++) {
+                    var tmpElement = frm.elements[i];
+                    var tmpVal = tmpElement.value;
+                    if (tmpVal === undefined || tmpVal === '') {
+                        tmpElement.disabled = true;
+                    }
+                }
+            }
         }
     </script>
 </th:block>

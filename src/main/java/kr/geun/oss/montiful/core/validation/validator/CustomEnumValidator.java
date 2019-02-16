@@ -16,6 +16,7 @@ import java.util.TreeSet;
 public class CustomEnumValidator implements ConstraintValidator<EnumValid, String> {
 
 	private Set<String> targetEnumList = new TreeSet<>();
+	private Boolean isNullable;
 
 	@Override
 	public void initialize(EnumValid constraintAnnotation) {
@@ -26,15 +27,19 @@ public class CustomEnumValidator implements ConstraintValidator<EnumValid, Strin
 			targetEnumList.add(StringUtils.upperCase(anEnum.toString()));
 		}
 
+		isNullable = constraintAnnotation.nullable();
+
 	}
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 
-		if (StringUtils.isBlank(value)) {
-			return false;
+		if (StringUtils.isNotBlank(value)) {
+			return targetEnumList.contains(StringUtils.upperCase(value));
+
 		}
 
-		return targetEnumList.contains(StringUtils.upperCase(value));
+		return isNullable;
+
 	}
 }

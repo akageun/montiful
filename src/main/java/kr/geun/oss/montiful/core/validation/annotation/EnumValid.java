@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  *
  * @author akageun
  */
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CustomEnumValidator.class)
 public @interface EnumValid {
@@ -25,4 +25,6 @@ public @interface EnumValid {
 	Class<? extends Payload>[] payload() default {};
 
 	Class<? extends Enum<?>> targetEnum();
+
+	boolean nullable() default false;
 }

@@ -212,3 +212,7 @@ ul.timeline > li:before {
     height: 10px;
     z-index: 400;
 }
+
+.search-row .form-group{
+    margin-bottom: 0.6rem;
+}
