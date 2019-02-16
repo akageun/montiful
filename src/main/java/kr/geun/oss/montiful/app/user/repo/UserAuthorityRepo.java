@@ -6,11 +6,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
+ * User Authority Repository
  *
- *
- * @author 김형근
+ * @author akageun
  */
 public interface UserAuthorityRepo extends JpaRepository<UserAuthorityEntity, UserAuthorityEntity.CompositeKey> {
 
+	/**
+	 * 유저 아이디로 권한 리스트 받아오기
+	 *
+	 * @param userId
+	 * @return
+	 */
 	List<UserAuthorityEntity> findByUserId(String userId);
 }

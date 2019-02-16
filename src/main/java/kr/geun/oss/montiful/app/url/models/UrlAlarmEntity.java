@@ -1,21 +1,19 @@
 package kr.geun.oss.montiful.app.url.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- *
+ * URL Alarm Entity
  *
  * @author akageun
  */
@@ -66,7 +64,7 @@ public class UrlAlarmEntity {
 				return true;
 			}
 			if (obj != null && getClass().isAssignableFrom(obj.getClass())) {
-				CompositeKey other = (CompositeKey) obj;
+				CompositeKey other = (CompositeKey)obj;
 				return new EqualsBuilder().append(urlIdx, other.getUrlIdx()).append(alarmIdx, other.alarmIdx).build();
 			}
 			return false;

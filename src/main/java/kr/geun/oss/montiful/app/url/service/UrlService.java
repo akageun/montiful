@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -95,5 +96,13 @@ public interface UrlService {
 	 */
 	void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list);
 
+	/**
+	 * Status Cnt
+	 *  - For Dashboard
+	 *
+	 * @return
+	 */
 	List<UrlDTO.StatusCnt> getStatusCntForDashboard();
+
+	Map<String, Object> getUrlInfoListByProgramIdx(Long programIdx);
 }

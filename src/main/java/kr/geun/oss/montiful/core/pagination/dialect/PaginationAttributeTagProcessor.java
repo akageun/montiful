@@ -51,7 +51,11 @@ public class PaginationAttributeTagProcessor extends AbstractAttributeTagProcess
 
 		final IStandardExpression expression = parser.parseExpression(iTemplateContext, s);
 
-		final PaginationInfo paginationInfo = (PaginationInfo) expression.execute(iTemplateContext);
+		final PaginationInfo paginationInfo = (PaginationInfo)expression.execute(iTemplateContext);
+
+		if (paginationInfo == null) {
+			return;
+		}
 
 		String jsFuncName = "movePage";
 		if (iProcessableElementTag.hasAttribute(JS_FUNC_NAME_ATTRIBUTE_NAME)) {

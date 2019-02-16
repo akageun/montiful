@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Program Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.css"/>
+</head>
+<div layout:fragment="page_content" id="page_content">
+    <div class="container-fluid">
+        <input type="hidden" name="programIdx" th:value="${paramInfo.programIdx}"/>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/monitor/program">(Monitor) Program List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Program</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Program</h5>
+                        <p class="card-text" th:text="${result.memo}">
+                            <!--프로그램 등록/수정이 가능한 관리 페이지 입니다.-->
+                        </p>
+                        <div class="form-inline">
+                            <div class="form-group pr-1">
+                                <!--<button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">-->
+                                <!--<i class="far fa-plus-square"></i> ADD-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-5">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="PieChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-url-info-template" class="row">
+        </div>
+    </div>
+
+</div>
+<th:block layout:fragment="includeScripts">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/1.7.1/billboard.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script id="url-info-template" type="text/x-handlebars-template">
+        {{#items}}
+        <div class="col-sm-12 col-md-6">
+            <div class="card ">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-info text-center mt-3">
+                            <h2>{{status_icon}}</h2>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-info text-center mt-3"><h4>{{healthStatusCd}}</h4></div>
+                        <div class="text-success text-center mt-2"><h6>{{urlName}}</h6></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/items}}
+    </script>
+
+    <script>
+        Handlebars.registerHelper('status_icon', function () {
+            var healthStatusCd = Handlebars.escapeExpression(this.healthStatusCd);
+            var html = '';
+
+            if (healthStatusCd === 'HEALTH') {
+                html = '<i class="fas fa-smile-wink fa-2x" style="color: #659bf2;"></i>';
+            } else if (healthStatusCd === 'WARNING') {
+                html = '<i class="fas fa-exclamation-circle fa-2x" style="color: #f7a151;"></i>';
+            } else if (healthStatusCd === 'ERROR') {
+                html = '<i class="fas fa-skull-crossbones fa-2x" style="color: #f70404;"></i>';
+            }
+
+            return new Handlebars.SafeString(html);
+        });
+
+        $(document).ready(function () {
+            var url = '/monitor/url/api/v1/list';
+
+            axios.get(url + "?programIdx=" + $("[name='programIdx']").val())
+                .then(function (response) {
+                    var data = response.data.data;
+
+                    chart(data.urlHealthCount);
+                    urlCard(data.urlList);
+
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
+                    if (error.response.status === 401) {
+                        console.log(error);
+                        alert("실패 401: " + error);
+                        location.href = "/login";
+                    } else if (error.response.status === 403) {
+                        console.log(error);
+                        alert("실패 403: " + error);
+                    } else {
+                        console.log("error : ", error);
+                        alert("실패 Else : " + error);
+                    }
+                });
+        });
+
+        function chart(urlHealthCount) {
+
+            if (isEmpty(urlHealthCount)) {
+                $("#PieChart").html('<h5>No Data!!</h5>');
+                return;
+            }
+
+            var rtnData = [];
+            for (var tmpIndex in urlHealthCount) {
+                var subRtnData = [];
+                subRtnData.push(tmpIndex);
+
+                for (var subTmpIndex in urlHealthCount[tmpIndex]) {
+                    subRtnData.push(urlHealthCount[tmpIndex][subTmpIndex]);
+                }
+
+                rtnData.push(subRtnData);
+            }
+
+            // Script
+            bb.generate({
+                data: {
+                    columns: rtnData,
+                    type: "pie",
+                    // onclick: function (d, i) {
+                    //     console.log("onclick", d, i);
+                    // },
+                    // onover: function (d, i) {
+                    //     console.log("onover", d, i);
+                    // },
+                    // onout: function (d, i) {
+                    //     console.log("onout", d, i);
+                    // }
+                },
+                bindto: "#PieChart"
+            });
+        }
+
+        function urlCard(urlList) {
+            var source = document.getElementById("url-info-template").innerHTML;
+
+            var data = {items: urlList};
+
+            var template = Handlebars.compile(source);
+            var html = template(data);
+
+            document.getElementById("result-url-info-template").innerHTML = html;
+        }
+    </script>
+</th:block>

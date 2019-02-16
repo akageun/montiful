@@ -9,7 +9,9 @@ import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.app.url.models.UrlMonitorHistEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
+import kr.geun.oss.montiful.app.url.repo.UrlMonitorHistRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +35,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -57,6 +56,9 @@ public class UrlServiceImpl implements UrlService {
 
 	@Autowired
 	private UrlAlarmRepo urlAlarmRepo;
+
+	@Autowired
+	private UrlMonitorHistRepo urlMonitorHistRepo;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -191,7 +193,7 @@ public class UrlServiceImpl implements UrlService {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
-		MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.HEALTH).resultMsg("SUCCESS").build();
+		MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.HEALTH).resultMsg("SUCCESS Message").build();
 
 		try {
 			StatusCheckTypeCd statusCheckTypeCd = EnumUtils.getEnum(StatusCheckTypeCd.class, param.getStatusCheckTypeCd());
@@ -212,6 +214,7 @@ public class UrlServiceImpl implements UrlService {
 		} catch (IllegalArgumentException e1) { //잘못 등록된 값
 			checkRes.setHealthStatusCd(HealthStatusCd.WARNING);
 			checkRes.setResultMsg(String.format("설정값이 잘못되었습니다. %s", e1.getMessage()));
+
 		} catch (HttpClientErrorException e2) {
 			checkRes.setHealthStatusCd(HealthStatusCd.WARNING);
 			checkRes.setResultMsg(String.format("페이지가 잘못되었습니다. (%s) %s", e2.getStatusCode(), e2.getMessage()));
@@ -224,6 +227,7 @@ public class UrlServiceImpl implements UrlService {
 			} else {
 				log.error("error : {}, {}", ee.getMessage(), ee);
 			}
+
 		} catch (RestClientException e) {
 			checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
 
@@ -239,7 +243,7 @@ public class UrlServiceImpl implements UrlService {
 
 		} catch (Exception e) {
 			checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-			checkRes.setResultMsg(String.format("System Error가 발생했습니다. : %s", e.getMessage()));
+			checkRes.setResultMsg(String.format("System Error 가 발생했습니다. : %s", e.getMessage()));
 		} finally {
 			checkRes.setResponseTime(stopwatch.elapsed(TimeUnit.MILLISECONDS));
 		}
@@ -257,28 +261,40 @@ public class UrlServiceImpl implements UrlService {
 	 *
 	 * @param list
 	 */
+	@Transactional
 	@Override
 	public void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list) {
 		if (list.isEmpty()) {
 			return;
 		}
 
-		//Map<String, List<UrlEntity>> groupByResult = list.stream().collect(Collectors.groupingBy(UrlEntity::getHealthStatusCd));
 		//@formatter:off
 		list.stream()
 			.collect(Collectors.groupingBy(MonitorDTO.CheckRes::getHealthStatusCd))
 			.forEach((key, values) ->
 				urlRepo.updateStatusCheckCdInUrlIdx(key.name(), values.stream().map(MonitorDTO.CheckRes::getUrlIdx).collect(Collectors.toList()))
 			);
+
+		urlMonitorHistRepo.saveAll(
+			list.stream()
+				.map(info ->
+					UrlMonitorHistEntity.builder()
+						.urlIdx(info.getUrlIdx())
+						.healthStatusCd(info.getHealthStatusCd().name())
+						.preHealthStatusCheckCd(info.getPreHealthStatusCheckCd())
+					.build()
+				).collect(Collectors.toList())
+		);
 		//@formatter:on
+
 	}
 
 	@Override
 	public List<UrlDTO.StatusCnt> getStatusCntForDashboard() {
 		List<UrlDTO.StatusCnt> rtnList = new ArrayList<>();
-		List<UrlDTO.StatusCnt> ttt = urlRepo.findGroupByStatusCntForDashboard();
+		List<UrlDTO.StatusCnt> ttt = urlRepo.findGroupByStatusCnt();
 
-		List<String> codeList = HealthStatusCd.getList();
+		List<String> codeList = HealthStatusCd.getNameList();
 		for (String code : codeList) {
 
 			UrlDTO.StatusCnt tmpStatusCnt = null;
@@ -297,6 +313,26 @@ public class UrlServiceImpl implements UrlService {
 		}
 
 		return rtnList;
+	}
+
+	@Override
+	public Map<String, Object> getUrlInfoListByProgramIdx(Long programIdx) {
+		Map<String, Object> rtnMap = new HashMap<>();
+
+		List<UrlEntity> urlList = programUrlRepo.findByProgramUrlList(programIdx);
+
+		final int urlListTotalCnt = urlList.size();
+
+		Map<String, String> urlHealthCount = urlList.stream().collect(
+			Collectors.groupingBy(UrlEntity::getHealthStatusCd, Collectors.collectingAndThen(Collectors.counting(), value -> {
+				double t = (double) value / (double) urlListTotalCnt;
+				return String.format("%.2f", t * 100.0);  //%.2f" 는 소수점 이하 2자리까지 출력
+			})));
+
+		rtnMap.put("urlHealthCount", urlHealthCount);
+		rtnMap.put("urlList", urlList);
+
+		return rtnMap;
 	}
 
 }

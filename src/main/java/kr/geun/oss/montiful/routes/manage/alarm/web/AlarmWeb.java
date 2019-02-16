@@ -5,8 +5,8 @@ import kr.geun.oss.montiful.app.alarm.common.dto.AlarmDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
-import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,18 +21,25 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 /**
- *
+ * Alarm Manage Web Controller
  *
  * @author akageun
  */
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class AlarmWeb {
+public class AlarmWeb extends BaseController {
 
 	@Autowired
 	private AlarmService alarmService;
 
+	/**
+	 * Alarm Page
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/alarm")
 	public ModelAndView getAlarmPage(@Valid AlarmDTO.Page param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -45,9 +52,7 @@ public class AlarmWeb {
 
 		mav.addObject("alarmChannelCd", AlarmChannelCd.values());
 		mav.addObject("resultList", rtnList);
-		mav.addObject("paramInfo", param);
-		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+		setPage(mav, rtnList, 3);
 
 		mav.setViewName("manage/alarm/alarmManage");
 

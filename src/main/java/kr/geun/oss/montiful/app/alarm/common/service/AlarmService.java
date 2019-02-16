@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * Alarm Service Interface
  *
  * @author akageun
  */
@@ -30,7 +30,7 @@ public interface AlarmService {
 	 *
 	 * @param list
 	 */
-	void alarmRegister(List<MonitorDTO.CheckRes> list);
+	void alarmPublisher(List<MonitorDTO.CheckRes> list);
 
 	void sendAlarm(MonitorDTO.CheckRes checkRes);
 }

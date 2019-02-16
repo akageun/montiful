@@ -22,7 +22,7 @@ public enum HealthStatusCd {
 	//@formatter:on
 	;
 
-	public static List<String> getList() {
+	public static List<String> getNameList() {
 		return Arrays.stream(HealthStatusCd.values()).map(String::valueOf).collect(Collectors.toList());
 	}
 }

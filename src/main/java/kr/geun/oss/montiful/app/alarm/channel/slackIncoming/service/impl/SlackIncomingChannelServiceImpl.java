@@ -20,7 +20,7 @@ import java.util.List;
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Slf4j
 @Service("SlackIncomingChannelService")

@@ -30,7 +30,7 @@ public class SlackIncomingChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity notificationEntity = initNotification(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
+			AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class)), param.getMemo());
 
 			AlarmEntity add = alarmService.add(notificationEntity);
@@ -50,7 +50,7 @@ public class SlackIncomingChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity notificationEntity = initNotification(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
+			AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class)), param.getMemo(),
 				param.getAlarmIdx());
 

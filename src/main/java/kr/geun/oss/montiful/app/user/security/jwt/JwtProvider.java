@@ -21,8 +21,21 @@ public interface JwtProvider {
 	 */
 	Authentication getAuthentication(HttpServletRequest req) throws ClaimJwtException;
 
+	/**
+	 * Logout
+	 *
+	 * @param req
+	 * @param res
+	 */
 	void logout(HttpServletRequest req, HttpServletResponse res);
 
+	/**
+	 * User Cookie 생성
+	 *
+	 * @param authentication
+	 * @param rememberMe
+	 * @param res
+	 */
 	void generateUserCookie(Authentication authentication, Boolean rememberMe, HttpServletResponse res);
 
 }

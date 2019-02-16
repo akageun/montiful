@@ -13,9 +13,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * User-Authority Mapping Entity
  *
- *
- * @author 김형근
+ * @author akageun
  */
 @Data
 @NoArgsConstructor

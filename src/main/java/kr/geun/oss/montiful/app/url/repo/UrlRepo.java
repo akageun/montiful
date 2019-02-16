@@ -1,6 +1,5 @@
 package kr.geun.oss.montiful.app.url.repo;
 
-import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

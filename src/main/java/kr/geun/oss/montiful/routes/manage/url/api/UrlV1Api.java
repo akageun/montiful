@@ -37,7 +37,9 @@ public class UrlV1Api {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}
 		Optional<UrlEntity> urlEntity = urlService.get(param.getUrlIdx());
-		//TODO : 방어로직 추가해야함.
+		if (urlEntity.isPresent() == false) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
+		}
 
 		Map<String, Object> rtnMap = new HashMap<>();
 		rtnMap.put("result", urlEntity.get());

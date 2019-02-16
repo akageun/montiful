@@ -1,7 +1,11 @@
 package kr.geun.oss.montiful.app.program.dto;
 
+import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
+import kr.geun.oss.montiful.app.program.cd.ProgramManageSortTypeCd;
+import kr.geun.oss.montiful.core.validation.annotation.EnumValid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +24,11 @@ public class ProgramDTO {
 	public static class PageReq {
 		@Min(0)
 		private int pageNumber;
+
+		private ProgramManageSortTypeCd sortType;
+		private Sort.Direction sortDirection;
+
+		private ProgramManageSearchTypeCd searchType;
 	}
 
 	@Data

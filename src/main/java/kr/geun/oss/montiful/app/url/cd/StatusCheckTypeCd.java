@@ -15,23 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @AllArgsConstructor
 public enum StatusCheckTypeCd {//@formatter:off
-	ONLY_200_CHK("", ""){
-
-		@Override
-		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
-			if (checkValue != null) {
-				throw  new IllegalArgumentException("해당 값은 Null 이여야합니다.");
-			}
-
-			if (HttpStatus.OK != result.getStatusCode()) {
-				checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-				checkRes.setResultMsg(String.format("%s(%s)로 상태값이 변경되었습니다. OK(200)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
-			}
-
-    		return checkRes;
-    	}
-    },
-	SUCCESS_2XX_CHK("", ""){
+	SUCCESS_2XX_CHECK("", "Success Status Code Check"){
 
 		@Override
 		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
@@ -47,12 +31,28 @@ public enum StatusCheckTypeCd {//@formatter:off
 			return checkRes;
 		}
 	},
-	SAME_TEXT("", ""){
+	ONLY_200_CHECK("", "Only 200 Status Code Check"){
+
+		@Override
+		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
+			if (checkValue != null) {
+				throw  new IllegalArgumentException("해당 값은 Null 이여야합니다.");
+			}
+
+			if (HttpStatus.OK != result.getStatusCode()) {
+				checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
+				checkRes.setResultMsg(String.format("%s(%s)로 상태값이 변경되었습니다. OK(200)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
+			}
+
+    		return checkRes;
+    	}
+    },
+	SAME_STRING("", "200 Status Check and Same String Check"){
 
 		@Override
 		public MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue) {
 			if (checkValue == null) {
-				throw  new IllegalArgumentException("해당 값은 Null 이여야합니다.");
+				throw new IllegalArgumentException("해당 값은 Null 이 아니여야 합니다.");
 			}
 
 			if (StringUtils.equals(result.getBody(), checkValue)) {
@@ -69,4 +69,5 @@ public enum StatusCheckTypeCd {//@formatter:off
 	private String cdNm;
 	private String description;
 
-	public abstract MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue);}
+	public abstract MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue);
+}

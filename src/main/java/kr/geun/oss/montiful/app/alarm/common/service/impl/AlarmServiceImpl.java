@@ -8,6 +8,8 @@ import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
 import kr.geun.oss.montiful.app.redis.publisher.service.RedisPublisher;
+import kr.geun.oss.montiful.app.system.cd.SysConfCd;
+import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -21,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * Alarm Service Implements
  *
  * @author akageun
  */
@@ -40,6 +42,9 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	private SysConfService sysConfService;
 
 	@Override
 	public Page<AlarmEntity> page(Pageable pageable) {
@@ -72,25 +77,40 @@ public class AlarmServiceImpl implements AlarmService {
 	 * @param list
 	 */
 	@Override
-	public void alarmRegister(List<MonitorDTO.CheckRes> list) {
+	public void alarmPublisher(List<MonitorDTO.CheckRes> list) {
 		if (list.isEmpty()) {
+			return;
+		}
+
+		String confValue = sysConfService.getValue(SysConfCd.GLOBAL_ALARM_YN);
+		if ("N".equals(confValue)) {
 			return;
 		}
 
 		list.forEach(info -> redisPublisher.publish(RedisTopicCd.NOTIFY, info));
 	}
 
+	/**
+	 * Send Alarm
+	 *
+	 * @param checkRes
+	 */
 	@Override
 	public void sendAlarm(MonitorDTO.CheckRes checkRes) {
-		List<AlarmEntity> notifyEntities = urlAlarmRepo.findUrlNotificationListByUrlIdx(checkRes.getUrlIdx());
+		List<AlarmEntity> notifyEntities = urlAlarmRepo.findUrlAlarmListByUrlIdx(checkRes.getUrlIdx());
+		if (notifyEntities.isEmpty()) {
+			log.debug("등록된 알람이 없습니다.");
+			return;
+		}
 
 		notifyEntities.forEach(info -> {
 			AlarmChannelCd notificationChannelCd = EnumUtils.getEnum(AlarmChannelCd.class, info.getAlarmChannel());
 			if (notificationChannelCd == null) {
+				log.error("등록되지 않은 알람 발송 : {} ", info.getAlarmChannel());
 				return;
 			}
 
-			AlarmChannelService notificationChannelService = (AlarmChannelService)applicationContext.getBean(notificationChannelCd.getBeanName());
+			AlarmChannelService notificationChannelService = (AlarmChannelService) applicationContext.getBean(notificationChannelCd.getBeanName());
 			notificationChannelService.send(checkRes, info);
 		});
 	}

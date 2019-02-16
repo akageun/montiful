@@ -108,6 +108,12 @@ public class JwtProviderImpl implements JwtProvider, InitializingBean {
 		return new UsernamePasswordAuthenticationToken(userId, null, authorities);
 	}
 
+	/**
+	 * Logout
+	 *
+	 * @param req
+	 * @param res
+	 */
 	@Override
 	public void logout(HttpServletRequest req, HttpServletResponse res) {
 		Cookie cookie = WebUtils.getCookie(req, JWT_COOKIE_STRING);
@@ -121,6 +127,13 @@ public class JwtProviderImpl implements JwtProvider, InitializingBean {
 		res.addCookie(cookie);
 	}
 
+	/**
+	 * User Cookie 생성
+	 *
+	 * @param authentication
+	 * @param rememberMe
+	 * @param res
+	 */
 	@Override
 	public void generateUserCookie(Authentication authentication, Boolean rememberMe, HttpServletResponse res) {
 		String token = generatorToken(authentication, rememberMe);

@@ -3,21 +3,22 @@ package kr.geun.oss.montiful.app.user.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- *
+ * User DTO
  *
  * @author akageun
  */
 public class UserDTO {
 
-
 	@Data
 	@NoArgsConstructor
 	public static class PageReq {
+
 		@Min(0)
 		private int pageNumber;
 	}
@@ -34,6 +35,7 @@ public class UserDTO {
 		private String passWd;
 
 		@NotBlank
+		@Email
 		private String email;
 	}
 

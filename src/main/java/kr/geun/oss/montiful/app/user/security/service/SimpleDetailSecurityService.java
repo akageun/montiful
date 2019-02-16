@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.app.user.security;
+package kr.geun.oss.montiful.app.user.security.service;
 
 import kr.geun.oss.montiful.app.user.models.UserAuthorityEntity;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
@@ -6,6 +6,7 @@ import kr.geun.oss.montiful.app.user.repo.UserAuthorityRepo;
 import kr.geun.oss.montiful.app.user.repo.UserRepo;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,9 +18,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Spring Security Detail Service
  *
- *
- * @author 김형근
+ * @author akageun
  */
 public class SimpleDetailSecurityService implements UserDetailsService {
 
@@ -33,7 +34,7 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		Optional<UserEntity> optUserInfo = userRepo.findById(userId);
 		if (optUserInfo.isPresent() == false) {
-			throw new UsernameNotFoundException("NOT Found User");
+			throw new UsernameNotFoundException("Not Found User");
 		}
 
 		List<UserAuthorityEntity> authList = userAuthorityRepo.findByUserId(userId);
@@ -42,8 +43,15 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 		}
 
 		UserEntity userEntity = optUserInfo.get();
+		//@formatter:off
+		List<GrantedAuthority> grantedAuthorities = SecUtils.mapToGrantedAuthorities(
+			authList
+				.stream()
+				.map(UserAuthorityEntity::getAuthorityCd)
+				.collect(Collectors.toList())
+		);
+		//@formatter:on
 
-		return new User(userEntity.getUserId(), userEntity.getPassWd(),
-			SecUtils.mapToGrantedAuthorities(authList.stream().map(userAuthEntity -> userAuthEntity.getAuthorityCd()).collect(Collectors.toList())));
+		return new User(userEntity.getUserId(), userEntity.getPassWd(), grantedAuthorities);
 	}
 }

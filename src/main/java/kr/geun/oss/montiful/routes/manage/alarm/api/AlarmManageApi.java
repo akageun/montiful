@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * Alarm Manage Api Controller
  *
  * @author akageun
  */
@@ -26,20 +26,36 @@ import java.util.Optional;
 @RequestMapping("/manage/alarm/api/v1")
 public class AlarmManageApi extends AlarmCommonModule {
 
+	/**
+	 * Single item search function
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/{alarmIdx}")
 	public ResponseEntity<Res> get(@Valid AlarmDTO.Get param, BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}
 
-		Optional<AlarmEntity> notifyEntity = alarmService.get(param.getAlarmIdx());
-		//TODO : 방어로직 추가해야함.
+		Optional<AlarmEntity> alarmEntity = alarmService.get(param.getAlarmIdx());
+		if (alarmEntity.isPresent() == false) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "없는 Alarm Idx 입니다."));
+		}
 
-		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", notifyEntity.get()));
+		return ResponseEntity.ok().body(Res.of(true, "SUCCESS", alarmEntity.get()));
 	}
 
+	/**
+	 *
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/search")
-	public ResponseEntity<Res> get(@Valid AlarmDTO.Search param, BindingResult result) {
+	public ResponseEntity<Res> search(@Valid AlarmDTO.Search param, BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
 		}

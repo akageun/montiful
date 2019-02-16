@@ -5,7 +5,7 @@ import kr.geun.oss.montiful.app.user.models.UserAuthorityEntity;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.repo.UserAuthorityRepo;
 import kr.geun.oss.montiful.app.user.repo.UserRepo;
-import kr.geun.oss.montiful.app.user.security.SimpleDetailSecurityService;
+import kr.geun.oss.montiful.app.user.security.service.SimpleDetailSecurityService;
 import kr.geun.oss.montiful.app.user.security.jwt.JwtProvider;
 import kr.geun.oss.montiful.app.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 /**
- *
+ * User Service Implements
  *
  * @author akageun
  */
@@ -51,19 +51,35 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private SimpleDetailSecurityService simpleDetailSecurityService;
 
+	/**
+	 * List Page Service
+	 *
+	 * @param pageable
+	 * @return
+	 */
 	@Override
 	public Page<UserEntity> page(Pageable pageable) {
 		return userRepo.findAll(pageable);
 	}
 
+	/**
+	 * Get
+	 *
+	 * @param userId
+	 * @return
+	 */
 	@Override
 	public Optional<UserEntity> get(String userId) {
 		return userRepo.findById(userId);
 	}
 
+	/**
+	 * Add
+	 *
+	 * @param param
+	 */
 	@Override
-	public void save(UserEntity param) {
-
+	public void add(UserEntity param) {
 		param.setPassWd(passwordEncoder.encode(param.getPassWd()));
 
 		userRepo.save(param);
@@ -72,26 +88,45 @@ public class UserServiceImpl implements UserService {
 			UserAuthorityEntity.builder()
 				.userId(param.getUserId())
 				.authorityCd(AuthorityCd.NORMAL.roleCd())
-				.createdUserId("SYSTEM")
-				.updatedUserId("SYSTEM")
+				.createdUserId(param.getUserId())
+				.updatedUserId(param.getUserId())
 				.build()
 		);
 		//@formatter:on
 	}
 
+	/**
+	 * Login
+	 *
+	 * @param userId
+	 * @param passWd
+	 * @param remember
+	 * @param req
+	 * @param res
+	 * @throws Exception
+	 */
 	@Override
 	public void login(String userId, String passWd, boolean remember, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		UserDetails userDetails = simpleDetailSecurityService.loadUserByUsername(userId);
 
-		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(userDetails, passWd, userDetails.getAuthorities()));
+		UsernamePasswordAuthenticationToken userNmPassWdAuthToken = new UsernamePasswordAuthenticationToken(userDetails, passWd,
+			userDetails.getAuthorities());
+
+		Authentication authentication = authenticationManager.authenticate(userNmPassWdAuthToken);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		jwtProvider.generateUserCookie(authentication, remember, res);
 	}
 
+	/**
+	 * Logout
+	 *
+	 * @param req
+	 * @param res
+	 */
 	@Override
 	public void logout(HttpServletRequest req, HttpServletResponse res) {
 		jwtProvider.logout(req, res);
+		SecurityContextHolder.clearContext();
 	}
 }

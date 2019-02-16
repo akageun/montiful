@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- *
+ * Url Repository Custom Implements
  *
  * @author akageun
  */
@@ -44,7 +44,6 @@ public class UrlRepoImpl implements UrlRepoSupt {
         //@formatter:on
 	}
 
-	@Transactional
 	@Override
 	public void updateStatusCheckCdInUrlIdx(String healthStatusCd, List<Long> urlIdxs) {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -83,8 +82,14 @@ public class UrlRepoImpl implements UrlRepoSupt {
         //@formatter:on
 	}
 
+	/**
+	 * Health Status Code Count
+	 *  - Group By
+	 *
+	 * @return
+	 */
 	@Override
-	public List<UrlDTO.StatusCnt> findGroupByStatusCntForDashboard() {
+	public List<UrlDTO.StatusCnt> findGroupByStatusCnt() {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;

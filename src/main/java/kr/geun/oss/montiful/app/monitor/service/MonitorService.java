@@ -7,5 +7,5 @@ package kr.geun.oss.montiful.app.monitor.service;
  */
 public interface MonitorService {
 
-    void run();
+	void run();
 }

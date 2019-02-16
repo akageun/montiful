@@ -1,7 +1,7 @@
 package kr.geun.oss.montiful.config;
 
 import kr.geun.oss.montiful.app.user.cd.AuthorityCd;
-import kr.geun.oss.montiful.app.user.security.SimpleDetailSecurityService;
+import kr.geun.oss.montiful.app.user.security.service.SimpleDetailSecurityService;
 import kr.geun.oss.montiful.app.user.security.jwt.JwtProvider;
 import kr.geun.oss.montiful.app.user.security.jwt.filter.JwtAuthenticationFilter;
 import kr.geun.oss.montiful.app.user.security.jwt.impl.JwtProviderImpl;
@@ -17,12 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  *
  *
- * @author 김형근
+ * @author akageun
  */
 @Configuration
 @EnableWebSecurity

@@ -14,7 +14,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * URL c
+ * URL Entity
  *
  * @author akageun
  */

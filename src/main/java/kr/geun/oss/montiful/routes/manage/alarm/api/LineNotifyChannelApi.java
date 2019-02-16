@@ -30,7 +30,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity alarmEntity = initNotification(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
+			AlarmEntity alarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class)), param.getMemo());
 
 			AlarmEntity alarmEntity1 = alarmService.add(alarmEntity);
@@ -50,7 +50,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
 		}
 
 		try {
-			AlarmEntity AlarmEntity = initNotification(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
+			AlarmEntity AlarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
 				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class)), param.getMemo(), param.getAlarmIdx());
 
 			AlarmEntity alarmEntity1 = alarmService.modify(AlarmEntity);

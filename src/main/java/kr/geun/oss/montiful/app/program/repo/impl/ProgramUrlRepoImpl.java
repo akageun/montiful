@@ -12,30 +12,38 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
- *
+ * Program-Url Repository Custom Implements
  *
  * @author akageun
  */
 @Slf4j
 public class ProgramUrlRepoImpl implements ProgramUrlRepoSupt {
 
-    @PersistenceContext
-    private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
-    @Override
-    public List<UrlEntity> findByProgramUrlList(Long programIdx) {
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+	/**
+	 * Program에 맵핑된 Url 리스트 가져오기
+	 *
+	 * @param programIdx
+	 * @return
+	 */
+	@Override
+	public List<UrlEntity> findByProgramUrlList(Long programIdx) {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
-        QProgramUrlEntity qProgramUrlEntity = QProgramUrlEntity.programUrlEntity;
-        QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
+		QProgramUrlEntity qProgramUrlEntity = QProgramUrlEntity.programUrlEntity;
+		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
-        //@formatter:off
+		//@formatter:off
         return jpaQueryFactory
             .select(qUrlEntity)
             .from(qProgramUrlEntity)
             .leftJoin(qUrlEntity)
             .on(qProgramUrlEntity.urlIdx.eq(qUrlEntity.urlIdx))
-            .where(qProgramUrlEntity.programIdx.eq(programIdx)).fetch();
+            .where(qProgramUrlEntity.programIdx.eq(programIdx))
+				.orderBy(qProgramUrlEntity.createdAt.desc())
+			.fetch();
         //@formatter:on
-    }
+	}
 }
