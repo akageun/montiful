@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -45,9 +46,15 @@ public class MonitorHistService {
 	public List<MonitorDTO.CheckRes> getList() {
 
 		List<Object> keyList = getUrlHistList();
-		List<MonitorDTO.CheckRes> sss = new ArrayList<>();
-		keyList.forEach(keyObj -> sss.addAll(checkResRedisTemplate.opsForZSet().range(String.valueOf(keyObj), 0, -1)));
+		List<MonitorDTO.CheckRes> checkList = new ArrayList<>();
+		keyList.forEach(keyObj -> {
+			Set<MonitorDTO.CheckRes> valueList = checkResRedisTemplate.opsForZSet().range(String.valueOf(keyObj), 0, -1);
+			if (valueList.isEmpty() == false) {
+				checkList.addAll(valueList);
+			}
 
-		return sss;
+		});
+
+		return checkList;
 	}
 }

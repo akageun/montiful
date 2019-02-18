@@ -51,7 +51,7 @@ public class ManageProgramWeb {
 		param.setSortDirection(CmnUtils.defaultEnumCode(param.getSortDirection(), Sort.Direction.DESC));
 
 		Page<ProgramEntity> rtnList = programService.page(
-			PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(param.getSortDirection(), param.getSortType().getColumnName())));
+			PageRequestWrapper.of(param.getPageNumber(), 1, Sort.by(param.getSortDirection(), param.getSortType().getColumnName())));
 
 		ModelAndView mav = new ModelAndView();
 
@@ -65,7 +65,7 @@ public class ManageProgramWeb {
 		mav.addObject("paramInfo", param);
 		mav.addObject("resultList", rtnList);
 		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 5));
 
 		mav.setViewName("manage/program/programManage");
 
