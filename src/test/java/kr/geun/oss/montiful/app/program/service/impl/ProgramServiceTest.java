@@ -18,8 +18,8 @@ import static org.mockito.BDDMockito.given;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { ProgramServiceImpl.class })
-public class ProgramServiceImplTest {
+@SpringBootTest(classes = { ProgramService.class })
+public class ProgramServiceTest {
 
 	@MockBean
 	private ProgramRepo programRepo;

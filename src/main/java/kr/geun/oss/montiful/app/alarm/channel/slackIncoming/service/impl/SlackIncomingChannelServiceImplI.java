@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import kr.geun.oss.montiful.app.alarm.channel.slackIncoming.dto.ChannelSlackIncomingDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
-import kr.geun.oss.montiful.app.alarm.common.service.AlarmChannelService;
+import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("SlackIncomingChannelService")
-public class SlackIncomingChannelServiceImpl implements AlarmChannelService {
+public class SlackIncomingChannelServiceImplI implements IAlarmChannelService {
 
 	//@formatter:off
 	protected static final ObjectMapper OM = new ObjectMapper()
