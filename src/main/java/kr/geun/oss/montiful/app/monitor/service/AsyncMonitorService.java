@@ -2,10 +2,10 @@ package kr.geun.oss.montiful.app.monitor.service;
 
 import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
-import kr.geun.oss.montiful.app.monitor.service.MonitorHistService;
+import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -36,6 +36,12 @@ public class AsyncMonitorService {
 	@Autowired
 	private MonitorHistService monitorHistService;
 
+	/**
+	 * Health Check Monitoring
+	 *
+	 * @param runTime
+	 * @param redisKey
+	 */
 	@Async
 	public void asyncMonitorCheck(Long runTime, String redisKey) {
 		log.debug("Execute method asynchronously - {}", Thread.currentThread().getName());
@@ -43,27 +49,33 @@ public class AsyncMonitorService {
 		MonitorDTO.CheckReq entity;
 		List<MonitorDTO.CheckRes> allList = new ArrayList<>();
 		List<MonitorDTO.CheckRes> chgTargetList = new ArrayList<>();
-
 		do {
+			Optional<MonitorDTO.CheckRes> checkRes;
+
 			entity = checkReqRedisTemplate.opsForList().rightPop(redisKey);
 			if (entity == null) {
 				break;
 
 			}
-			String preHealthStatusCheckCd = entity.getHealthStatusCd();
+			HealthStatusCd preHealthStatusCd = EnumUtils.getEnum(HealthStatusCd.class, entity.getHealthStatusCd());
+			if (preHealthStatusCd == null) {
+				checkRes = Optional.of(MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.WARNING).resultMsg("설정값이 잘못되었습니다.").build());
 
-			Optional<MonitorDTO.CheckRes> optionalUrlEntity = urlService.healthCheck(entity);
-			if (optionalUrlEntity.isPresent() == false) {
-				continue;
+			} else {
+
+				checkRes = urlService.healthCheck(entity);
+				if (checkRes.isPresent() == false) {
+					continue;
+				}
 			}
 
-			MonitorDTO.CheckRes urlEntity = optionalUrlEntity.get();
-			urlEntity.setRuntime(System.currentTimeMillis());
+			MonitorDTO.CheckRes urlEntity = checkRes.get();
+			urlEntity.setRuntime(runTime);
 			urlEntity.setUrlIdx(entity.getUrlIdx());
 			urlEntity.setUrlName(entity.getUrlName());
-			urlEntity.setPreHealthStatusCheckCd(preHealthStatusCheckCd);
+			urlEntity.setPreHealthStatusCheckCd(preHealthStatusCd);
 
-			if (StringUtils.equals(urlEntity.getHealthStatusCd().name(), preHealthStatusCheckCd) == false) {
+			if (urlEntity.getHealthStatusCd() != preHealthStatusCd) {
 				chgTargetList.add(urlEntity);
 			}
 

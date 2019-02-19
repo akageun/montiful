@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.alarm.common.cd;
 
+import kr.geun.oss.montiful.core.constants.Const;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,9 +14,9 @@ import lombok.Getter;
 public enum AlarmChannelCd {
 
 	//@formatter:off
-	LINE_NOTIFY("Line Notify","LineNotifyChannelService", "fab fa-line"),
-	EMAIL_SMTP("Email SMTP","EmailSmtpChannelService", "fas fa-at"),
-	SLACK_INCOMING("Slack Incoming","SlackIncomingChannelService", "fab fa-slack"),
+	LINE_NOTIFY("Line Notify",Const.BeanNm.LINE_NOTIFY, "fab fa-line"),
+	EMAIL_SMTP("Email SMTP",Const.BeanNm.EMAIL_SMTP, "fas fa-at"),
+	SLACK_INCOMING("Slack Incoming",Const.BeanNm.SLACK_INCOMING, "fab fa-slack"),
 	//@formatter:off
 	;
 

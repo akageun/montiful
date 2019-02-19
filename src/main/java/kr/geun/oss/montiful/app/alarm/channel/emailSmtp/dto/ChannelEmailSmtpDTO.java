@@ -1,21 +1,17 @@
 package kr.geun.oss.montiful.app.alarm.channel.emailSmtp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
- *
+ * Email Smtp DTO
  *
  * @author akageun
  */
 public class ChannelEmailSmtpDTO {
 
-	/**
-	 * ADD
-	 */
-	@Data
-	@NoArgsConstructor
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	public static class Add {
 		private String alarmName;
 		private String memo;
@@ -30,8 +26,9 @@ public class ChannelEmailSmtpDTO {
 		private String toEmail;
 	}
 
-	@Data
-	@NoArgsConstructor
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	public static class Modify {
 		private Long alarmIdx;
 		private String alarmName;
@@ -47,8 +44,8 @@ public class ChannelEmailSmtpDTO {
 		private String toEmail;
 	}
 
-	@Data
-	@NoArgsConstructor
+	@Getter
+	@Builder
 	@AllArgsConstructor
 	public static class AlarmValue {
 		private String hostname;

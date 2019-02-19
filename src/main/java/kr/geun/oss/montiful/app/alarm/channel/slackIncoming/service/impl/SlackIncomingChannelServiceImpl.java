@@ -1,12 +1,12 @@
 package kr.geun.oss.montiful.app.alarm.channel.slackIncoming.service.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import kr.geun.oss.montiful.app.alarm.channel.slackIncoming.dto.ChannelSlackIncomingDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
+import kr.geun.oss.montiful.app.alarm.common.service.ChannelServiceModule;
 import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.core.constants.Const;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,18 +23,12 @@ import java.util.List;
  * @author akageun
  */
 @Slf4j
-@Service("SlackIncomingChannelService")
-public class SlackIncomingChannelServiceImplI implements IAlarmChannelService {
-
-	//@formatter:off
-	protected static final ObjectMapper OM = new ObjectMapper()
-		.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
-		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-		.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-	//@formatter:on
+@Service(Const.BeanNm.SLACK_INCOMING)
+public class SlackIncomingChannelServiceImpl extends ChannelServiceModule implements IAlarmChannelService {
 
 	@Override
 	public void send(MonitorDTO.CheckRes checkRes, AlarmEntity param) {
+
 		try {
 			ChannelSlackIncomingDTO.AlarmValue value = OM.readValue(param.getAlarmValue(), ChannelSlackIncomingDTO.AlarmValue.class);
 
@@ -47,17 +41,6 @@ public class SlackIncomingChannelServiceImplI implements IAlarmChannelService {
 			log.error(e.getMessage(), e);
 		}
 
-	}
-
-	public enum SlackTarget { // TODO webHookUrl 은 자신의 슬랙 IncomingWebHookAPI로 변경하세요.
-		CH_INCOMING("", "random");
-		String webHookUrl;
-		String channel;
-
-		SlackTarget(String webHookUrl, String channel) {
-			this.webHookUrl = webHookUrl;
-			this.channel = channel;
-		}
 	}
 
 	@Data

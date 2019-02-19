@@ -1,11 +1,11 @@
 package kr.geun.oss.montiful.app.alarm.channel.emailSmtp.service.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.geun.oss.montiful.app.alarm.channel.emailSmtp.dto.ChannelEmailSmtpDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
+import kr.geun.oss.montiful.app.alarm.common.service.ChannelServiceModule;
 import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.core.constants.Const;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -13,20 +13,13 @@ import org.apache.commons.mail.SimpleEmail;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Email Smtp Channel Service Implements
  *
  * @author akageun
  */
 @Slf4j
-@Service("EmailSmtpChannelService")
-public class EmailSmtpChannelServiceImplI implements IAlarmChannelService {
-
-	//@formatter:off
-	protected static final ObjectMapper OM = new ObjectMapper()
-		.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
-		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-		.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-	//@formatter:on
+@Service(Const.BeanNm.EMAIL_SMTP)
+public class EmailSmtpChannelServiceImpl extends ChannelServiceModule implements IAlarmChannelService {
 
 	@Override
 	public void send(MonitorDTO.CheckRes checkRes, AlarmEntity param) {

@@ -60,7 +60,12 @@ public class MonitorDTO {
 		private Long responseTime;
 		private Long runtime;
 
-		private String preHealthStatusCheckCd;
+		private HealthStatusCd preHealthStatusCheckCd;
+
+		public void setHealthAndMsg(HealthStatusCd healthStatusCd, String resultMsg) {
+			this.healthStatusCd = healthStatusCd;
+			this.resultMsg = resultMsg;
+		}
 	}
 
 	@Data
