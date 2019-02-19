@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- *
+ * Alarm Channel Code
  *
  * @author akageun
  */

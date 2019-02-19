@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.geun.oss.montiful.app.alarm.channel.lineNotify.dto.ChannelLineNotifyDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
-import kr.geun.oss.montiful.app.alarm.common.service.AlarmChannelService;
+import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Service("LineNotifyChannelService")
-public class LineNotificationChannelServiceImpl implements AlarmChannelService {
+public class LineNotificationChannelServiceImplI implements IAlarmChannelService {
 
 	private static final String LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify";
 

@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 /**
- *
+ * Monitor DTO
  *
  * @author akageun
  */
@@ -47,8 +47,8 @@ public class MonitorDTO {
 
 	}
 
-	@Builder
 	@Data
+	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CheckRes {

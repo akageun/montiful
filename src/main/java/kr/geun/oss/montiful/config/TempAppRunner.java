@@ -56,6 +56,9 @@ public class TempAppRunner implements CommandLineRunner {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private SysConfService sysConfService;
+
 	@Override
 	public void run(String... args) throws Exception {
 		final String userId = Const.System.systemAdminUserId;
@@ -87,27 +90,27 @@ public class TempAppRunner implements CommandLineRunner {
 
         UrlEntity u1 = UrlEntity.builder()
                 .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api")
-			.urlName("테스트 11111222222221")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
-                    .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
+				.urlName("테스트 11111222222221")
+				.connectionTimeout(200)
+				.readTimeout(500)
+				.healthStatusCd(HealthStatusCd.HEALTH.name())
+				.method(HttpMethod.GET.name())
+				.statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
+				.createdUserId(userId)
+				.updatedUserId(userId)
               .build();
         urlRepo.save(u1);
 
         UrlEntity u2 = UrlEntity.builder()
                 .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api")
-			.urlName("테스트5437345751")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
-                    .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
+				.urlName("테스트5437345751")
+				.connectionTimeout(200)
+				.readTimeout(500)
+				.healthStatusCd(HealthStatusCd.HEALTH.name())
+				.method(HttpMethod.POST.name())
+				.statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
+				.createdUserId(userId)
+				.updatedUserId(userId)
               .build();
 		urlRepo.save(u2);
 
@@ -178,9 +181,6 @@ public class TempAppRunner implements CommandLineRunner {
 
 		initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.
 	}
-
-	@Autowired
-	private SysConfService sysConfService;
 
 	private void initSystemConfig() {
 		for (SysConfCd value : SysConfCd.values()) {

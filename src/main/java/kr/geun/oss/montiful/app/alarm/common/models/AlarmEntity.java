@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- *
+ * Alarm Entity
  *
  * @author akageun
  */

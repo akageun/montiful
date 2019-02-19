@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.geun.oss.montiful.app.alarm.channel.emailSmtp.dto.ChannelEmailSmtpDTO;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
-import kr.geun.oss.montiful.app.alarm.common.service.AlarmChannelService;
+import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service("EmailSmtpChannelService")
-public class EmailSmtpChannelServiceImpl implements AlarmChannelService {
+public class EmailSmtpChannelServiceImplI implements IAlarmChannelService {
 
 	//@formatter:off
 	protected static final ObjectMapper OM = new ObjectMapper()
