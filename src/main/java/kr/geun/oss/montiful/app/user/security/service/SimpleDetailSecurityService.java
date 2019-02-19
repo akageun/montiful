@@ -31,6 +31,13 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 	@Autowired
 	private UserAuthorityRepo userAuthorityRepo;
 
+	/**
+	 * User 정보를 가지고옴.
+	 *
+	 * @param userId
+	 * @return
+	 * @throws UsernameNotFoundException
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		Optional<UserEntity> optUserInfo = userRepo.findById(userId);
@@ -61,6 +68,16 @@ public class SimpleDetailSecurityService implements UserDetailsService {
 		);
 		//@formatter:on
 
-		return new User(userEntity.getUserId(), userEntity.getPassWd(), grantedAuthorities);
+		//@formatter:off
+		return User.builder()
+			.username(userEntity.getUserId())
+			.password(userEntity.getPassWd())
+			.disabled(!userEntity.getEnable())
+			.accountExpired(false)
+			.credentialsExpired(false)
+			.accountLocked(userEntity.getLocked())
+			.authorities(grantedAuthorities)
+			.build();
+		//@formatter:on
 	}
 }
