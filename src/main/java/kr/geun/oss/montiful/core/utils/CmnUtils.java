@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.core.utils;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,10 +35,24 @@ public class CmnUtils {
 
 	public static <E extends Enum<E>> E defaultEnumCode(E enm, E defaultEnum) {
 
-		if(enm == null){
+		if (enm == null) {
 			return defaultEnum;
 		}
 
 		return enm;
+	}
+
+	public static <E extends Enum<E>> E defaultEnumCodeStr(Class<E> enm, String enumValue, E defaultEnum) {
+
+		if (enumValue == null) {
+			return defaultEnum;
+		}
+
+		E tmpEnum = EnumUtils.getEnum(enm, enumValue);
+		if (tmpEnum == null) {
+			return defaultEnum;
+		}
+
+		return tmpEnum;
 	}
 }

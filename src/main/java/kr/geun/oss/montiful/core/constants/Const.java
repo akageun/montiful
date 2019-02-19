@@ -7,6 +7,11 @@ package kr.geun.oss.montiful.core.constants;
  */
 public class Const {
 
+	public static class Page {
+		public static final int DEFAULT_ELEMENT_SIZE = 20;
+		public static final int DEFAULT_PAGE_BLOCK_SIZE = 3;
+	}
+
 	public static class System {
 		public static final String systemAdminUserId = "system_admin";
 	}

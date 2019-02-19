@@ -20,9 +20,9 @@ public class PageRequestWrapper {
 		} else {
 			pageNumber -= 1;
 		}
-
-		if (elementSize > MAX_ELEMENT_SIZE) {
+		if (elementSize == 0 || elementSize > MAX_ELEMENT_SIZE) {
 			elementSize = DEFAULT_ELEMENT_SIZE;
+
 		}
 
 		return PageRequest.of(pageNumber, elementSize, sort);

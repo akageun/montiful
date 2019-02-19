@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.app.program.service.impl;
+package kr.geun.oss.montiful.app.program.service;
 
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;

@@ -3,6 +3,7 @@ package kr.geun.oss.montiful.routes.system.web;
 import kr.geun.oss.montiful.app.system.dto.SysConfDTO;
 import kr.geun.oss.montiful.app.system.models.SysConfEntity;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
+import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
@@ -40,13 +41,12 @@ public class SysConfWeb extends BaseController {
 
 		Page<SysConfEntity> rtnList = sysConfService.page(PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "confCd")));
 
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("system/configuration");
 
 		mav.addObject("resultList", rtnList);
 		mav.addObject("paramInfo", param);
-		setPage(mav, rtnList, 3);
+		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
-		mav.setViewName("system/configuration");
 		return mav;
 	}
 }

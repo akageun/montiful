@@ -25,13 +25,6 @@
                         <p class="card-text">
                             프로그램 등록/수정이 가능한 관리 페이지 입니다.
                         </p>
-                        <div class="form-inline">
-                            <div class="form-group pr-1">
-                                <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
-                                    <i class="far fa-plus-square"></i> ADD
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -40,7 +33,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <form id="frmSearch" class="mb-2">
+                        <form id="frmSearch">
                             <input type="hidden" name="pageNumber" value="1">
                             <div class="row search-row">
                                 <div class="col-sm-12 col-md-6">
@@ -93,9 +86,9 @@
 
                                         <div class="form-group">
                                             <select class="form-control form-control-sm" name="elementSize" onchange="search();">
-                                                <option>20 Row</option>
-                                                <option>50 Row</option>
-                                                <option>100 Row</option>
+                                                <option value="20">20 Row</option>
+                                                <option value="50">50 Row</option>
+                                                <option value="100">100 Row</option>
                                             </select>
                                         </div>
                                     </div>
@@ -154,12 +147,6 @@
                         </div>
                         <div class="row">
                             <div class="col-3">
-                                <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
-                                    <i class="far fa-plus-square"></i> ADD
-                                </button>
-                                <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
-                                    <i class="far fa-plus-square"></i> ADD
-                                </button>
                                 <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
                                     <i class="far fa-plus-square"></i> ADD
                                 </button>

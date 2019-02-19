@@ -5,9 +5,10 @@ import kr.geun.oss.montiful.app.program.cd.ProgramManageSortTypeCd;
 import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
+import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
-import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class ManageProgramWeb {
+public class ManageProgramWeb extends BaseController {
 
 	@Autowired
 	private ProgramService programService;
@@ -47,27 +48,29 @@ public class ManageProgramWeb {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
 
-		param.setSortType(CmnUtils.defaultEnumCode(param.getSortType(), ProgramManageSortTypeCd.IDX));
-		param.setSortDirection(CmnUtils.defaultEnumCode(param.getSortDirection(), Sort.Direction.DESC));
+		ProgramManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(ProgramManageSortTypeCd.class, param.getSortType(),
+			ProgramManageSortTypeCd.IDX);
 
-		Page<ProgramEntity> rtnList = programService.page(
-			PageRequestWrapper.of(param.getPageNumber(), 1, Sort.by(param.getSortDirection(), param.getSortType().getColumnName())));
+		Sort.Direction direction = CmnUtils.defaultEnumCodeStr(Sort.Direction.class, param.getSortDirection(), Sort.Direction.DESC);
 
-		ModelAndView mav = new ModelAndView();
+		param.setSortType(sortTypeCd.name());
+		param.setSortDirection(direction.name());
+
+		Sort tmpSort = Sort.by(direction, sortTypeCd.getColumnName());
+
+		Page<ProgramEntity> rtnList = programService.page(PageRequestWrapper.of(param.getPageNumber(), param.getElementSize(), tmpSort));
+
+		ModelAndView mav = new ModelAndView("manage/program/programManage");
 
 		mav.addObject("searchTypeCd", ProgramManageSearchTypeCd.values());
+
 		mav.addObject("sortTypeCd", ProgramManageSortTypeCd.values());
-
-		mav.addObject("test", ProgramManageSortTypeCd.PROGRAM_NAME);
-
 		mav.addObject("sortDirectionCd", Sort.Direction.values());
 
 		mav.addObject("paramInfo", param);
 		mav.addObject("resultList", rtnList);
-		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 5));
 
-		mav.setViewName("manage/program/programManage");
+		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
 		return mav;
 	}

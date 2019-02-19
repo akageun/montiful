@@ -177,7 +177,8 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId(Const.System.systemAdminUserId).enable(true).locked(true).build());
+		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId(Const.System.systemAdminUserId).enable(true).locked(false).build());
+
 
 		initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.
 	}
