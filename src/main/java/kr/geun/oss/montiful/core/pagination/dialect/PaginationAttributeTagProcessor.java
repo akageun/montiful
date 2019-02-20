@@ -2,6 +2,7 @@ package kr.geun.oss.montiful.core.pagination.dialect;
 
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.thymeleaf.IEngineConfiguration;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.engine.AttributeName;
@@ -25,6 +26,7 @@ public class PaginationAttributeTagProcessor extends AbstractAttributeTagProcess
 	private static final int PRECEDENCE = 10000;
 
 	private static final String JS_FUNC_NAME_ATTRIBUTE_NAME = "jsFuncName";
+	private static final String NO_EMPTY_ATTRIBUTE_NAME = "noEmpty";
 
 	public PaginationAttributeTagProcessor(final String dialectPrefix) {
 		super(
@@ -84,6 +86,12 @@ public class PaginationAttributeTagProcessor extends AbstractAttributeTagProcess
 				+ ");'>&gt;</a></li>");
 			sb.append(
 				"<li class='page-item'><a class='page-link'  onclick='" + jsFuncName + "(" + paginationInfo.getLastPageNo() + ");'>&raquo;</a></li>");
+		}
+
+		if (StringUtils.isBlank(sb) && iProcessableElementTag.hasAttribute(NO_EMPTY_ATTRIBUTE_NAME) && Boolean.parseBoolean(
+			iProcessableElementTag.getAttribute(NO_EMPTY_ATTRIBUTE_NAME).getValue())) {
+
+			sb.append("<li class='page-item active'><a class='page-link'>1</a></li>");
 		}
 
 		iElementTagStructureHandler.setBody(sb.toString(), false);
