@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.program.dto;
 
+import kr.geun.oss.montiful.core.dto.CmnPageModule;
 import lombok.*;
 
 import javax.validation.constraints.Min;
@@ -17,22 +18,9 @@ public class ProgramDTO {
 	@Getter
 	@Builder
 	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class PageReq {
-		private int pageNumber;
-		private int elementSize;
-
-		private String searchType; //ProgramManageSearchTypeCd
-		private String sortType; //ProgramManageSortTypeCd
-		private String sortDirection; //Sort.Direction
-
-		public void setSortType(String sortType) {
-			this.sortType = sortType;
-		}
-
-		public void setSortDirection(String sortDirection) {
-			this.sortDirection = sortDirection;
-		}
+	public static class PageReq extends CmnPageModule {
+		private String st; //SearchType
+		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
 	}
 
 	@Data

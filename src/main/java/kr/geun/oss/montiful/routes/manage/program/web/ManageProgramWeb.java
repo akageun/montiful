@@ -6,12 +6,12 @@ import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.constants.Const;
-import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -48,17 +48,10 @@ public class ManageProgramWeb extends BaseController {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
 
-		ProgramManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(ProgramManageSortTypeCd.class, param.getSortType(),
-			ProgramManageSortTypeCd.IDX);
+		ProgramManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(ProgramManageSortTypeCd.class, param.getSot(), ProgramManageSortTypeCd.IDX);
 
-		Sort.Direction direction = CmnUtils.defaultEnumCodeStr(Sort.Direction.class, param.getSortDirection(), Sort.Direction.DESC);
-
-		param.setSortType(sortTypeCd.name());
-		param.setSortDirection(direction.name());
-
-		Sort tmpSort = Sort.by(direction, sortTypeCd.getColumnName());
-
-		Page<ProgramEntity> rtnList = programService.page(PageRequestWrapper.of(param.getPageNumber(), param.getElementSize(), tmpSort));
+		Pageable pageable = setCmnPage(param, sortTypeCd);
+		Page<ProgramEntity> rtnList = programService.page(pageable, param.getSt(), param.getSv());
 
 		ModelAndView mav = new ModelAndView("manage/program/programManage");
 
@@ -74,4 +67,5 @@ public class ManageProgramWeb extends BaseController {
 
 		return mav;
 	}
+
 }

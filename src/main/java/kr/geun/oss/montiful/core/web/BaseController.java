@@ -1,7 +1,14 @@
 package kr.geun.oss.montiful.core.web;
 
+import kr.geun.oss.montiful.core.cd.ISortTypeCd;
+import kr.geun.oss.montiful.core.dto.CmnPageModule;
+import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
+import kr.geun.oss.montiful.core.utils.CmnUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -30,5 +37,28 @@ public class BaseController {
 			)
 		);
 		//@formatter:on
+	}
+
+	/**
+	 * 공통 Pagination setting
+	 *
+	 * @param param
+	 * @param sortTypeCd
+	 * @param <B>
+	 * @return
+	 */
+	protected <B extends CmnPageModule> Pageable setCmnPage(B param, ISortTypeCd sortTypeCd) {
+
+		Sort.Direction direction = CmnUtils.defaultEnumCodeStr(Sort.Direction.class, StringUtils.upperCase(param.getSod()), Sort.Direction.DESC);
+
+		param.setSot(sortTypeCd.getName());
+		param.setSod(direction.name());
+
+		Sort tmpSort = Sort.by(direction, sortTypeCd.getColumnName());
+		Pageable pageRequest = PageRequestWrapper.of(param.getPn(), param.getEz(), tmpSort);
+
+		param.setEz(pageRequest.getPageSize());
+
+		return pageRequest;
 	}
 }

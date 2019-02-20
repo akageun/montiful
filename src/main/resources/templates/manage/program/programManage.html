@@ -34,26 +34,28 @@
                 <div class="card">
                     <div class="card-body">
                         <form id="frmSearch">
-                            <input type="hidden" name="pageNumber" value="1">
+                            <input type="hidden" name="pn" value="1">
                             <div class="row search-row">
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-inline ">
                                         <div class=" form-group">
-                                            <select class="form-control form-control-sm" name="searchType">
+                                            <select class="form-control form-control-sm" name="st">
                                                 <option value="">==Search Type==</option>
                                                 <option th:each="typeCd : ${searchTypeCd}"
                                                         th:value="${typeCd.name()}"
                                                         th:text="${typeCd.cdNm}"
-                                                        th:selected="${typeCd eq paramInfo.searchType}"
+                                                        th:selected="${typeCd.name() eq paramInfo.st}"
                                                 >
                                                 </option>
                                             </select>
                                         </div>
                                         <div class=" form-group">
-                                            <input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>
+                                            <input type="text" class="form-control form-control-sm" name="sv"
+                                                   placeholder="Entered Program Name" th:value="${paramInfo.sv}"
+                                                   onkeydown="enterSearch();"/>
                                         </div>
                                         <div class="form-group">
-                                            <button class="btn btn-outline-primary btn-sm">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="search();">
                                                 <i class="fas fa-search"></i> Search
                                             </button>
                                         </div>
@@ -64,31 +66,32 @@
                                     <div class="form-inline float-right">
                                         <div class="form-group">
 
-                                            <select class="form-control form-control-sm" name="sortType" onchange="search();">
+                                            <select class="form-control form-control-sm" name="sot" onchange="search();">
                                                 <option th:each="typeCd : ${sortTypeCd}"
                                                         th:value="${typeCd.name()}"
-                                                        th:text="${typeCd.name()}"
-                                                        th:selected="${typeCd == paramInfo.sortType}"
+                                                        th:text="${typeCd.cdNm}"
+                                                        th:selected="${typeCd.name() eq paramInfo.sot}"
                                                 >
                                                 </option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <select class="form-control form-control-sm" name="sortDirection" onchange="search();">
+                                            <select class="form-control form-control-sm" name="sod" onchange="search();">
                                                 <option th:each="directionCd : ${sortDirectionCd}"
                                                         th:value="${directionCd.name()}"
                                                         th:text="${directionCd.name()}"
-                                                        th:selected="${directionCd eq paramInfo.sortDirection}"
+                                                        th:selected="${directionCd.name() eq paramInfo.sod}"
                                                 >
                                                 </option>
                                             </select>
                                         </div>
 
                                         <div class="form-group">
-                                            <select class="form-control form-control-sm" name="elementSize" onchange="search();">
-                                                <option value="20">20 Row</option>
-                                                <option value="50">50 Row</option>
-                                                <option value="100">100 Row</option>
+                                            <select class="form-control form-control-sm" name="ez" onchange="search();">
+                                                <option value="10" th:selected="${paramInfo.ez eq 10}">10 Row</option>
+                                                <option value="20" th:selected="${paramInfo.ez eq 20}">20 Row</option>
+                                                <option value="50" th:selected="${paramInfo.ez eq 50}">50 Row</option>
+                                                <option value="100" th:selected="${paramInfo.ez eq 100}">100 Row</option>
                                             </select>
                                         </div>
                                     </div>
@@ -118,14 +121,14 @@
                                     <th class="text-center">Updated At</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr th:each="result : ${resultList}">
+                                <tbody th:with="conditionList=${not #lists.isEmpty(resultList)}">
+                                <tr th:if="${conditionList}" th:each="result : ${resultList}">
                                     <td class="text-center" th:text="${result.programIdx}"></td>
                                     <td>
                                         <div th:with="condition=${#strings.isEmpty(result.programName)} == false and ${#strings.length(result.programName)} > 30"
                                              th:remove="tag">
-                                                <span th:if="${condition}" th:text="|${#strings.substring(result.programName, 0, 30)}...|"
-                                                      th:remove="tag"></span>
+                                                        <span th:if="${condition}" th:text="|${#strings.substring(result.programName, 0, 30)}...|"
+                                                              th:remove="tag"></span>
                                             <span th:unless="${condition}" th:text="${result.programName}"></span>
                                         </div>
 
@@ -142,20 +145,25 @@
                                     <td class="text-center" th:text="${result.updatedUserId}"></td>
                                     <td class="text-center" th:text="${#temporals.format(result.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                 </tr>
+
+                                <tr th:unless="${conditionList}">
+                                    <td colspan="6" class="text-center">No Data</td>
+                                </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-3">
-                                <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
-                                    <i class="far fa-plus-square"></i> ADD
-                                </button>
-                            </div>
-                            <div class="col-9">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom">
-                                    </ul>
-                                </nav>
+                            <div class="row">
+                                <div class="col-3">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
+                                        <i class="far fa-plus-square"></i> ADD
+                                    </button>
+                                </div>
+                                <div class="col-9">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom"
+                                            noEmpty="true">
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,6 +236,12 @@
 </th:block>
 <th:block layout:fragment="scripts">
     <script>
+        function enterSearch() {
+            if (event.keyCode === 13) {
+                search();
+            }
+        }
+
         function bindSelect2() {
             $(".select2-bind").select2({
                 placeholder: "연결할 URL 이름을 검색하세요.",

@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.app.program.cd;
 
+import kr.geun.oss.montiful.core.cd.ISortTypeCd;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,18 +11,28 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ProgramManageSortTypeCd {
+public enum ProgramManageSortTypeCd implements ISortTypeCd {
 
 	//@formatter:off
 	IDX("PK", "programIdx"),
-	CREATED_AT("Created At", "createdAt"),
-	UPDATED_AT("Updated At", "updatedAt"),
-	PROGRAM_NAME("Program Name", "programName"),
+	C("Created At", "createdAt"),
+	U("Updated At", "updatedAt"),
+	P_NM("Program Name", "programName"),
 
 	//@formatter:on
 	;
 
 	private String cdNm;
 	private String columnName;
+
+	@Override
+	public String getName() {
+		return this.name();
+	}
+
+	@Override
+	public String getColumnName() {
+		return this.columnName;
+	}
 
 }

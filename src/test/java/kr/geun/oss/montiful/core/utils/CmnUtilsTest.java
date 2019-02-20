@@ -11,11 +11,11 @@ public class CmnUtilsTest {
 	@Test
 	public void defaultEnumSettingTest() {
 
-		ProgramManageSearchTypeCd result = CmnUtils.defaultEnumCode(null, ProgramManageSearchTypeCd.MEMO);
-		ProgramManageSearchTypeCd result2 = CmnUtils.defaultEnumCode(ProgramManageSearchTypeCd.UPDATED_ID, ProgramManageSearchTypeCd.MEMO);
+		ProgramManageSearchTypeCd result = CmnUtils.defaultEnumCode(null, ProgramManageSearchTypeCd.MM);
+		ProgramManageSearchTypeCd result2 = CmnUtils.defaultEnumCode(ProgramManageSearchTypeCd.U, ProgramManageSearchTypeCd.MM);
 
-		Assert.assertEquals(ProgramManageSearchTypeCd.MEMO, result);
-		Assert.assertEquals(ProgramManageSearchTypeCd.UPDATED_ID, result2);
+		Assert.assertEquals(ProgramManageSearchTypeCd.MM, result);
+		Assert.assertEquals(ProgramManageSearchTypeCd.U, result2);
 
 	}
 

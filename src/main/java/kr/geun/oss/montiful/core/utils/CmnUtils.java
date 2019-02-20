@@ -1,6 +1,7 @@
 package kr.geun.oss.montiful.core.utils;
 
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +32,10 @@ public class CmnUtils {
 		BeanUtils.copyProperties(param, newInstance);
 
 		return newInstance;
+	}
+
+	public static <E extends Enum<E>> boolean isSearchable(E searchType, String searchValue) {
+		return searchType != null && StringUtils.isNotBlank(searchValue);
 	}
 
 	public static <E extends Enum<E>> E defaultEnumCode(E enm, E defaultEnum) {

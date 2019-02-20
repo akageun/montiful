@@ -51,7 +51,7 @@ public class ManageProgramWebTest {
         List<ProgramEntity> programEntityList = new ArrayList<>();
         programEntityList.add(ProgramEntity.builder().programName("Test").build());
 
-        given(programService.page(pageable)).willReturn(new PageImpl<>(programEntityList, pageable , programEntityList.size()));
+        given(programService.page(pageable, "", "")).willReturn(new PageImpl<>(programEntityList, pageable , programEntityList.size()));
 
 		mvc.perform(
 		        get("/program")

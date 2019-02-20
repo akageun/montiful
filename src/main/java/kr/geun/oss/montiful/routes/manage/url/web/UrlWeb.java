@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
+ * Url Manage Web Controller
  *
  * @author akageun
  */
@@ -37,6 +37,13 @@ public class UrlWeb {
 	@Autowired
 	private UrlService urlService;
 
+	/**
+	 * URL Page
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 */
 	@GetMapping("/url")
 	public ModelAndView getUrlPage(@Valid UrlDTO.PageReq param, BindingResult result) {
 		if (result.hasErrors()) {
@@ -44,14 +51,13 @@ public class UrlWeb {
 		}
 
 		Page<UrlEntity> rtnList = urlService.page(PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "urlIdx")));
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("manage/url/urlManage");
 
 		mav.addObject("paramInfo", param);
 		mav.addObject("resultList", rtnList);
 		mav.addObject("pagination",
 			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
 
-		mav.setViewName("manage/url/urlManage");
 		return mav;
 	}
 
