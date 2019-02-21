@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author akageun
  */
-public interface AlarmRepo extends JpaRepository<AlarmEntity, Long> {
+public interface AlarmRepo extends JpaRepository<AlarmEntity, Long>, AlarmRepoSupt {
 
 	/**
 	 * TODO : Query DSL 로 변경해서 limit 걸어야함.
@@ -19,4 +19,5 @@ public interface AlarmRepo extends JpaRepository<AlarmEntity, Long> {
 	 * @return
 	 */
 	List<AlarmEntity> findByAlarmNameStartingWith(String keyword);
+
 }

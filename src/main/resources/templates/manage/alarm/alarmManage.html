@@ -9,31 +9,29 @@
 </head>
 <div layout:fragment="page_content" id="page_content">
     <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="#">Manage</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Alarm</li>
+            </ol>
+        </nav>
+
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">alarm Manage</h5>
+                        <h5 class="card-title">Alarm Manage</h5>
                         <p class="card-text">
                             테테테테테텥 테테테테테텥 테테테테테텥 테테테테테텥
                         </p>
-                        <form id="frmSearch" class="form-inline mb-3">
-                            <input type="hidden" name="pageNumber" value="0">
-                            <div class="form-group pr-1">
-                                <select class="form-control form-control-sm">
-                                    <option>테스트</option>
-                                    <option>테스트2222</option>
-                                </select>
-                            </div>
-                            <div class="form-group pr-1">
-                                <input type="text" class="form-control form-control-sm" placeholder="Entered Program Name"/>
-                            </div>
-                        </form>
 
                         <div class="btn-group">
-                            <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
                                     aria-expanded="false">
-                                Action
+                                <i class="far fa-plus-square"></i>
+                                ADD
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" th:each="channel : ${alarmChannelCd}"
@@ -46,10 +44,84 @@
                                 </a>
                             </div>
                         </div>
-                        <br>
-                        <br>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="frmSearch">
+                            <input type="hidden" name="pn" value="1">
+
+                            <div class="row search-row">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="form-inline ">
+                                        <div class=" form-group">
+                                            <select class="form-control form-control-sm" name="st">
+                                                <option value="">==Search Type==</option>
+                                                <option th:each="typeCd : ${searchTypeCd}"
+                                                        th:value="${typeCd.name()}"
+                                                        th:text="${typeCd.cdNm}"
+                                                        th:selected="${typeCd.name() eq paramInfo.st}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class=" form-group">
+                                            <input type="text" class="form-control form-control-sm" name="sv"
+                                                   placeholder="Entered Search Text!" th:value="${paramInfo.sv}"
+                                                   onkeydown="enterSearch();"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="search();">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="form-inline float-right">
+                                        <div class="form-group">
+
+                                            <select class="form-control form-control-sm" name="sot" onchange="search();">
+                                                <option th:each="typeCd : ${sortTypeCd}"
+                                                        th:value="${typeCd.name()}"
+                                                        th:text="${typeCd.cdNm}"
+                                                        th:selected="${typeCd.name() eq paramInfo.sot}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="form-control form-control-sm" name="sod" onchange="search();">
+                                                <option th:each="directionCd : ${sortDirectionCd}"
+                                                        th:value="${directionCd.name()}"
+                                                        th:text="${directionCd.name()}"
+                                                        th:selected="${directionCd.name() eq paramInfo.sod}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <select class="form-control form-control-sm" name="ez" onchange="search();">
+                                                <option value="10" th:selected="${paramInfo.ez eq 10}">10 Row</option>
+                                                <option value="20" th:selected="${paramInfo.ez eq 20}">20 Row</option>
+                                                <option value="50" th:selected="${paramInfo.ez eq 50}">50 Row</option>
+                                                <option value="100" th:selected="${paramInfo.ez eq 100}">100 Row</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-hover table-sm">
                                 <thead>
                                 <tr>
                                     <th>IDX</th>
@@ -87,7 +159,8 @@
                             </table>
 
                             <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom">
+                                <ul class="pagination justify-content-center" paging:pagination="${pagination}" jsFuncName="movePageCustom"
+                                    noEmpty="true">
                                 </ul>
                             </nav>
                         </div>

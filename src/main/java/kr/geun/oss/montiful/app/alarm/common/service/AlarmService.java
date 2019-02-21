@@ -1,15 +1,16 @@
 package kr.geun.oss.montiful.app.alarm.common.service;
 
 import kr.geun.oss.montiful.app.alarm.common.cd.AlarmChannelCd;
+import kr.geun.oss.montiful.app.alarm.common.cd.AlarmManageSearchTypeCd;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.repo.AlarmRepo;
-import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
 import kr.geun.oss.montiful.app.redis.publisher.service.RedisPublisher;
 import kr.geun.oss.montiful.app.system.cd.SysConfCd;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
+import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +38,21 @@ public class AlarmService {
 	private UrlAlarmRepo urlAlarmRepo;
 
 	@Autowired
-	private RedisPublisher redisPublisher;
+	private ApplicationContext applicationContext;
 
 	@Autowired
-	private ApplicationContext applicationContext;
+	private RedisPublisher redisPublisher;
 
 	@Autowired
 	private SysConfService sysConfService;
 
-	public Page<AlarmEntity> page(Pageable pageable) {
+	public Page<AlarmEntity> page(Pageable pageable, String searchType, String searchValue) {
+		AlarmManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(AlarmManageSearchTypeCd.class, searchType);
+
+		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+			return alarmRepo.findPage(pageable, searchTypeCd, searchValue);
+		}
+
 		return alarmRepo.findAll(pageable);
 	}
 
