@@ -28,6 +28,9 @@
                         <p class="card-text">
                             모니터링하기 위한 URL을 등록/수정 할 수 있는 관리 페이지 입니다.
                         </p>
+                        <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
+                            <i class="far fa-plus-square"></i> ADD
+                        </button>
                     </div>
                 </div>
             </div>
@@ -161,20 +164,11 @@
                                 </tbody>
                             </table>
 
-                            <div class="row">
-                                <div class="col-3">
-                                    <button class="btn btn-outline-primary btn-sm" onclick="addOpenModal(); return false;">
-                                        <i class="far fa-plus-square"></i> ADD
-                                    </button>
-                                </div>
-                                <div class="col-9">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination justify-content-end" paging:pagination="${pagination}" jsFuncName="movePageCustom"
-                                            noEmpty="true">
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center" paging:pagination="${pagination}" jsFuncName="movePageCustom"
+                                    noEmpty="true">
+                                </ul>
+                            </nav>
                         </div>
 
                     </div>
