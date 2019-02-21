@@ -3,18 +3,25 @@ package kr.geun.oss.montiful.app.url.repo.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.models.QAlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.app.url.cd.UrlManageSearchTypeCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.QUrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.QUrlEntity;
+import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlRepoSupt;
+import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
+import kr.geun.oss.montiful.core.repo.CmnRepoModule;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -22,7 +29,7 @@ import java.util.List;
  *
  * @author akageun
  */
-public class UrlRepoImpl implements UrlRepoSupt {
+public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 
 	@PersistenceContext
 	private EntityManager em;
@@ -109,5 +116,25 @@ public class UrlRepoImpl implements UrlRepoSupt {
 			.orderBy(aliasQuantity.desc())
             .fetch();
         //@formatter:on
+	}
+
+	@Override
+	public Page<UrlEntity> findPage(Pageable pageable, UrlManageSearchTypeCd searchTypeCd, String searchValue) {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+
+		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
+
+		//@formatter:off
+		JPAQuery<UrlEntity> jpaQuery = jpaQueryFactory
+			.select(qUrlEntity)
+			.from(qUrlEntity)
+			.where(booleanLikeSearch(qUrlEntity, searchTypeCd, searchValue, LikeSearchTypeCd.BOTH))
+			.orderBy(getOrderBy(qUrlEntity, pageable.getSort()))
+			.limit(pageable.getPageSize())
+			.offset(pageable.getOffset())
+			;
+		//@formatter:on
+
+		return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
 	}
 }

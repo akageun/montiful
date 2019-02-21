@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = ManageProgramWeb.class)
-public class ManageProgramWebTest {
+@WebMvcTest(value = ProgramManageWeb.class)
+public class ProgramManageWebTest {
 
 	@Autowired
 	private MockMvc mvc;

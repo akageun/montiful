@@ -1,15 +1,18 @@
 package kr.geun.oss.montiful.routes.manage.url.web;
 
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
+import kr.geun.oss.montiful.app.url.cd.UrlManageSearchTypeCd;
+import kr.geun.oss.montiful.app.url.cd.UrlManageSortTypeCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
-import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
-import kr.geun.oss.montiful.core.pagination.PaginationInfo;
+import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -32,7 +35,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class UrlWeb {
+public class UrlManageWeb extends BaseController {
 
 	@Autowired
 	private UrlService urlService;
@@ -49,26 +52,32 @@ public class UrlWeb {
 		if (result.hasErrors()) {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
+		UrlManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UrlManageSortTypeCd.class, param.getSot(), UrlManageSortTypeCd.IDX);
 
-		Page<UrlEntity> rtnList = urlService.page(PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "urlIdx")));
+		Pageable pageable = setCmnPage(param, sortTypeCd);
+
+		Page<UrlEntity> rtnList = urlService.page(pageable, param.getSt(), param.getSv());
 		ModelAndView mav = new ModelAndView("manage/url/urlManage");
+
+		mav.addObject("searchTypeCd", UrlManageSearchTypeCd.values());
+
+		mav.addObject("sortTypeCd", UrlManageSortTypeCd.values());
+		mav.addObject("sortDirectionCd", Sort.Direction.values());
 
 		mav.addObject("paramInfo", param);
 		mav.addObject("resultList", rtnList);
-		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
 		return mav;
 	}
 
 	@GetMapping("/url/form")
 	public ModelAndView addUrlForm() {
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("manage/url/urlForm");
 
 		mav.addObject("timeout", getTimeout());
 		mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
 
-		mav.setViewName("manage/url/urlForm");
 		return mav;
 	}
 
@@ -78,7 +87,7 @@ public class UrlWeb {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
 
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("manage/url/urlForm");
 
 		Optional<UrlEntity> optionalProgramEntity = urlService.get(param.getUrlIdx());
 		if (optionalProgramEntity.isPresent() == false) {
@@ -89,7 +98,6 @@ public class UrlWeb {
 		mav.addObject("timeout", getTimeout());
 		mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
 
-		mav.setViewName("manage/url/urlForm");
 		return mav;
 	}
 

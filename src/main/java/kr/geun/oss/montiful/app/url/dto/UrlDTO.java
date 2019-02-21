@@ -1,9 +1,7 @@
 package kr.geun.oss.montiful.app.url.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import kr.geun.oss.montiful.core.dto.CmnPageModule;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -15,11 +13,12 @@ import java.util.List;
  */
 public class UrlDTO {
 
-	@Data
-	@NoArgsConstructor
-	public static class PageReq {
-		@Min(0)
-		private int pageNumber;
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class PageReq  extends CmnPageModule {
+		private String st; //SearchType
+		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
 	}
 
 	@Data

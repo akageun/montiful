@@ -13,7 +13,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">(Manage) Program Manage</li>
+                <li class="breadcrumb-item"><a href="#">Manage</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Program</li>
             </ol>
         </nav>
 
@@ -35,6 +36,7 @@
                     <div class="card-body">
                         <form id="frmSearch">
                             <input type="hidden" name="pn" value="1">
+
                             <div class="row search-row">
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-inline ">
@@ -51,7 +53,7 @@
                                         </div>
                                         <div class=" form-group">
                                             <input type="text" class="form-control form-control-sm" name="sv"
-                                                   placeholder="Entered Program Name" th:value="${paramInfo.sv}"
+                                                   placeholder="Entered Search Text!" th:value="${paramInfo.sv}"
                                                    onkeydown="enterSearch();"/>
                                         </div>
                                         <div class="form-group">
@@ -97,18 +99,16 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </form>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <colgroup>
                                     <col width="5%">
                                     <col width="*">
-                                    <col width="12%">
-                                    <col width="15%">
-                                    <col width="12%">
-                                    <col width="15%">
+                                    <col width="8%">
+                                    <col width="10%">
+                                    <col width="8%">
+                                    <col width="10%">
                                 </colgroup>
                                 <thead>
                                 <tr>
@@ -140,7 +140,6 @@
                                     </td>
 
                                     <td class="text-center" th:text="${result.createdUserId}"></td>
-                                    <!--<td class="text-center" th:text="${result.createdAt}"></td>-->
                                     <td class="text-center" th:text="${#temporals.format(result.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                     <td class="text-center" th:text="${result.updatedUserId}"></td>
                                     <td class="text-center" th:text="${#temporals.format(result.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
@@ -373,8 +372,9 @@
         }
 
         function movePageCustom(pageNo) {
-            $("#frmSearch [name='pageNumber']").val(pageNo);
-            $("#frmSearch").submit();
+            document.querySelector("#frmSearch [name='pn']").value = pageNo;
+
+            search();
         }
 
         function search() {
@@ -384,26 +384,6 @@
 
             removeNotUsedElement(frmSearch);
             frmSearch.submit();
-        }
-
-        /**
-         * Form 내부에 있는 미사용 value 삭제
-         *
-         * - GET일 경우에만 동작함.
-         *
-         * @param frm
-         */
-        function removeNotUsedElement(frm) {
-
-            if (frm.method.toUpperCase() === 'GET') {
-                for (var i = 0; i < frm.elements.length; i++) {
-                    var tmpElement = frm.elements[i];
-                    var tmpVal = tmpElement.value;
-                    if (tmpVal === undefined || tmpVal === '') {
-                        tmpElement.disabled = true;
-                    }
-                }
-            }
         }
     </script>
 </th:block>

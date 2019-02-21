@@ -43,3 +43,24 @@ function isEmpty(obj) {
 
     return JSON.stringify(obj) === JSON.stringify({});
 }
+
+
+/**
+ * Form 내부에 있는 미사용 value 삭제
+ *
+ * - GET일 경우에만 동작함.
+ *
+ * @param frm
+ */
+function removeNotUsedElement(frm) {
+
+    if (frm.method.toUpperCase() === 'GET') {
+        for (var i = 0; i < frm.elements.length; i++) {
+            var tmpElement = frm.elements[i];
+            var tmpVal = tmpElement.value;
+            if (tmpVal === undefined || tmpVal === '') {
+                tmpElement.disabled = true;
+            }
+        }
+    }
+}

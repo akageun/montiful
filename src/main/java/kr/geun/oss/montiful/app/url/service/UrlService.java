@@ -6,6 +6,7 @@ import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
+import kr.geun.oss.montiful.app.url.cd.UrlManageSearchTypeCd;
 import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlAlarmEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
@@ -13,6 +14,7 @@ import kr.geun.oss.montiful.app.url.models.UrlMonitorHistEntity;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlMonitorHistRepo;
 import kr.geun.oss.montiful.app.url.repo.UrlRepo;
+import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +70,14 @@ public class UrlService {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<UrlEntity> page(Pageable pageable) {
+	public Page<UrlEntity> page(Pageable pageable, String searchType, String searchValue) {
+
+		UrlManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(UrlManageSearchTypeCd.class, searchType);
+
+		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+			return urlRepo.findPage(pageable, searchTypeCd, searchValue);
+		}
+
 		return urlRepo.findAll(pageable);
 	}
 

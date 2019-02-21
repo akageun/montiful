@@ -6,6 +6,7 @@ import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.models.QProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepoSupt;
+import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
 import kr.geun.oss.montiful.core.repo.CmnRepoModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 		JPAQuery<ProgramEntity> jpaQuery = jpaQueryFactory
 			.select(qProgramEntity)
 			.from(qProgramEntity)
-			.where(booleanLikeSearch(qProgramEntity, searchType, searchValue))
+			.where(booleanLikeSearch(qProgramEntity, searchType, searchValue, LikeSearchTypeCd.BOTH))
 			.orderBy(getOrderBy(qProgramEntity, pageable.getSort()))
 			.limit(pageable.getPageSize())
 			.offset(pageable.getOffset())

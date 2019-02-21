@@ -30,7 +30,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class ManageProgramWeb extends BaseController {
+public class ProgramManageWeb extends BaseController {
 
 	@Autowired
 	private ProgramService programService;

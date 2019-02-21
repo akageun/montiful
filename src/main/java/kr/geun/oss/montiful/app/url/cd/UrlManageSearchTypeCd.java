@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.app.program.cd;
+package kr.geun.oss.montiful.app.url.cd;
 
 import kr.geun.oss.montiful.core.cd.ISearchTypeCd;
 import lombok.AllArgsConstructor;
@@ -11,13 +11,14 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ProgramManageSearchTypeCd implements ISearchTypeCd {
+public enum UrlManageSearchTypeCd implements ISearchTypeCd {
 
 	//@formatter:off
-	IDX("PK", "programIdx", Long.class),
+	IDX("PK", "urlIdx", Long.class),
 	C("Created User Id","createdUserId", String.class),
 	U("Updated User Id","updatedUserId", String.class),
 	U_NM("Url Name","urlName", String.class),
+	URL("Url","url", String.class),
 	MM("Memo","memo", String.class),
 	//@formatter:on
 	;

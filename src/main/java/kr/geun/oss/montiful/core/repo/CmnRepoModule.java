@@ -4,6 +4,8 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.*;
 import kr.geun.oss.montiful.core.cd.ISearchTypeCd;
+import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
  *
  * @author akageun
  */
+@Slf4j
 public class CmnRepoModule {
 
 	/**
@@ -43,7 +46,8 @@ public class CmnRepoModule {
 	 * @param searchValue
 	 * @return
 	 */
-	protected <E> BooleanExpression booleanLikeSearch(EntityPathBase<E> qEntity, ISearchTypeCd searchType, String searchValue) {
+	protected <E> BooleanExpression booleanLikeSearch(EntityPathBase<E> qEntity, ISearchTypeCd searchType, String searchValue,
+		LikeSearchTypeCd likeType) {
 
 		if (searchType.isLongSearch()) {
 			NumberPath<Long> numberPath = Expressions.numberPath(Long.class, searchType.getColumnName());
@@ -53,6 +57,23 @@ public class CmnRepoModule {
 
 		StringPath tmpStringPath = Expressions.stringPath(qEntity, searchType.getColumnName());
 
-		return tmpStringPath.like(searchValue + "%");
+		StringBuffer sb = new StringBuffer();
+
+		switch (likeType) {
+			case START:
+				sb.append("%");
+				sb.append(searchValue);
+
+			case END:
+
+				sb.append(searchValue);
+				sb.append("%");
+			case BOTH:
+				sb.append("%");
+				sb.append(searchValue);
+				sb.append("%");
+		}
+
+		return tmpStringPath.like(sb.toString());
 	}
 }
