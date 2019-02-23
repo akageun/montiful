@@ -6,6 +6,7 @@ import kr.geun.oss.montiful.app.user.service.UserService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/system")
-public class UserManageWeb {
+public class UserManageWeb extends BaseController {
 
     @Autowired
     private UserService userService;

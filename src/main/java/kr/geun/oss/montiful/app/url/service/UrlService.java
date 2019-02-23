@@ -74,7 +74,7 @@ public class UrlService {
 
 		UrlManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(UrlManageSearchTypeCd.class, searchType);
 
-		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) { //Search
 			return urlRepo.findPage(pageable, searchTypeCd, searchValue);
 		}
 

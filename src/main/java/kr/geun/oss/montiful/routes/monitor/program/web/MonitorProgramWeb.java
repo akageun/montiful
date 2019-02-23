@@ -6,6 +6,7 @@ import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import kr.geun.oss.montiful.core.pagination.PaginationInfo;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
+import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,13 +30,13 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @RequestMapping("/monitor")
-public class MonitorProgramWeb {
+public class MonitorProgramWeb extends BaseController {
 
 	@Autowired
 	private ProgramService programService;
 
 	@GetMapping("/program")
-	public ModelAndView getMonitorProgramList(@Valid MonitorDTO.ProgramPageReq param, BindingResult result) {
+	public ModelAndView getMonitorProgramList(@Valid MonitorDTO.PageReq param, BindingResult result) {
 		if (result.hasErrors()) {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
@@ -55,7 +56,7 @@ public class MonitorProgramWeb {
 	}
 
 	@GetMapping("/program/{programIdx}")
-	public ModelAndView getMonitorProgram(@Valid MonitorDTO.ProgramSingleReq param, BindingResult result) {
+	public ModelAndView getMonitorProgram(@Valid MonitorDTO.ViewerReq param, BindingResult result) {
 		if (result.hasErrors()) {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
@@ -65,12 +66,10 @@ public class MonitorProgramWeb {
 			return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
 		}
 
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("monitor/program/programSingle");
 		mav.addObject("result", optionalProgramEntity.get());
 		mav.addObject("paramInfo", param);
 
-		//URL 리스트 가져오기.
-		mav.setViewName("monitor/program/programSingle");
 		return mav;
 	}
 }

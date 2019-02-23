@@ -18,14 +18,14 @@ public class MonitorDTO {
 
 	@Data
 	@NoArgsConstructor
-	public static class ProgramPageReq {
+	public static class PageReq {
 		@Min(0)
 		private int pageNumber;
 	}
 
 	@Data
 	@NoArgsConstructor
-	public static class ProgramSingleReq {
+	public static class ViewerReq {
 		@Min(0)
 		private Long programIdx;
 	}

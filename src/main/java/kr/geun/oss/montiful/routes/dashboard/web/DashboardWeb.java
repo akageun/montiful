@@ -3,10 +3,11 @@ package kr.geun.oss.montiful.routes.dashboard.web;
 import kr.geun.oss.montiful.app.monitor.service.MonitorHistService;
 import kr.geun.oss.montiful.app.url.repo.UrlMonitorHistRepo;
 import kr.geun.oss.montiful.app.url.service.UrlService;
+import kr.geun.oss.montiful.core.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Dashboard Web Controller
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author akageun
  */
 @Controller
-public class DashboardWeb {
+public class DashboardWeb extends BaseController {
 
 	@Autowired
 	private UrlService urlService;
@@ -25,17 +26,13 @@ public class DashboardWeb {
 	@Autowired
 	private UrlMonitorHistRepo urlMonitorHistRepo;
 
-//	@GetMapping(value = { "/403" })
-	//	public String welcome403() {
-	//		return "/dashboard";
-	//	}
-
 	/**
 	 * Dashboard
+	 * - Redirect
 	 *
 	 * @return
 	 */
-	@GetMapping(value = { "/" })
+	@GetMapping(value = {"/"})
 	public String welcome() {
 		return "redirect:/dashboard";
 	}
@@ -45,14 +42,16 @@ public class DashboardWeb {
 	 *
 	 * @return
 	 */
-	@GetMapping(value = { "/dashboard" })
-	public String dashboard(Model model) {
+	@GetMapping(value = {"/dashboard"})
+	public ModelAndView dashboard() {
 
-		model.addAttribute("histList", monitorHistService.getUrlHistList());
-		model.addAttribute("statusCntList", urlService.getStatusCntForDashboard());
-		model.addAttribute("urlMonitorHistList", urlMonitorHistRepo.findUrlMonitorHistEntities(10L));
+		ModelAndView mav = new ModelAndView("dashboard");
 
-		return "dashboard";
+		mav.addObject("histList", monitorHistService.getUrlHistList());
+		mav.addObject("statusCntList", urlService.getStatusCntForDashboard());
+		mav.addObject("urlMonitorHistList", urlMonitorHistRepo.findUrlMonitorHistEntities(10L));
+
+		return mav;
 	}
 
 }
