@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,6 +22,20 @@ public class ProgramDTO {
 	public static class PageReq extends CmnPageModule {
 		private String st; //SearchType
 		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class PageRes {
+		private Long programIdx;
+		private String programName;
+		private String memo;
+		private String createdUserId;
+		private String updatedUserId;
+		private LocalDateTime createdAt;
+		private LocalDateTime updatedAt;
 	}
 
 	@Data

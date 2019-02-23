@@ -1,7 +1,7 @@
 package kr.geun.oss.montiful.app.program.repo;
 
 import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
-import kr.geun.oss.montiful.app.program.models.ProgramEntity;
+import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +17,8 @@ public interface ProgramRepoSupt {
 	 * @param pageable
 	 * @param searchType : ProgramManageSearchTypeCd
 	 * @param searchValue
+	 * @param isSearchMode
 	 * @return
 	 */
-	Page<ProgramEntity> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue);
+	Page<ProgramDTO.PageRes> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue, boolean isSearchMode);
 }

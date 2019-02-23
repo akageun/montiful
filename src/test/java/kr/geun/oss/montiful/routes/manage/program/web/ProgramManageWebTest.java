@@ -1,6 +1,6 @@
 package kr.geun.oss.montiful.routes.manage.program.web;
 
-import kr.geun.oss.montiful.app.program.models.ProgramEntity;
+import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +48,8 @@ public class ProgramManageWebTest {
 		//@formatter:off
         Pageable pageable = PageRequestWrapper.of(1, 20, Sort.by(Sort.Direction.DESC, "programIdx"));
 
-        List<ProgramEntity> programEntityList = new ArrayList<>();
-        programEntityList.add(ProgramEntity.builder().programName("Test").build());
+        List<ProgramDTO.PageRes> programEntityList = new ArrayList<>();
+        programEntityList.add(ProgramDTO.PageRes.builder().programName("Test").build());
 
         given(programService.page(pageable, "", "")).willReturn(new PageImpl<>(programEntityList, pageable , programEntityList.size()));
 

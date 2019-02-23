@@ -1,9 +1,10 @@
 package kr.geun.oss.montiful.app.program.repo.impl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
-import kr.geun.oss.montiful.app.program.models.ProgramEntity;
+import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.QProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepoSupt;
 import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
@@ -32,24 +33,39 @@ public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 	 * @param pageable
 	 * @param searchType
 	 * @param searchValue
+	 * @param isSearchMode
 	 * @return
 	 */
 	@Override
-	public Page<ProgramEntity> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue) {
+	public Page<ProgramDTO.PageRes> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		QProgramEntity qProgramEntity = QProgramEntity.programEntity;
 
 		//@formatter:off
-		JPAQuery<ProgramEntity> jpaQuery = jpaQueryFactory
-			.select(qProgramEntity)
-			.from(qProgramEntity)
-			.where(booleanLikeSearch(qProgramEntity, searchType, searchValue, LikeSearchTypeCd.BOTH))
-			.orderBy(getOrderBy(qProgramEntity, pageable.getSort()))
+		JPAQuery<ProgramDTO.PageRes> jpaQuery = jpaQueryFactory
+			.select(
+				Projections.fields(ProgramDTO.PageRes.class,
+					qProgramEntity.programIdx,
+					qProgramEntity.programName,
+					qProgramEntity.memo,
+					qProgramEntity.createdUserId,
+					qProgramEntity.createdAt,
+					qProgramEntity.updatedUserId,
+					qProgramEntity.updatedAt
+				)
+			)
+			.from(qProgramEntity);
+
+		if (isSearchMode) {
+			jpaQuery.where(booleanLikeSearch(qProgramEntity, searchType, searchValue, LikeSearchTypeCd.BOTH));
+		}
+
+		jpaQuery.orderBy(getOrderBy(qProgramEntity, pageable.getSort()))
 			.limit(pageable.getPageSize())
-			.offset(pageable.getOffset())
-			;
+			.offset(pageable.getOffset());
 		//@formatter:on
+
 		return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
 	}
 

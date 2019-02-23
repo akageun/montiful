@@ -17,7 +17,7 @@ public enum ProgramManageSearchTypeCd implements ISearchTypeCd {
 	IDX("PK", "programIdx", Long.class),
 	C("Created User Id","createdUserId", String.class),
 	U("Updated User Id","updatedUserId", String.class),
-	U_NM("Url Name","urlName", String.class),
+	P_NM("Program Name","programName", String.class),
 	MM("Memo","memo", String.class),
 	//@formatter:on
 	;

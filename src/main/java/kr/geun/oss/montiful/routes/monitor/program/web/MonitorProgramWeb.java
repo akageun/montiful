@@ -1,6 +1,7 @@
 package kr.geun.oss.montiful.routes.monitor.program.web;
 
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
+import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
@@ -43,7 +44,7 @@ public class MonitorProgramWeb extends BaseController {
 
 		PageRequest pageRequest = PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "programIdx"));
 
-		Page<ProgramEntity> rtnList = programService.page(pageRequest, "", "");
+		Page<ProgramDTO.PageRes> rtnList = programService.page(pageRequest, "", "");
 
 		ModelAndView mav = new ModelAndView("monitor/program/programList");
 
