@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.routes.system.api;
+package kr.geun.oss.montiful.routes.system.sysConf.api;
 
 /**
  *

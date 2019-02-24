@@ -42,6 +42,7 @@ public class SampleHealthCheckApi {
 		} catch (InterruptedException e) {
 			log.info(e.getMessage(), e);
 		}
+
 		return ResponseEntity.ok("OK");
 	}
 
@@ -57,6 +58,7 @@ public class SampleHealthCheckApi {
 		} catch (InterruptedException e) {
 			log.info(e.getMessage(), e);
 		}
+
 		return ResponseEntity.ok("OK");
 	}
 

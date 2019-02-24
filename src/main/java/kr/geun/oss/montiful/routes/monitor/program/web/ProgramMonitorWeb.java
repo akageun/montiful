@@ -31,13 +31,13 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @RequestMapping("/monitor")
-public class MonitorProgramWeb extends BaseController {
+public class ProgramMonitorWeb extends BaseController {
 
 	@Autowired
 	private ProgramService programService;
 
 	@GetMapping("/program")
-	public ModelAndView getMonitorProgramList(@Valid MonitorDTO.PageReq param, BindingResult result) {
+	public ModelAndView getMonitorProgramPage(@Valid MonitorDTO.PageReq param, BindingResult result) {
 		if (result.hasErrors()) {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
@@ -67,7 +67,7 @@ public class MonitorProgramWeb extends BaseController {
 			return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
 		}
 
-		ModelAndView mav = new ModelAndView("monitor/program/programSingle");
+		ModelAndView mav = new ModelAndView("monitor/program/programViewer");
 		mav.addObject("result", optionalProgramEntity.get());
 		mav.addObject("paramInfo", param);
 

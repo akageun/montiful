@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.routes.system.web;
+package kr.geun.oss.montiful.routes.system.user.web;
 
 import kr.geun.oss.montiful.app.user.dto.UserDTO;
 import kr.geun.oss.montiful.app.user.models.UserEntity;

@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.routes.system.web;
+package kr.geun.oss.montiful.routes.system.sysConf.web;
 
 import kr.geun.oss.montiful.app.system.dto.SysConfDTO;
 import kr.geun.oss.montiful.app.system.models.SysConfEntity;

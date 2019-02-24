@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @Slf4j
-public class MonitorProgramWebTest {
+public class ProgramMonitorWebTest {
 
 	@Test
 	public void average() {
