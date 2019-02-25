@@ -2,7 +2,6 @@ package kr.geun.oss.montiful.app.program.repo.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
 import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.QProgramEntity;
@@ -14,9 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 /**
  * Program Repository Implements
  *
@@ -24,9 +20,6 @@ import javax.persistence.PersistenceContext;
  */
 @Slf4j
 public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
-
-	@PersistenceContext
-	private EntityManager em;
 
 	/**
 	 *
@@ -38,8 +31,6 @@ public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 	 */
 	@Override
 	public Page<ProgramDTO.PageRes> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-
 		QProgramEntity qProgramEntity = QProgramEntity.programEntity;
 
 		//@formatter:off

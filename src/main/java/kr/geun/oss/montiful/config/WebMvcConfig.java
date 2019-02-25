@@ -1,5 +1,6 @@
 package kr.geun.oss.montiful.config;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.core.pagination.dialect.PaginationDialect;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Web Mvc Configuration
  *
@@ -25,6 +29,9 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+	@PersistenceContext
+	private EntityManager em;
 
 	/**
 	 * 정적 자원에 대한 설정
@@ -65,6 +72,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Bean
 	public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
 		return new ResourceUrlEncodingFilter();
+	}
+
+	@Bean
+	public JPAQueryFactory jpaQueryFactory() {
+		return new JPAQueryFactory(em);
 	}
 
 	/**

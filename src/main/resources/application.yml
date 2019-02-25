@@ -24,7 +24,7 @@ spring:
     password:
     driverClassName: org.h2.Driver
   jpa:
-    show-sql: false
+    show-sql: true
     open-in-view: false
     hibernate:
       ddl-auto: create-drop

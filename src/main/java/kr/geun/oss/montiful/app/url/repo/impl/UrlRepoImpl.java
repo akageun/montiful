@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.models.QAlarmEntity;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
@@ -20,8 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -31,12 +28,8 @@ import java.util.List;
  */
 public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 
-	@PersistenceContext
-	private EntityManager em;
-
 	@Override
 	public List<AlarmEntity> findUrlAlarmList(Long urlIdx) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		QAlarmEntity qAlarmEntity = QAlarmEntity.alarmEntity;
 		QUrlAlarmEntity qUrlAlarmEntity = QUrlAlarmEntity.urlAlarmEntity;
@@ -53,7 +46,6 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 
 	@Override
 	public void updateStatusCheckCdInUrlIdx(String healthStatusCd, List<Long> urlIdxs) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
@@ -65,8 +57,6 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 
 	@Override
 	public List<MonitorDTO.CheckReq> findByCheckList() {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
@@ -97,7 +87,6 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 	 */
 	@Override
 	public List<UrlDTO.StatusCnt> findGroupByStatusCnt() {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
@@ -120,7 +109,6 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 
 	@Override
 	public Page<UrlEntity> findPage(Pageable pageable, UrlManageSearchTypeCd searchTypeCd, String searchValue) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 

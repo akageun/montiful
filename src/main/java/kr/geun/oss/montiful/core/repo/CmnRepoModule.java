@@ -3,9 +3,11 @@ package kr.geun.oss.montiful.core.repo;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.*;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.core.cd.ISearchTypeCd;
 import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
@@ -18,6 +20,9 @@ import java.util.List;
  */
 @Slf4j
 public class CmnRepoModule {
+
+	@Autowired
+	protected JPAQueryFactory jpaQueryFactory;
 
 	/**
 	 * OrderBy

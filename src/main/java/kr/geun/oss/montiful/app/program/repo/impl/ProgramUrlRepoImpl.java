@@ -1,14 +1,12 @@
 package kr.geun.oss.montiful.app.program.repo.impl;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.program.models.QProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepoSupt;
 import kr.geun.oss.montiful.app.url.models.QUrlEntity;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.core.repo.CmnRepoModule;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -17,10 +15,7 @@ import java.util.List;
  * @author akageun
  */
 @Slf4j
-public class ProgramUrlRepoImpl implements ProgramUrlRepoSupt {
-
-	@PersistenceContext
-	private EntityManager em;
+public class ProgramUrlRepoImpl extends CmnRepoModule implements ProgramUrlRepoSupt {
 
 	/**
 	 * Program에 맵핑된 Url 리스트 가져오기
@@ -30,8 +25,6 @@ public class ProgramUrlRepoImpl implements ProgramUrlRepoSupt {
 	 */
 	@Override
 	public List<UrlEntity> findByProgramUrlList(Long programIdx) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-
 		QProgramUrlEntity qProgramUrlEntity = QProgramUrlEntity.programUrlEntity;
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 

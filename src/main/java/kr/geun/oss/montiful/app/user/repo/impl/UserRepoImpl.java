@@ -1,7 +1,6 @@
 package kr.geun.oss.montiful.app.user.repo.impl;
 
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.app.user.cd.UserManageSearchTypeCd;
 import kr.geun.oss.montiful.app.user.models.QUserEntity;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
@@ -12,9 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 /**
  *
  *
@@ -22,13 +18,8 @@ import javax.persistence.PersistenceContext;
  */
 public class UserRepoImpl extends CmnRepoModule implements UserRepoSupt {
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Override
     public Page<UserEntity> findPage(Pageable pageable, UserManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-
         QUserEntity qUserEntity = QUserEntity.userEntity;
 
         //@formatter:off

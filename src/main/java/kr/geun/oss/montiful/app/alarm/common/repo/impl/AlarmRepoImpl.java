@@ -22,13 +22,8 @@ import javax.persistence.PersistenceContext;
  */
 public class AlarmRepoImpl extends CmnRepoModule implements AlarmRepoSupt {
 
-	@PersistenceContext
-	private EntityManager em;
-
 	@Override
 	public Page<AlarmEntity> findPage(Pageable pageable, AlarmManageSearchTypeCd searchType, String searchValue) {
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-
 		QAlarmEntity qAlarmEntity = QAlarmEntity.alarmEntity;
 
 		//@formatter:off
