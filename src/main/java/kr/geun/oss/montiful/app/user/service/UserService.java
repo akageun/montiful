@@ -1,13 +1,16 @@
 package kr.geun.oss.montiful.app.user.service;
 
 import kr.geun.oss.montiful.app.user.cd.AuthorityCd;
+import kr.geun.oss.montiful.app.user.cd.UserManageSearchTypeCd;
 import kr.geun.oss.montiful.app.user.models.UserAuthorityEntity;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.repo.UserAuthorityRepo;
 import kr.geun.oss.montiful.app.user.repo.UserRepo;
 import kr.geun.oss.montiful.app.user.security.jwt.JwtProvider;
 import kr.geun.oss.montiful.app.user.security.service.SimpleDetailSecurityService;
+import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,8 +59,16 @@ public class UserService {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<UserEntity> page(Pageable pageable) {
-		return userRepo.findAll(pageable);
+	public Page<UserEntity> page(Pageable pageable, String searchType, String searchValue) {
+		UserManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(UserManageSearchTypeCd.class, searchType);
+
+		boolean isSearchMode = false;
+		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+			isSearchMode = true;
+
+		}
+
+		return userRepo.findPage(pageable, searchTypeCd, searchValue, isSearchMode);
 	}
 
 	/**

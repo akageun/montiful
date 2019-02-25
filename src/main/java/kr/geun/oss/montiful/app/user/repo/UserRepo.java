@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author akageun
  */
-public interface UserRepo extends JpaRepository<UserEntity, String> {
+public interface UserRepo extends JpaRepository<UserEntity, String>, UserRepoSupt {
+
 }

@@ -124,7 +124,8 @@
                                     <th class="text-center">Updated At</th>
                                 </tr>
                                 </thead>
-                                <tbody th:with="conditionList=${not #lists.isEmpty(resultList)}">
+
+                                <tbody th:with="conditionList=${not resultList.isEmpty()}">
                                 <tr th:if="${conditionList}" th:each="result : ${resultList}">
                                     <td class="text-center" th:text="${result.programIdx}"></td>
                                     <td>

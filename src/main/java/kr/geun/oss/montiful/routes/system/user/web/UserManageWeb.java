@@ -1,15 +1,17 @@
 package kr.geun.oss.montiful.routes.system.user.web;
 
+import kr.geun.oss.montiful.app.user.cd.UserManageSearchTypeCd;
+import kr.geun.oss.montiful.app.user.cd.UserManageSortTypeCd;
 import kr.geun.oss.montiful.app.user.dto.UserDTO;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.service.UserService;
-import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
-import kr.geun.oss.montiful.core.pagination.PaginationInfo;
+import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -30,25 +32,32 @@ import javax.validation.Valid;
 @RequestMapping("/system")
 public class UserManageWeb extends BaseController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @GetMapping("/user")
-    public ModelAndView systemUserManage(@Valid UserDTO.PageReq param, BindingResult result) {
-        if (result.hasErrors()) {
-            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-        }
+	@GetMapping("/user")
+	public ModelAndView systemUserManage(@Valid UserDTO.PageReq param, BindingResult result) {
+		if (result.hasErrors()) {
+			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+		}
 
-        Page<UserEntity> rtnList = userService.page(PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "createdAt")));
+		UserManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UserManageSortTypeCd.class, param.getSot(), UserManageSortTypeCd.C);
+		Pageable pageable = setCmnPage(param, sortTypeCd);
 
-        ModelAndView mav = new ModelAndView();
+		Page<UserEntity> rtnList = userService.page(pageable, param.getSt(), param.getSv());
 
-        mav.addObject("paramInfo", param);
-        mav.addObject("resultList", rtnList);
-        mav.addObject("pagination",
-            PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+		ModelAndView mav = new ModelAndView("system/userManage");
 
-        mav.setViewName("system/userManage");
-        return mav;
-    }
+		mav.addObject("searchTypeCd", UserManageSearchTypeCd.values());
+
+		mav.addObject("sortTypeCd", UserManageSortTypeCd.values());
+		mav.addObject("sortDirectionCd", Sort.Direction.values());
+
+		mav.addObject("paramInfo", param);
+		mav.addObject("resultList", rtnList);
+
+		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+
+		return mav;
+	}
 }

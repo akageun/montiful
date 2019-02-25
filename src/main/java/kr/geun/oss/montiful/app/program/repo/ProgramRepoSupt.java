@@ -15,7 +15,7 @@ public interface ProgramRepoSupt {
 	/**
 	 *
 	 * @param pageable
-	 * @param searchType : ProgramManageSearchTypeCd
+	 * @param searchType : UserManageSearchTypeCd
 	 * @param searchValue
 	 * @param isSearchMode
 	 * @return
