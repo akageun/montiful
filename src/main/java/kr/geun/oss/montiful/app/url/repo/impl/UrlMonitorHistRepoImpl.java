@@ -23,7 +23,7 @@ public class UrlMonitorHistRepoImpl extends CmnRepoModule implements UrlMonitorH
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
-        return jpaQueryFactory.select(Projections.fields(MonitorDTO.MonitorHistRes.class,
+        return getJpaQueryFactory().select(Projections.fields(MonitorDTO.MonitorHistRes.class,
             qUrlMonitorHistEntity.monitorHistIdx,
             qUrlEntity.urlIdx,
             qUrlEntity.urlName,

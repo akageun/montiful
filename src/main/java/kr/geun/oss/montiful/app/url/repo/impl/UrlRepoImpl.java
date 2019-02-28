@@ -35,7 +35,7 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 		QUrlAlarmEntity qUrlAlarmEntity = QUrlAlarmEntity.urlAlarmEntity;
 
 		//@formatter:off
-        return jpaQueryFactory
+        return getJpaQueryFactory()
             .select(qAlarmEntity)
             .from(qUrlAlarmEntity)
             .leftJoin(qAlarmEntity)
@@ -49,7 +49,7 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
-		jpaQueryFactory.update(qUrlEntity)
+		getJpaQueryFactory().update(qUrlEntity)
 			.set(qUrlEntity.healthStatusCd, healthStatusCd)
 			.where(qUrlEntity.urlIdx.in(urlIdxs)).execute();
 		//@formatter:on
@@ -60,7 +60,7 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
-        return jpaQueryFactory
+        return getJpaQueryFactory()
             .select(
             	Projections.fields(MonitorDTO.CheckReq.class,
 					qUrlEntity.urlIdx,
@@ -93,7 +93,7 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 		NumberPath<Long> aliasQuantity = Expressions.numberPath(Long.class, "urlCnt");
 
 		//@formatter:off
-        return jpaQueryFactory
+        return getJpaQueryFactory()
             .select(
             	Projections.fields(UrlDTO.StatusCnt.class,
 					qUrlEntity.healthStatusCd,
@@ -113,7 +113,7 @@ public class UrlRepoImpl extends CmnRepoModule implements UrlRepoSupt {
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
-		JPAQuery<UrlEntity> jpaQuery = jpaQueryFactory
+		JPAQuery<UrlEntity> jpaQuery = getJpaQueryFactory()
 			.select(qUrlEntity)
 			.from(qUrlEntity)
 			.where(booleanLikeSearch(qUrlEntity, searchTypeCd, searchValue, LikeSearchTypeCd.BOTH))

@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.routes.dashboard.web;
+package kr.geun.oss.montiful.routes.user.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
@@ -15,21 +15,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = DashboardWeb.class)
-public class DashboardWebTest {
+@WebMvcTest(value = LoginWeb.class)
+public class LoginWebTest {
 
     @Autowired
     private MockMvc mvc;
 
-	@Ignore
+    @Ignore
     @Test
-    public void dashboardTest() throws Exception {
+    public void loginPageTest() throws Exception {
         //@formatter:off
-		mvc.perform(get("/"))
+		mvc.perform(get("/login"))
 			.andExpect(status().isOk())
-			.andExpect(view().name("dashboard"))
+			.andExpect(view().name("user/login"))
 			;
 		//@formatter:on
     }
-
 }

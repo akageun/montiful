@@ -27,7 +27,7 @@ public class AlarmRepoImpl extends CmnRepoModule implements AlarmRepoSupt {
 		QAlarmEntity qAlarmEntity = QAlarmEntity.alarmEntity;
 
 		//@formatter:off
-		JPAQuery<AlarmEntity> jpaQuery = jpaQueryFactory
+		JPAQuery<AlarmEntity> jpaQuery = getJpaQueryFactory()
 			.select(qAlarmEntity)
 			.from(qAlarmEntity)
 			.where(booleanLikeSearch(qAlarmEntity, searchType, searchValue, LikeSearchTypeCd.BOTH))

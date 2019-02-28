@@ -18,12 +18,12 @@ import org.springframework.data.domain.Pageable;
  */
 public class UserRepoImpl extends CmnRepoModule implements UserRepoSupt {
 
-    @Override
-    public Page<UserEntity> findPage(Pageable pageable, UserManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
-        QUserEntity qUserEntity = QUserEntity.userEntity;
+	@Override
+	public Page<UserEntity> findPage(Pageable pageable, UserManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
+		QUserEntity qUserEntity = QUserEntity.userEntity;
 
-        //@formatter:off
-		JPAQuery<UserEntity> jpaQuery = jpaQueryFactory.select(qUserEntity).from(qUserEntity);
+		//@formatter:off
+		JPAQuery<UserEntity> jpaQuery = getJpaQueryFactory().select(qUserEntity).from(qUserEntity);
 
 		if (isSearchMode) {
 			jpaQuery.where(booleanLikeSearch(qUserEntity, searchType, searchValue, LikeSearchTypeCd.BOTH));
@@ -35,6 +35,6 @@ public class UserRepoImpl extends CmnRepoModule implements UserRepoSupt {
 			.offset(pageable.getOffset());
 		//@formatter:on
 
-        return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
-    }
+		return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
+	}
 }

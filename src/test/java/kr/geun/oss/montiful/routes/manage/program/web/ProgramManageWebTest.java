@@ -4,6 +4,7 @@ import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.pagination.PageRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class ProgramManageWebTest {
 //		//@formatter:on
 	//    }
 
+	@Ignore
 	@Test
 	public void programWebTest() throws Exception {
 

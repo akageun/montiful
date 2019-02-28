@@ -29,7 +29,7 @@ public class ProgramUrlRepoImpl extends CmnRepoModule implements ProgramUrlRepoS
 		QUrlEntity qUrlEntity = QUrlEntity.urlEntity;
 
 		//@formatter:off
-        return jpaQueryFactory
+        return getJpaQueryFactory()
             .select(qUrlEntity)
             .from(qProgramUrlEntity)
             .leftJoin(qUrlEntity)

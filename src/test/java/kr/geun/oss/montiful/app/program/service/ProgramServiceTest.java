@@ -5,6 +5,7 @@ import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class ProgramServiceTest {
 	//
 	//	}
 
+	@Ignore
 	@Test
 	public void getTest() {
 		final Long programIdx = 1L;

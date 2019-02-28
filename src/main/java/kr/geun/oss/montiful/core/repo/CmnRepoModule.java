@@ -7,9 +7,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.geun.oss.montiful.core.cd.ISearchTypeCd;
 import kr.geun.oss.montiful.core.cd.LikeSearchTypeCd;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,12 @@ import java.util.List;
 @Slf4j
 public class CmnRepoModule {
 
-	@Autowired
-	protected JPAQueryFactory jpaQueryFactory;
+	@PersistenceContext
+	private EntityManager em;
+
+	protected JPAQueryFactory getJpaQueryFactory() {
+		return new JPAQueryFactory(em);
+	}
 
 	/**
 	 * OrderBy

@@ -34,7 +34,7 @@ public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 		QProgramEntity qProgramEntity = QProgramEntity.programEntity;
 
 		//@formatter:off
-		JPAQuery<ProgramDTO.PageRes> jpaQuery = jpaQueryFactory
+		JPAQuery<ProgramDTO.PageRes> jpaQuery = getJpaQueryFactory()
 			.select(
 				Projections.fields(ProgramDTO.PageRes.class,
 					qProgramEntity.programIdx,

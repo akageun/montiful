@@ -28,7 +28,7 @@ public class UrlAlarmRepoImpl extends CmnRepoModule implements UrlAlarmRepoSupt 
 		QUrlAlarmEntity qUrlNotificationEntity = QUrlAlarmEntity.urlAlarmEntity;
 
 		//@formatter:off
-        return jpaQueryFactory
+        return getJpaQueryFactory()
             .select(qAlarmEntity)
             .from(qUrlNotificationEntity)
             .leftJoin(qAlarmEntity)
