@@ -39,7 +39,7 @@ public class EmailSmtpChannelServiceImpl extends ChannelServiceModule implements
 			email.setMsg("This is a test mail ... :-)");
 			email.addTo(value.getToEmail());
 			email.send();
-			log.info("Mail sent!");
+
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}

@@ -43,7 +43,7 @@ public class LineNotificationChannelServiceImpl extends ChannelServiceModule imp
 			header.set("Authorization", String.format("Bearer %s", value.getAccessToken())); //헤더셋팅
 
 			MultiValueMap<String, Object> param2 = new LinkedMultiValueMap<>();
-			param2.set("message", String.format("%s 소요, %s", checkRes.getResponseTime(), checkRes.getResultMsg()));
+			param2.set("message", getMessage(checkRes));
 
 			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(param2, header);
 
@@ -59,10 +59,14 @@ public class LineNotificationChannelServiceImpl extends ChannelServiceModule imp
 
 	}
 
-	private String getMessage(MonitorDTO.CheckRes checkRes){
-		String msg = "URL 상태값이 변경되었습니다.";
+	private String getMessage(MonitorDTO.CheckRes checkRes) {
+		StringBuffer sb = new StringBuffer("URL 상태값이 변경되었습니다.");
+		sb.append(String.format("(%s -> %s)", checkRes.getPreHealthStatusCheckCd().name(), checkRes.getHealthStatusCd().name()));
+		sb.append(String.format("URL Name : %s", checkRes.getUrlName()));
+		sb.append(String.format("URL  바로가기. "));
+		sb.append(String.format("%s 소요, %s", checkRes.getResponseTime(), checkRes.getResultMsg()));
 
-		return msg;
+		return sb.toString();
 	}
 
 	@Builder
