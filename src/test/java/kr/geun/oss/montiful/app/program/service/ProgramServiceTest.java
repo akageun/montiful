@@ -2,7 +2,6 @@ package kr.geun.oss.montiful.app.program.service;
 
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
-import kr.geun.oss.montiful.app.program.service.ProgramService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -19,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { ProgramService.class })
+@SpringBootTest(classes = {ProgramService.class})
 public class ProgramServiceTest {
 
 	@MockBean
@@ -28,7 +27,7 @@ public class ProgramServiceTest {
 	@Autowired
 	private ProgramService programService;
 
-//	@Test
+	//	@Test
 	//	public void pageTest() {
 	//
 	//	}
