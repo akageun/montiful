@@ -1,10 +1,9 @@
 package kr.geun.oss.montiful.app.alarm.common.dto;
 
 import kr.geun.oss.montiful.core.dto.CmnPageModule;
-import lombok.*;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  *
@@ -16,20 +15,20 @@ public class AlarmDTO {
 	@Getter
 	@Builder
 	@AllArgsConstructor
-	public static class PageReq  extends CmnPageModule {
+	public static class PageReq extends CmnPageModule {
 		private String st; //SearchType
 		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
 	}
 
-	@Data
-	@NoArgsConstructor
+	@Getter
+	@AllArgsConstructor
 	public static class Get {
 		private Long alarmIdx;
 
 	}
 
-	@Data
-	@NoArgsConstructor
+	@Getter
+	@AllArgsConstructor
 	public static class Search {
 		private String keyword;
 	}

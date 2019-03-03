@@ -3,6 +3,7 @@ package kr.geun.oss.montiful.app.url.dto;
 import kr.geun.oss.montiful.core.dto.CmnPageModule;
 import lombok.*;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -16,12 +17,14 @@ public class UrlDTO {
 	@Getter
 	@Builder
 	@AllArgsConstructor
-	public static class PageReq  extends CmnPageModule {
+	public static class PageReq extends CmnPageModule {
 		private String st; //SearchType
 		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
 	}
 
-	@Data
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class GetReq {
 
@@ -43,7 +46,13 @@ public class UrlDTO {
 		private String urlName;
 		private String url;
 		private String memo;
+
+		@Min(100)
+		@Max(10000)
 		private int connectionTimeout;
+
+		@Min(100)
+		@Max(10000)
 		private int readTimeout;
 		private String method;
 		private String statusCheckTypeCd;
@@ -62,7 +71,13 @@ public class UrlDTO {
 		private String urlName;
 		private String url;
 		private String memo;
+
+		@Min(100)
+		@Max(10000)
 		private int connectionTimeout;
+
+		@Min(100)
+		@Max(10000)
 		private int readTimeout;
 		private String healthStatusCd;
 		private String method;

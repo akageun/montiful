@@ -38,7 +38,9 @@ public class ProgramDTO {
 		private LocalDateTime updatedAt;
 	}
 
-	@Data
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class GetReq {
 		@Min(0)
