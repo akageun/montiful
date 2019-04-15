@@ -6,7 +6,7 @@ server:
 
 spring:
   profiles:
-    active: default
+    active: h2
   thymeleaf:
     cache: false
   mvc:
@@ -17,44 +17,3 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
-  datasource:
-    url: jdbc:h2:file:./test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE;CACHE_SIZE=131072;
-    platform: h2
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-  jpa:
-    show-sql: true
-    open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        use_sql_comments: false
-        format_sql: false
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
-  redis:
-    host: localhost
-    port: 6379
-    database: 0
-  data:
-    redis:
-      repositories:
-        enabled: false
-  cache:
-    type: redis
-    redis:
-      use-key-prefix: true
-      key-prefix: 'local:cache:'
-
-      expireTime:
-        programList: 60
-        urlList: 60
-      time-to-live: 600000
-

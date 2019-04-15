@@ -1,0 +1,37 @@
+info:
+  app:
+    name: Montiful(Ver-Mysql)
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/motiful?useUnicode=true&charaterEncoding=utf-8
+    username: USER_ID
+    password: USER_PASSWORD
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        use_sql_comments: false
+        format_sql: false
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+  data:
+    redis:
+      repositories:
+        enabled: false
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: true
+      key-prefix: 'local:cache:'
+
+      expireTime:
+        programList: 60
+        urlList: 60
+      time-to-live: 600000
