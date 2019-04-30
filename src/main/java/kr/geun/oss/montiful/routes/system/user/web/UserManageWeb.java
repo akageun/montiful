@@ -42,7 +42,7 @@ public class UserManageWeb extends BaseController {
 		}
 
 		UserManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UserManageSortTypeCd.class, param.getSot(), UserManageSortTypeCd.C);
-		Pageable pageable = setCmnPage(param, sortTypeCd);
+		Pageable pageable = setCmnPageable(param, sortTypeCd);
 
 		Page<UserEntity> rtnList = userService.page(pageable, param.getSt(), param.getSv());
 

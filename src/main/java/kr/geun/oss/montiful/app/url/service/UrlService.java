@@ -49,217 +49,215 @@ import java.util.stream.Collectors;
 @Service
 public class UrlService {
 
-	@Autowired
-	private UrlRepo urlRepo;
+    @Autowired
+    private UrlRepo urlRepo;
 
-	@Autowired
-	private ProgramUrlRepo programUrlRepo;
+    @Autowired
+    private ProgramUrlRepo programUrlRepo;
 
-	@Autowired
-	private UrlAlarmRepo urlAlarmRepo;
+    @Autowired
+    private UrlAlarmRepo urlAlarmRepo;
 
-	@Autowired
-	private UrlMonitorHistRepo urlMonitorHistRepo;
+    @Autowired
+    private UrlMonitorHistRepo urlMonitorHistRepo;
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	/**
-	 * Page
-	 *
-	 * @param pageable
-	 * @return
-	 */
-	public Page<UrlEntity> page(Pageable pageable, String searchType, String searchValue) {
+    /**
+     * Page
+     *
+     * @param pageable
+     * @return
+     */
+    public Page<UrlEntity> page(Pageable pageable, String searchType, String searchValue) {
 
-		UrlManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(UrlManageSearchTypeCd.class, searchType);
+        UrlManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(UrlManageSearchTypeCd.class, searchType);
 
-		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) { //Search
-			return urlRepo.findPage(pageable, searchTypeCd, searchValue);
-		}
+        if (CmnUtils.isSearchable(searchTypeCd, searchValue)) { //Search
+            return urlRepo.findPage(pageable, searchTypeCd, searchValue);
+        }
 
-		return urlRepo.findAll(pageable);
-	}
+        return urlRepo.findAll(pageable);
+    }
 
-	/**
-	 * GetReq
-	 *
-	 * @param urlIdx
-	 * @return
-	 */
-	public Optional<UrlEntity> get(Long urlIdx) {
-		return urlRepo.findById(urlIdx);
-	}
+    /**
+     * GetReq
+     *
+     * @param urlIdx
+     * @return
+     */
+    public Optional<UrlEntity> get(Long urlIdx) {
+        return urlRepo.findById(urlIdx);
+    }
 
-	/**
-	 * Add
-	 *
-	 * @param param
-	 * @param alarmIdxs
-	 */
-	@Transactional
-	public UrlEntity add(UrlEntity param, List<Long> alarmIdxs) {
+    /**
+     * Add
+     *
+     * @param param
+     * @param alarmIdxs
+     */
+    @Transactional
+    public UrlEntity add(UrlEntity param, List<Long> alarmIdxs) {
 
-		UrlEntity urlEntity = urlRepo.save(param);
+        UrlEntity urlEntity = urlRepo.save(param);
 
-		saveAllAlarmIdxs(param.getUrlIdx(), param.getUpdatedUserId(), alarmIdxs);
+        saveAllAlarmIdxs(param.getUrlIdx(), param.getUpdatedUserId(), alarmIdxs);
 
-		return urlEntity;
-	}
+        return urlEntity;
+    }
 
-	/**
-	 * modify
-	 *
-	 * @param param
-	 * @param alarmIdxs
-	 */
-	@Transactional
-	public UrlEntity modify(UrlEntity param, List<Long> alarmIdxs) {
+    /**
+     * modify
+     *
+     * @param param
+     * @param alarmIdxs
+     */
+    @Transactional
+    public UrlEntity modify(UrlEntity param, List<Long> alarmIdxs) {
 
-		UrlEntity urlEntity = urlRepo.save(param);
+        UrlEntity urlEntity = urlRepo.save(param);
 
-		urlAlarmRepo.deleteByUrlIdx(param.getUrlIdx());
+        urlAlarmRepo.deleteByUrlIdx(param.getUrlIdx());
 
-		saveAllAlarmIdxs(param.getUrlIdx(), param.getUpdatedUserId(), alarmIdxs);
+        saveAllAlarmIdxs(param.getUrlIdx(), param.getUpdatedUserId(), alarmIdxs);
 
-		return urlEntity;
-	}
+        return urlEntity;
+    }
 
-	private void saveAllAlarmIdxs(Long urlIdx, String updatedUserId, List<Long> alarmIdxs) {
-		if (alarmIdxs != null && alarmIdxs.isEmpty() == false) {
-			List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
-					//@formatter:off
-					UrlAlarmEntity.builder()
-						.alarmIdx(idx)
-						.urlIdx(urlIdx)
-						.createdUserId(updatedUserId)
-						.build()
-					//@formatter:on
-			).collect(Collectors.toList());
+    private void saveAllAlarmIdxs(Long urlIdx, String updatedUserId, List<Long> alarmIdxs) {
+        if (alarmIdxs != null && alarmIdxs.isEmpty() == false) {
+            List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
+                    UrlAlarmEntity.builder()
+                            .alarmIdx(idx)
+                            .urlIdx(urlIdx)
+                            .createdUserId(updatedUserId)
+                            .build()
+            ).collect(Collectors.toList());
 
-			urlAlarmRepo.saveAll(programUrlEntities);
-		}
-	}
+            urlAlarmRepo.saveAll(programUrlEntities);
+        }
+    }
 
-	/**
-	 * Url Name Search
-	 * TODO : Cache
-	 *
-	 * @param keyword
-	 * @return
-	 */
-	public List<UrlEntity> urlNameSearch(String keyword) {
-		return urlRepo.findByUrlNameStartingWith(keyword);
-	}
+    /**
+     * Url Name Search
+     * TODO : Cache
+     *
+     * @param keyword
+     * @return
+     */
+    public List<UrlEntity> urlNameSearch(String keyword) {
+        return urlRepo.findByUrlNameStartingWith(keyword);
+    }
 
-	/**
-	 * Url Program
-	 *
-	 * @param programIdx
-	 * @return
-	 */
-	public List<UrlEntity> urlProgramList(Long programIdx) {
-		return programUrlRepo.findByProgramUrlList(programIdx);
-	}
+    /**
+     * Url Program
+     *
+     * @param programIdx
+     * @return
+     */
+    public List<UrlEntity> urlProgramList(Long programIdx) {
+        return programUrlRepo.findByProgramUrlList(programIdx);
+    }
 
-	/**
-	 * Url Mapping Alarm List
-	 *
-	 * @param urlIdx
-	 * @return
-	 */
-	public List<AlarmEntity> urlAlarmList(Long urlIdx) {
-		return urlRepo.findUrlAlarmList(urlIdx);
-	}
+    /**
+     * Url Mapping Alarm List
+     *
+     * @param urlIdx
+     * @return
+     */
+    public List<AlarmEntity> urlAlarmList(Long urlIdx) {
+        return urlRepo.findUrlAlarmList(urlIdx);
+    }
 
-	/**
-	 * Health Check
-	 *
-	 * @param param
-	 * @return
-	 */
-	public Optional<MonitorDTO.CheckRes> healthCheck(MonitorDTO.CheckReq param) {
-		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		clientHttpRequestFactory.setConnectTimeout(param.getConnectionTimeout()); //Connect timeout
-		clientHttpRequestFactory.setReadTimeout(param.getReadTimeout()); //Read timeout
+    /**
+     * Health Check
+     *
+     * @param param
+     * @return
+     */
+    public Optional<MonitorDTO.CheckRes> healthCheck(MonitorDTO.CheckReq param) {
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(param.getConnectionTimeout()); //Connect timeout
+        clientHttpRequestFactory.setReadTimeout(param.getReadTimeout()); //Read timeout
 
-		restTemplate.setRequestFactory(clientHttpRequestFactory);
+        restTemplate.setRequestFactory(clientHttpRequestFactory);
 
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.HEALTH).resultMsg("SUCCESS").build();
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.HEALTH).resultMsg("SUCCESS").build();
 
-		try {
-			StatusCheckTypeCd statusCheckTypeCd = EnumUtils.getEnum(StatusCheckTypeCd.class, param.getStatusCheckTypeCd());
-			if (statusCheckTypeCd == null) {
-				throw new IllegalArgumentException("Not Found StatusCheck Type");
-			}
+        try {
+            StatusCheckTypeCd statusCheckTypeCd = EnumUtils.getEnum(StatusCheckTypeCd.class, param.getStatusCheckTypeCd());
+            if (statusCheckTypeCd == null) {
+                throw new IllegalArgumentException("Not Found StatusCheck Type");
+            }
 
-			HttpMethod method = HttpMethod.resolve(param.getMethod());
-			if (method == null) {
-				throw new IllegalArgumentException("Not Supported Method!!");
-			}
+            HttpMethod method = HttpMethod.resolve(param.getMethod());
+            if (method == null) {
+                throw new IllegalArgumentException("Not Supported Method!!");
+            }
 
-			ResponseEntity<String> result = restTemplate.exchange(param.getUrl(), method, new HttpEntity<>(new LinkedMultiValueMap<>()),
-				String.class);
+            ResponseEntity<String> result = restTemplate.exchange(param.getUrl(), method, new HttpEntity<>(new LinkedMultiValueMap<>()),
+                    String.class);
 
-			checkRes = statusCheckTypeCd.isOk(checkRes, result, param.getStatusCheckValue());
+            checkRes = statusCheckTypeCd.isOk(checkRes, result, param.getStatusCheckValue());
 
-		} catch (IllegalArgumentException e1) { //잘못 등록된 값
-			checkRes.setHealthAndMsg(HealthStatusCd.WARNING, String.format("설정값이 잘못되었습니다. %s", e1.getMessage()));
+        } catch (IllegalArgumentException e1) { //잘못 등록된 값
+            checkRes.setHealthAndMsg(HealthStatusCd.WARNING, String.format("설정값이 잘못되었습니다. %s", e1.getMessage()));
 
-		} catch (HttpClientErrorException e2) {
-			checkRes.setHealthAndMsg(HealthStatusCd.WARNING, String.format("페이지가 잘못되었습니다. (%s) %s", e2.getStatusCode(), e2.getMessage()));
+        } catch (HttpClientErrorException e2) {
+            checkRes.setHealthAndMsg(HealthStatusCd.WARNING, String.format("페이지가 잘못되었습니다. (%s) %s", e2.getStatusCode(), e2.getMessage()));
 
-		} catch (HttpServerErrorException ee) {
-			if (ee.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
-				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("500 에러가 발생했습니다. %s", ee.getMessage()));
+        } catch (HttpServerErrorException ee) {
+            if (ee.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("500 에러가 발생했습니다. %s", ee.getMessage()));
 
-			} else {
-				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("500이 아닌 에러가 발생했습니다. %s", ee.getMessage()));
+            } else {
+                checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("500이 아닌 에러가 발생했습니다. %s", ee.getMessage()));
 
-				log.error("error : {}, {}", ee.getMessage(), ee);
-			}
+                log.error("error : {}, {}", ee.getMessage(), ee);
+            }
 
-		} catch (RestClientException e) {
-			checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
+        } catch (RestClientException e) {
+            checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
 
-			if (e.getRootCause() instanceof SocketTimeoutException) {
-				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("SocketTimeout 이 발생했습니다. %s", e.getMessage()));
+            if (e.getRootCause() instanceof SocketTimeoutException) {
+                checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("SocketTimeout 이 발생했습니다. %s", e.getMessage()));
 
-			} else if (e.getRootCause() instanceof ConnectTimeoutException) {
-				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("ConnectTimeout 이 발생했습니다. %s", e.getMessage()));
+            } else if (e.getRootCause() instanceof ConnectTimeoutException) {
+                checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("ConnectTimeout 이 발생했습니다. %s", e.getMessage()));
 
-			} else {
-				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("알수없는 에러가 발생했습니다. %s", e.getMessage()));
-			}
+            } else {
+                checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("알수없는 에러가 발생했습니다. %s", e.getMessage()));
+            }
 
-		} catch (Exception e) {
-			checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("System Error 가 발생했습니다. : %s", e.getMessage()));
+        } catch (Exception e) {
+            checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("System Error 가 발생했습니다. : %s", e.getMessage()));
 
-		} finally {
-			checkRes.setResponseTime(stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        } finally {
+            checkRes.setResponseTime(stopwatch.elapsed(TimeUnit.MILLISECONDS));
 
-		}
+        }
 
-		return Optional.ofNullable(checkRes);
-	}
+        return Optional.ofNullable(checkRes);
+    }
 
-	public List<MonitorDTO.CheckReq> getHealthCheckTargetList() {
-		return urlRepo.findByCheckList();
-	}
+    public List<MonitorDTO.CheckReq> getHealthCheckTargetList() {
+        return urlRepo.findByCheckList();
+    }
 
-	/**
-	 * Status Value Modify
-	 *
-	 * @param list
-	 */
-	@Transactional
-	public void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list) {
-		if (list.isEmpty()) {
-			return;
-		}
+    /**
+     * Status Value Modify
+     *
+     * @param list
+     */
+    @Transactional
+    public void modifyHealthStatusCheck(List<MonitorDTO.CheckRes> list) {
+        if (list.isEmpty()) {
+            return;
+        }
 
-		//@formatter:off
+        //@formatter:off
 		list.stream()
 			.collect(Collectors.groupingBy(MonitorDTO.CheckRes::getHealthStatusCd))
 			.forEach((key, values) ->
@@ -278,51 +276,51 @@ public class UrlService {
 		);
 		//@formatter:on
 
-	}
+    }
 
-	public List<UrlDTO.StatusCnt> getStatusCntForDashboard() {
-		List<UrlDTO.StatusCnt> rtnList = new ArrayList<>();
-		List<UrlDTO.StatusCnt> ttt = urlRepo.findGroupByStatusCnt();
+    public List<UrlDTO.StatusCnt> getStatusCntForDashboard() {
+        List<UrlDTO.StatusCnt> rtnList = new ArrayList<>();
+        List<UrlDTO.StatusCnt> ttt = urlRepo.findGroupByStatusCnt();
 
-		List<String> codeList = HealthStatusCd.getNameList();
+        List<String> codeList = HealthStatusCd.getNameList();
 
-		for (String code : codeList) {
+        for (String code : codeList) {
 
-			UrlDTO.StatusCnt tmpStatusCnt = null;
-			for (UrlDTO.StatusCnt statusCnt : ttt) {
-				if (StringUtils.equals(code, statusCnt.getHealthStatusCd())) {
-					tmpStatusCnt = statusCnt;
-				}
-			}
+            UrlDTO.StatusCnt tmpStatusCnt = null;
+            for (UrlDTO.StatusCnt statusCnt : ttt) {
+                if (StringUtils.equals(code, statusCnt.getHealthStatusCd())) {
+                    tmpStatusCnt = statusCnt;
+                }
+            }
 
-			if (tmpStatusCnt == null) {
-				tmpStatusCnt = UrlDTO.StatusCnt.builder().healthStatusCd(code).urlCnt(0L).build();
-			}
+            if (tmpStatusCnt == null) {
+                tmpStatusCnt = UrlDTO.StatusCnt.builder().healthStatusCd(code).urlCnt(0L).build();
+            }
 
-			rtnList.add(tmpStatusCnt);
+            rtnList.add(tmpStatusCnt);
 
-		}
+        }
 
-		return rtnList;
-	}
+        return rtnList;
+    }
 
-	public Map<String, Object> getUrlInfoListByProgramIdx(Long programIdx) {
-		Map<String, Object> rtnMap = new HashMap<>();
+    public Map<String, Object> getUrlInfoListByProgramIdx(Long programIdx) {
+        Map<String, Object> rtnMap = new HashMap<>();
 
-		List<UrlEntity> urlList = programUrlRepo.findByProgramUrlList(programIdx);
+        List<UrlEntity> urlList = programUrlRepo.findByProgramUrlList(programIdx);
 
-		final int urlListTotalCnt = urlList.size();
+        final int urlListTotalCnt = urlList.size();
 
-		Map<String, String> urlHealthCount = urlList.stream().collect(
-			Collectors.groupingBy(UrlEntity::getHealthStatusCd, Collectors.collectingAndThen(Collectors.counting(), value -> {
-				double t = (double)value / (double)urlListTotalCnt;
-				return String.format("%.2f", t * 100.0);  //%.2f" 는 소수점 이하 2자리까지 출력
-			})));
+        Map<String, String> urlHealthCount = urlList.stream().collect(
+                Collectors.groupingBy(UrlEntity::getHealthStatusCd, Collectors.collectingAndThen(Collectors.counting(), value -> {
+                    double t = (double) value / (double) urlListTotalCnt;
+                    return String.format("%.2f", t * 100.0);  //%.2f" 는 소수점 이하 2자리까지 출력
+                })));
 
-		rtnMap.put("urlHealthCount", urlHealthCount);
-		rtnMap.put("urlList", urlList);
+        rtnMap.put("urlHealthCount", urlHealthCount);
+        rtnMap.put("urlList", urlList);
 
-		return rtnMap;
-	}
+        return rtnMap;
+    }
 
 }

@@ -49,7 +49,7 @@ public class ProgramManageWeb extends BaseController {
 
 		ProgramManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(ProgramManageSortTypeCd.class, param.getSot(), ProgramManageSortTypeCd.IDX);
 
-		Pageable pageable = setCmnPage(param, sortTypeCd);
+		Pageable pageable = setCmnPageable(param, sortTypeCd);
 		Page<ProgramDTO.PageRes> rtnList = programService.page(pageable, param.getSt(), param.getSv());
 
 		ModelAndView mav = new ModelAndView("manage/program/programManage");

@@ -37,76 +37,79 @@ import java.util.stream.IntStream;
 @RequestMapping("/manage")
 public class UrlManageWeb extends BaseController {
 
-	@Autowired
-	private UrlService urlService;
+    @Autowired
+    private UrlService urlService;
 
-	/**
-	 * URL Page
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping("/url")
-	public ModelAndView getUrlPage(@Valid UrlDTO.PageReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
-		UrlManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UrlManageSortTypeCd.class, param.getSot(), UrlManageSortTypeCd.IDX);
+    /**
+     * URL Page
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @GetMapping("/url")
+    public ModelAndView getUrlPage(
+            @Valid UrlDTO.PageReq param,
+            BindingResult result
+    ) {
 
-		Pageable pageable = setCmnPage(param, sortTypeCd);
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
+        UrlManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UrlManageSortTypeCd.class, param.getSot(), UrlManageSortTypeCd.IDX);
 
-		Page<UrlEntity> rtnList = urlService.page(pageable, param.getSt(), param.getSv());
-		ModelAndView mav = new ModelAndView("manage/url/urlManage");
+        Pageable pageable = setCmnPageable(param, sortTypeCd);
 
-		mav.addObject("searchTypeCd", UrlManageSearchTypeCd.values());
+        Page<UrlEntity> rtnList = urlService.page(pageable, param.getSt(), param.getSv());
+        ModelAndView mav = new ModelAndView("manage/url/urlManage");
 
-		mav.addObject("sortTypeCd", UrlManageSortTypeCd.values());
-		mav.addObject("sortDirectionCd", Sort.Direction.values());
+        mav.addObject("searchTypeCd", UrlManageSearchTypeCd.values());
 
-		mav.addObject("paramInfo", param);
-		mav.addObject("resultList", rtnList);
-		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+        mav.addObject("sortTypeCd", UrlManageSortTypeCd.values());
+        mav.addObject("sortDirectionCd", Sort.Direction.values());
+        mav.addObject("paramInfo", param);
+        mav.addObject("resultList", rtnList);
+        setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
-		return mav;
-	}
+        return mav;
+    }
 
-	@GetMapping("/url/form")
-	public ModelAndView addUrlForm() {
-		ModelAndView mav = new ModelAndView("manage/url/urlForm");
+    @GetMapping("/url/form")
+    public ModelAndView addUrlForm() {
+        ModelAndView mav = new ModelAndView("manage/url/urlForm");
 
-		mav.addObject("timeout", getTimeout());
-		mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
+        mav.addObject("timeout", getTimeout());
+        mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
 
-		return mav;
-	}
+        return mav;
+    }
 
-	@GetMapping("/url/form/{urlIdx}")
-	public ModelAndView modifyUrlForm(@Valid UrlDTO.ModifyPage param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+    @GetMapping("/url/form/{urlIdx}")
+    public ModelAndView modifyUrlForm(@Valid UrlDTO.ModifyPage param, BindingResult result) {
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		ModelAndView mav = new ModelAndView("manage/url/urlForm");
+        ModelAndView mav = new ModelAndView("manage/url/urlForm");
 
-		Optional<UrlEntity> optionalProgramEntity = urlService.get(param.getUrlIdx());
-		if (optionalProgramEntity.isPresent() == false) {
-			return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
-		}
+        Optional<UrlEntity> optionalProgramEntity = urlService.get(param.getUrlIdx());
+        if (optionalProgramEntity.isPresent() == false) {
+            return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
+        }
 
-		mav.addObject("result", optionalProgramEntity.get());
-		mav.addObject("timeout", getTimeout());
-		mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
+        mav.addObject("result", optionalProgramEntity.get());
+        mav.addObject("timeout", getTimeout());
+        mav.addObject("statusCheckTypeCd", StatusCheckTypeCd.values());
 
-		return mav;
-	}
+        return mav;
+    }
 
-	/**
-	 * Generate Timeout
-	 *
-	 * @return
-	 */
-	private List<Integer> getTimeout() {
-		return IntStream.rangeClosed(1, 100).mapToObj(i -> i * 100).collect(Collectors.toList());
-	}
+    /**
+     * Generate Timeout
+     *
+     * @return
+     */
+    private List<Integer> getTimeout() {
+        return IntStream.rangeClosed(1, 100).mapToObj(i -> i * 100).collect(Collectors.toList());
+    }
 }

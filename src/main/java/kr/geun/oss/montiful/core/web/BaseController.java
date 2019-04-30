@@ -47,7 +47,7 @@ public class BaseController {
 	 * @param <B>
 	 * @return
 	 */
-	protected <B extends CmnPageModule> Pageable setCmnPage(B param, ISortTypeCd sortTypeCd) {
+	protected <B extends CmnPageModule> Pageable setCmnPageable(B param, ISortTypeCd sortTypeCd) {
 
 		Sort.Direction direction = CmnUtils.defaultEnumCodeStr(Sort.Direction.class, StringUtils.upperCase(param.getSod()), Sort.Direction.DESC);
 

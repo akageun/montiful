@@ -33,40 +33,40 @@ import javax.validation.Valid;
 @RequestMapping("/manage")
 public class AlarmManageWeb extends BaseController {
 
-	@Autowired
-	private AlarmService alarmService;
+    @Autowired
+    private AlarmService alarmService;
 
-	/**
-	 * Alarm Page
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping("/alarm")
-	public ModelAndView getAlarmPage(@Valid AlarmDTO.PageReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+    /**
+     * Alarm Page
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @GetMapping("/alarm")
+    public ModelAndView getAlarmPage(@Valid AlarmDTO.PageReq param, BindingResult result) {
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		AlarmManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(AlarmManageSortTypeCd.class, param.getSot(), AlarmManageSortTypeCd.IDX);
+        AlarmManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(AlarmManageSortTypeCd.class, param.getSot(), AlarmManageSortTypeCd.IDX);
 
-		Pageable pageable = setCmnPage(param, sortTypeCd);
+        Pageable pageable = setCmnPageable(param, sortTypeCd);
 
-		Page<AlarmEntity> rtnList = alarmService.page(pageable, param.getSt(), param.getSv());
+        Page<AlarmEntity> rtnList = alarmService.page(pageable, param.getSt(), param.getSv());
 
-		ModelAndView mav = new ModelAndView("manage/alarm/alarmManage");
+        ModelAndView mav = new ModelAndView("manage/alarm/alarmManage");
 
-		mav.addObject("searchTypeCd", AlarmManageSearchTypeCd.values());
+        mav.addObject("searchTypeCd", AlarmManageSearchTypeCd.values());
 
-		mav.addObject("sortTypeCd", AlarmManageSortTypeCd.values());
-		mav.addObject("sortDirectionCd", Sort.Direction.values());
+        mav.addObject("sortTypeCd", AlarmManageSortTypeCd.values());
+        mav.addObject("sortDirectionCd", Sort.Direction.values());
 
-		mav.addObject("paramInfo", param);
-		mav.addObject("alarmChannelCd", AlarmChannelCd.values());
-		mav.addObject("resultList", rtnList);
-		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+        mav.addObject("paramInfo", param);
+        mav.addObject("alarmChannelCd", AlarmChannelCd.values());
+        mav.addObject("resultList", rtnList);
+        setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
-		return mav;
-	}
+        return mav;
+    }
 }

@@ -2,7 +2,7 @@ package kr.geun.oss.montiful.app.program.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  *
  * @author akageun
  */
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,39 +25,39 @@ import java.time.LocalDateTime;
 @Table(name = "program", indexes = {@Index(name = "IDX_programName", columnList = "program_name")})
 public class ProgramEntity {
 
-	@Id
-	@Column(name = "program_idx", nullable = false)
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long programIdx;
+    @Id
+    @Column(name = "program_idx", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long programIdx;
 
-	@Column(name = "program_name", nullable = false)
-	private String programName;
+    @Column(name = "program_name", nullable = false)
+    private String programName;
 
-	@Column(name = "memo")
-	private String memo;
+    @Column(name = "memo")
+    private String memo;
 
-	@Column(name = "created_user_id", nullable = false, updatable = false)
-	private String createdUserId;
+    @Column(name = "created_user_id", nullable = false, updatable = false)
+    private String createdUserId;
 
-	@Column(name = "updated_user_id", nullable = false)
-	private String updatedUserId;
+    @Column(name = "updated_user_id", nullable = false)
+    private String updatedUserId;
 
-	/**
-	 * 생성일시
-	 */
-	@CreationTimestamp
-	@Column(name = "created_at", nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+    /**
+     * 생성일시
+     */
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-	/**
-	 * 수정일시
-	 */
-	@UpdateTimestamp
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
+    /**
+     * 수정일시
+     */
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }
