@@ -33,6 +33,6 @@ public class SchedulerConfig {
 			return;
 		}
 
-		//monitorService.run();
+		monitorService.run();
 	}
 }

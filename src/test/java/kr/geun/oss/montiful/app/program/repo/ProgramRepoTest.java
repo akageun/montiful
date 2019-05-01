@@ -54,7 +54,7 @@ public class ProgramRepoTest {
         ProgramEntity modifyInfo = programRepo.save(modifyParam);
 
         Assert.assertNotNull(modifyInfo);
-        Assert.assertNotEquals(modifyInfo.getProgramName(), dbParam.getProgramName());
+        Assert.assertNotEquals(modifyInfo.getProgramName(), tmpAddInfo.getProgramName());
     }
 
 }

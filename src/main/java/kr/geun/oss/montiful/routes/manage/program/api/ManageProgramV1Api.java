@@ -27,146 +27,160 @@ import java.util.*;
 @RequestMapping("/manage/program/api/v1")
 public class ManageProgramV1Api {
 
-	@Autowired
-	private ProgramService programService;
+    @Autowired
+    private ProgramService programService;
 
-	@Autowired
-	private UrlService urlService;
+    @Autowired
+    private UrlService urlService;
 
-	/**
-	 * Single Data
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping("/{programIdx}")
-	public ResponseEntity<Res> get(@Valid ProgramDTO.GetReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+    /**
+     * Single Data
+     *
+     * @param programIdx
+     * @return
+     */
+    @GetMapping("/{programIdx}")
+    public ResponseEntity<Res> get(
+            @PathVariable Long programIdx
+    ) {
 
-		Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
-		if (optionalProgramEntity.isPresent() == false) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
-		}
+        if (programIdx == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-		List<UrlEntity> urlList = urlService.urlProgramList(param.getProgramIdx());
+        Optional<ProgramEntity> optionalProgramEntity = programService.get(programIdx);
+        if (optionalProgramEntity.isPresent() == false) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
+        }
 
-		Map<String, Object> rtnMap = new HashMap<>();
-		rtnMap.put("result", optionalProgramEntity.get());
-		rtnMap.put("urlList", urlList);
+        List<UrlEntity> urlList = urlService.urlProgramList(programIdx);
 
-		return ResponseEntity.ok(Res.of(true, "SUCCESS", rtnMap));
-	}
+        Map<String, Object> rtnMap = new HashMap<>();
+        rtnMap.put("result", optionalProgramEntity.get());
+        rtnMap.put("urlList", urlList);
 
-	/**
-	 * Add Program
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@PostMapping(value = "")
-	public ResponseEntity<Res> add(@Valid ProgramDTO.AddReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+        return ResponseEntity.ok(Res.of(true, "SUCCESS", rtnMap));
+    }
 
-		Res res = programService.valid(param.getProgramName(), null);
-		if (res.getResult() == false) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-		}
+    /**
+     * Add Program
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PostMapping(value = "")
+    public ResponseEntity<Res> add(
+            @Valid ProgramDTO.AddReq param,
+            BindingResult result
+    ) {
 
-		String userId = SecUtils.userId();
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-		//@formatter:off
-		ProgramEntity addParam = ProgramEntity.builder()
-				.programName(param.getProgramName())
-				.memo(param.getMemo())
-				.createdUserId(userId)
-				.updatedUserId(userId)
-			.build();
-		//@formatter:on
+        Res res = programService.valid(param.getProgramName(), null);
+        if (res.getResult() == false) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
 
-		ProgramEntity dbInfo = programService.add(addParam, param.getUrlIdxs());
+        String userId = SecUtils.userId();
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(Res.of(true, "SUCCESS", dbInfo));
-	}
+        ProgramEntity addParam = ProgramEntity.builder()
+                .programName(param.getProgramName())
+                .memo(param.getMemo())
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
 
-	/**
-	 * Modify Program
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@PutMapping(value = "")
-	public ResponseEntity<Res> modify(@RequestBody @Valid ProgramDTO.ModifyReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+        ProgramEntity dbInfo = programService.add(addParam, param.getUrlIdxs());
 
-		Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
-		if (optionalProgramEntity.isPresent() == false) {
-			log.error("존재하지 않는 데이터 수정이 있습니다. 확인이 필요합니다. {} ", param.getProgramIdx());
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
-		}
+        return ResponseEntity.status(HttpStatus.CREATED).body(Res.of(true, "SUCCESS", dbInfo));
+    }
 
-		Res res = programService.valid(param.getProgramName(), param.getProgramIdx());
-		if (res.getResult() == false) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-		}
+    /**
+     * Modify Program
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PutMapping(value = "")
+    public ResponseEntity<Res> modify(
+            @RequestBody @Valid ProgramDTO.ModifyReq param,
+            BindingResult result
+    ) {
 
-		String userId = SecUtils.userId();
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-		//@formatter:off
-		ProgramEntity modifyParam = ProgramEntity.builder()
-				.programIdx(param.getProgramIdx())
-				.programName(param.getProgramName())
-				.memo(param.getMemo())
-				.updatedUserId(userId)
-			.build();
-		//@formatter:on
+        Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
+        if (optionalProgramEntity.isPresent() == false) {
+            log.error("존재하지 않는 데이터 수정이 있습니다. 확인이 필요합니다. {} ", param.getProgramIdx());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
+        }
 
-		ProgramEntity dbInfo = programService.modify(modifyParam, param.getUrlIdxs());
+        Res res = programService.valid(param.getProgramName(), param.getProgramIdx());
+        if (res.getResult() == false) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
 
-		return ResponseEntity.status(HttpStatus.OK).body(Res.of(true, "SUCCESS", dbInfo));
-	}
+        String userId = SecUtils.userId();
 
-	/**
-	 * Search API
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping("/url/search")
-	public ResponseEntity<Res> urlSearch(@Valid ProgramDTO.UrlSearch param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
-		}
+        ProgramEntity modifyParam = ProgramEntity.builder()
+                .programIdx(param.getProgramIdx())
+                .programName(param.getProgramName())
+                .memo(param.getMemo())
+                .updatedUserId(userId)
+                .build();
 
-		List<UrlEntity> searchList = Optional.ofNullable(urlService.urlNameSearch(param.getKeyword())).orElseGet(Collections::emptyList);
+        ProgramEntity dbInfo = programService.modify(modifyParam, param.getUrlIdxs());
 
-		return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
-	}
+        return ResponseEntity.status(HttpStatus.OK).body(Res.of(true, "SUCCESS", dbInfo));
+    }
 
-	/**
-	 * Search API
-	 *
-	 * @param param
-	 * @param result
-	 * @return
-	 */
-	@GetMapping("/search")
-	public ResponseEntity<Res> search(@Valid ProgramDTO.Search param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
-		}
+    /**
+     * Search API
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @GetMapping("/url/search")
+    public ResponseEntity<Res> urlSearch(
+            @Valid ProgramDTO.UrlSearch param,
+            BindingResult result
+    ) {
+        
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
+        }
 
-		List<ProgramEntity> searchList = Optional.ofNullable(programService.search(param.getKeyword())).orElseGet(Collections::emptyList);
+        List<UrlEntity> searchList = Optional.ofNullable(urlService.urlNameSearch(param.getKeyword())).orElseGet(Collections::emptyList);
 
-		return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
-	}
+        return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
+    }
+
+    /**
+     * Search API
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @GetMapping("/search")
+    public ResponseEntity<Res> search(
+            @Valid ProgramDTO.Search param,
+            BindingResult result
+    ) {
+
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
+        }
+
+        List<ProgramEntity> searchList = Optional.ofNullable(programService.search(param.getKeyword())).orElseGet(Collections::emptyList);
+
+        return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
+    }
 }

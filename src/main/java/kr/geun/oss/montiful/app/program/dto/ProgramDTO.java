@@ -16,78 +16,71 @@ import java.util.List;
  */
 public class ProgramDTO {
 
-	@Getter
-	@Builder
-	@AllArgsConstructor
-	public static class PageReq extends CmnPageModule {
-		private String st; //SearchType
-		private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
-	}
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class PageReq extends CmnPageModule {
+        private String st; //SearchType
+        private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
+    }
 
-	@Getter
-	@Builder
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class PageRes {
-		private Long programIdx;
-		private String programName;
-		private String memo;
-		private String createdUserId;
-		private String updatedUserId;
-		private LocalDateTime createdAt;
-		private LocalDateTime updatedAt;
-	}
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PageRes {
+        private Long programIdx;
+        private String programName;
+        private String memo;
+        private String createdUserId;
+        private String updatedUserId;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+    }
 
-	@Getter
-	@Builder
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class GetReq {
-		@Min(0)
-		private Long programIdx;
-	}
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddReq {
 
-	@Data
-	@NoArgsConstructor
-	public static class AddReq {
+        @NotBlank
+        @Size(min = 1, max = 100)
+        private String programName;
+        private String memo;
 
-		@NotBlank
-		@Size(min = 1, max = 100)
-		private String programName;
-		private String memo;
+        private List<String> urlIdxs;
+    }
 
-		private List<String> urlIdxs;
-	}
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ModifyReq {
+        @Min(0)
+        private Long programIdx;
 
-	@Data
-	@NoArgsConstructor
-	public static class ModifyReq {
-		@Min(0)
-		private Long programIdx;
+        @NotBlank
+        @Size(min = 1, max = 100)
+        private String programName;
+        private String memo;
 
-		@NotBlank
-		@Size(min = 1, max = 100)
-		private String programName;
-		private String memo;
+        private List<String> urlIdxs;
+    }
 
-		private List<String> urlIdxs;
-	}
+    @Data
+    @NoArgsConstructor
+    public static class UrlSearch {
+        @NotBlank
+        @Size(min = 1, max = 100)
+        private String keyword;
 
-	@Data
-	@NoArgsConstructor
-	public static class UrlSearch {
-		@NotBlank
-		@Size(min = 1, max = 100)
-		private String keyword;
+    }
 
-	}
+    @Data
+    @NoArgsConstructor
+    public static class Search {
+        @NotBlank
+        @Size(min = 1, max = 100)
+        private String keyword;
 
-	@Data
-	@NoArgsConstructor
-	public static class Search {
-		@NotBlank
-		@Size(min = 1, max = 100)
-		private String keyword;
-
-	}
+    }
 }

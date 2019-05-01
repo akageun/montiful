@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -85,14 +86,17 @@ public class UrlManageWeb extends BaseController {
     }
 
     @GetMapping("/url/form/{urlIdx}")
-    public ModelAndView modifyUrlForm(@Valid UrlDTO.ModifyPage param, BindingResult result) {
-        if (result.hasErrors()) {
+    public ModelAndView modifyUrlForm(
+            @PathVariable Long urlIdx
+    ) {
+
+        if (urlIdx == null) {
             return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
         }
 
         ModelAndView mav = new ModelAndView("manage/url/urlForm");
 
-        Optional<UrlEntity> optionalProgramEntity = urlService.get(param.getUrlIdx());
+        Optional<UrlEntity> optionalProgramEntity = urlService.get(urlIdx);
         if (optionalProgramEntity.isPresent() == false) {
             return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
         }

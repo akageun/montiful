@@ -42,7 +42,11 @@ public class ProgramManageWeb extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/program")
-	public ModelAndView getProgramPage(@Valid ProgramDTO.PageReq param, BindingResult result) {
+	public ModelAndView getProgramPage(
+			@Valid ProgramDTO.PageReq param,
+			BindingResult result
+	) {
+
 		if (result.hasErrors()) {
 			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
 		}
