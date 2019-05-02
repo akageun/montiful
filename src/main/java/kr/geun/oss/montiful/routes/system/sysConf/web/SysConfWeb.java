@@ -10,6 +10,7 @@ import kr.geun.oss.montiful.core.web.BaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -30,23 +31,28 @@ import javax.validation.Valid;
 @RequestMapping("/system")
 public class SysConfWeb extends BaseController {
 
-	@Autowired
-	private SysConfService sysConfService;
+    @Autowired
+    private SysConfService sysConfService;
 
-	@GetMapping("/configuration")
-	public ModelAndView systemConfigPage(@Valid SysConfDTO.PageReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+    @GetMapping("/configuration")
+    public ModelAndView systemConfigPage(
+            @Valid SysConfDTO.PageReq param,
+            BindingResult result
+    ) {
 
-		Page<SysConfEntity> rtnList = sysConfService.page(PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "confCd")));
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		ModelAndView mav = new ModelAndView("system/configuration");
+        Pageable pageable = PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "confCd"));
+        Page<SysConfEntity> rtnList = sysConfService.page(pageable);
 
-		mav.addObject("resultList", rtnList);
-		mav.addObject("paramInfo", param);
-		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+        ModelAndView mav = new ModelAndView("system/configuration");
 
-		return mav;
-	}
+        mav.addObject("resultList", rtnList);
+        mav.addObject("paramInfo", param);
+        setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+
+        return mav;
+    }
 }

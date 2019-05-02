@@ -323,4 +323,7 @@ public class UrlService {
         return rtnMap;
     }
 
+    public List<MonitorDTO.MonitorHistRes> getUrlMonitorHistList(Long limit) {
+        return urlMonitorHistRepo.findUrlMonitorHistEntities(limit);
+    }
 }

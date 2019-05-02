@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,123 +30,126 @@ import java.util.stream.Collectors;
 @Service
 public class ProgramService {
 
-	@Autowired
-	private ProgramRepo programRepo;
+    @Autowired
+    private ProgramRepo programRepo;
 
-	@Autowired
-	private ProgramUrlRepo programUrlRepo;
+    @Autowired
+    private ProgramUrlRepo programUrlRepo;
 
-	/**
-	 * Page
-	 *
-	 * @param pageable
-	 * @return
-	 */
-	public Page<ProgramDTO.PageRes> page(Pageable pageable, String searchType, String searchValue) {
-		ProgramManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(ProgramManageSearchTypeCd.class, searchType);
+    public Page<ProgramDTO.PageRes> page(Pageable pageable) {
+        return page(pageable, null, null);
+    }
 
-		boolean isSearchMode = false;
-		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
-			isSearchMode = true;
+    /**
+     * Page
+     *
+     * @param pageable
+     * @return
+     */
+    public Page<ProgramDTO.PageRes> page(Pageable pageable, String searchType, String searchValue) {
+        ProgramManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(ProgramManageSearchTypeCd.class, searchType);
 
-		}
+        boolean isSearchMode = false;
+        if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+            isSearchMode = true;
 
-		return programRepo.findPage(pageable, searchTypeCd, searchValue, isSearchMode);
-	}
+        }
 
-	/**
-	 * Get Req
-	 *
-	 * @param programIdx
-	 * @return
-	 */
-	public Optional<ProgramEntity> get(Long programIdx) {
-		return programRepo.findById(programIdx);
-	}
+        return programRepo.findPage(pageable, searchTypeCd, searchValue, isSearchMode);
+    }
 
-	/**
-	 * Validation
-	 *
-	 * @param programName
-	 * @param programIdx
-	 * @return
-	 */
-	public Res valid(String programName, Long programIdx) {
-		ProgramEntity existCheck = programRepo.findByProgramName(programName);
-		if (existCheck != null) {
+    /**
+     * Get Req
+     *
+     * @param programIdx
+     * @return
+     */
+    public Optional<ProgramEntity> get(Long programIdx) {
+        return programRepo.findById(programIdx);
+    }
 
-			if (programIdx == null || existCheck.getProgramIdx().equals(programIdx) == false) {
-				return Res.of(false, "이미 존재하는 프로그램 이름입니다.");
-			}
-		}
+    /**
+     * Validation
+     *
+     * @param programName
+     * @param programIdx
+     * @return
+     */
+    public Res valid(String programName, Long programIdx) {
+        ProgramEntity existCheck = programRepo.findByProgramName(programName);
+        if (existCheck != null) {
 
-		return Res.ok();
-	}
+            if (programIdx == null || existCheck.getProgramIdx().equals(programIdx) == false) {
+                return Res.of(false, "이미 존재하는 프로그램 이름입니다.");
+            }
+        }
 
-	/**
-	 * Add Program
-	 *
-	 * @param param
-	 * @return
-	 */
-	@Transactional
-	public ProgramEntity add(ProgramEntity param, List<String> urlIdxs) {
-		ProgramEntity programEntity = programRepo.save(param);
+        return Res.ok();
+    }
 
-		if (urlIdxs != null && urlIdxs.isEmpty() == false) {
-			List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream().map(idx ->
-					//@formatter:off
-					ProgramUrlEntity.builder()
-						.programIdx(programEntity.getProgramIdx())
-						.urlIdx(Long.parseLong(idx))
-						.createdUserId(param.getCreatedUserId())
-						.build()
-					//@formatter:on
-			).collect(Collectors.toList());
+    /**
+     * Add Program
+     *
+     * @param param
+     * @return
+     */
+    @Transactional
+    public ProgramEntity add(ProgramEntity param, List<String> urlIdxs) {
+        ProgramEntity programEntity = programRepo.save(param);
 
-			programUrlRepo.saveAll(programUrlEntities);
-		}
 
-		return programEntity;
-	}
+        if (CollectionUtils.isEmpty(urlIdxs) == false) {
+            List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream()
+                    .map(idx ->
+                            ProgramUrlEntity.builder()
+                                    .programIdx(programEntity.getProgramIdx())
+                                    .urlIdx(Long.parseLong(idx))
+                                    .createdUserId(param.getCreatedUserId())
+                                    .build()
+                    ).collect(Collectors.toList());
 
-	/**
-	 * Update Program
-	 *
-	 * @param param
-	 * @return
-	 */
-	@Transactional
-	public ProgramEntity modify(ProgramEntity param, List<String> urlIdxs) {
-		ProgramEntity programEntity = programRepo.save(param);
+            programUrlRepo.saveAll(programUrlEntities);
+        }
 
-		programUrlRepo.deleteByProgramIdx(param.getProgramIdx());
+        return programEntity;
+    }
 
-		if (urlIdxs != null && urlIdxs.isEmpty() == false) {
-			List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream().map(idx ->
-					//@formatter:off
-					ProgramUrlEntity.builder()
-						.programIdx(param.getProgramIdx())
-						.urlIdx(Long.parseLong(idx))
-						.createdUserId(param.getUpdatedUserId())
-						.build()
-					//@formatter:on
-			).collect(Collectors.toList());
+    /**
+     * Update Program
+     *
+     * @param param
+     * @return
+     */
+    @Transactional
+    public ProgramEntity modify(ProgramEntity param, List<String> urlIdxs) {
+        ProgramEntity programEntity = programRepo.save(param);
 
-			programUrlRepo.saveAll(programUrlEntities);
-		}
+        programUrlRepo.deleteByProgramIdx(param.getProgramIdx());
 
-		return programEntity;
-	}
+        if (CollectionUtils.isEmpty(urlIdxs) == false) {
+            List<ProgramUrlEntity> programUrlEntities = urlIdxs.stream()
+                    .map(idx ->
+                            ProgramUrlEntity.builder()
+                                    .programIdx(param.getProgramIdx())
+                                    .urlIdx(Long.parseLong(idx))
+                                    .createdUserId(param.getUpdatedUserId())
+                                    .build()
+                    ).collect(Collectors.toList());
 
-	/**
-	 * For Search API
-	 * TODO : Cache 추가해야함.
-	 *
-	 * @param keyword
-	 * @return
-	 */
-	public List<ProgramEntity> search(String keyword) {
-		return programRepo.findByProgramNameStartingWithOrMemoStartsWith(keyword, keyword);
-	}
+            programUrlRepo.saveAll(programUrlEntities);
+        }
+
+        return programEntity;
+    }
+
+    /**
+     * For Search API
+     * TODO : Cache 추가해야함.
+     *
+     * @param keyword
+     * @return
+     */
+    public List<ProgramEntity> search(String keyword) {
+        return programRepo.findByProgramNameStartingWithOrMemoStartsWith(keyword, keyword);
+    }
 }

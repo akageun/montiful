@@ -34,7 +34,7 @@ public class ManageProgramV1Api {
     private UrlService urlService;
 
     /**
-     * Single Data
+     * 단건조회
      *
      * @param programIdx
      * @return

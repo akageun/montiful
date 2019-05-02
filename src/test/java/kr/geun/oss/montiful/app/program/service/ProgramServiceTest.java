@@ -2,9 +2,9 @@ package kr.geun.oss.montiful.app.program.service;
 
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
+import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,40 +21,45 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(classes = {ProgramService.class})
 public class ProgramServiceTest {
 
-	@MockBean
-	private ProgramRepo programRepo;
+    @MockBean
+    private ProgramRepo programRepo;
 
-	@Autowired
-	private ProgramService programService;
+    @MockBean
+    private ProgramUrlRepo programUrlRepo;
 
-	//	@Test
-	//	public void pageTest() {
-	//
-	//	}
+    @Autowired
+    private ProgramService programService;
 
-	@Ignore
-	@Test
-	public void getTest() {
-		final Long programIdx = 1L;
-		ProgramEntity param;
+    //	@Test
+    //	public void pageTest() {
+    //
+    //	}
 
-		GIVEN:
-		{
-			param = ProgramEntity.builder().programName("Test").memo("Memo Text").build();
-			given(programRepo.findById(programIdx)).willReturn(Optional.of(param));
-		}
+    @Test
+    public void getTest() {
+        final Long programIdx = 1L;
+        ProgramEntity param;
 
-		Optional<ProgramEntity> optionalProgramEntity;
+        GIVEN:
+        {
+            param = ProgramEntity.builder()
+                    .programName("Test")
+                    .memo("Memo Text")
+                    .build();
+            given(programRepo.findById(programIdx)).willReturn(Optional.of(param));
+        }
 
-		WHEN:
-		{
-			optionalProgramEntity = programService.get(programIdx);
-		}
+        Optional<ProgramEntity> optionalProgramEntity;
 
-		THEN:
-		{
-			Assert.assertTrue(optionalProgramEntity.isPresent());
-			Assert.assertEquals(param.getProgramName(), optionalProgramEntity.get().getProgramName());
-		}
-	}
+        WHEN:
+        {
+            optionalProgramEntity = programService.get(programIdx);
+        }
+
+        THEN:
+        {
+            Assert.assertTrue(optionalProgramEntity.isPresent());
+            Assert.assertEquals(param.getProgramName(), optionalProgramEntity.get().getProgramName());
+        }
+    }
 }

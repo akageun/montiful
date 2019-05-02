@@ -14,14 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginWeb {
 
-	/**
-	 * 로그인 페이지
-	 *
-	 * @return
-	 */
-	@GetMapping("/login")
-	public ModelAndView login() {
-		ModelAndView mv = new ModelAndView("user/login");
-		return mv;
-	}
+    /**
+     * 로그인 페이지
+     *
+     * @return
+     */
+    @GetMapping("/login")
+    public ModelAndView login() {
+        return new ModelAndView("user/login");
+    }
 }

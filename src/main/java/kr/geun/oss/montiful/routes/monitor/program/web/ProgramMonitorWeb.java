@@ -24,8 +24,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 /**
- *
- *
  * @author akageun
  */
 @Slf4j
@@ -33,44 +31,52 @@ import java.util.Optional;
 @RequestMapping("/monitor")
 public class ProgramMonitorWeb extends BaseController {
 
-	@Autowired
-	private ProgramService programService;
+    @Autowired
+    private ProgramService programService;
 
-	@GetMapping("/program")
-	public ModelAndView getMonitorProgramPage(@Valid MonitorDTO.PageReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+    @GetMapping("/program")
+    public ModelAndView getMonitorProgramPage(
+            @Valid MonitorDTO.PageReq param,
+            BindingResult result
+    ) {
 
-		PageRequest pageRequest = PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "programIdx"));
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		Page<ProgramDTO.PageRes> rtnList = programService.page(pageRequest, "", "");
+        PageRequest pageRequest = PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "programIdx"));
 
-		ModelAndView mav = new ModelAndView("monitor/program/programList");
+        Page<ProgramDTO.PageRes> rtnList = programService.page(pageRequest);
 
-		mav.addObject("paramInfo", param);
-		mav.addObject("resultList", rtnList);
-		mav.addObject("pagination",
-			PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
+        ModelAndView mav = new ModelAndView("monitor/program/programList");
 
-		return mav;
-	}
+        mav.addObject("paramInfo", param);
+        mav.addObject("resultList", rtnList);
+        mav.addObject("pagination",
+                PaginationInfo.of(rtnList.getNumber(), rtnList.getNumberOfElements(), rtnList.getTotalElements(), rtnList.getTotalPages(), 3));
 
-	@GetMapping("/program/{programIdx}")
-	public ModelAndView getMonitorProgram(@Valid MonitorDTO.ViewerReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+        return mav;
+    }
 
-		Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
-		if (optionalProgramEntity.isPresent() == false) {
-			return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
-		}
+    @GetMapping("/program/{programIdx}")
+    public ModelAndView getMonitorProgram(
+            @Valid MonitorDTO.ViewerReq param,
+            BindingResult result
+    ) {
 
-		ModelAndView mav = new ModelAndView("monitor/program/programViewer");
-		mav.addObject("result", optionalProgramEntity.get());
-		mav.addObject("paramInfo", param);
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		return mav;
-	}
+        Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());
+        if (optionalProgramEntity.isPresent() == false) {
+            return CmnUtils.mav(HttpStatus.NOT_FOUND, "err/notFound");
+        }
+
+        ModelAndView mav = new ModelAndView("monitor/program/programViewer");
+        mav.addObject("result", optionalProgramEntity.get());
+        mav.addObject("paramInfo", param);
+
+        return mav;
+    }
 }

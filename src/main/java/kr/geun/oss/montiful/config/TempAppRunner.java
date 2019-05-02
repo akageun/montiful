@@ -21,50 +21,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
- *
- *
  * @author akageun
  */
 @Slf4j
 @Component
 public class TempAppRunner implements CommandLineRunner {
 
-	@Autowired
-	private ProgramRepo programRepo;
+    @Autowired
+    private ProgramRepo programRepo;
 
-	@Autowired
-	private UrlRepo urlRepo;
+    @Autowired
+    private UrlRepo urlRepo;
 
-	@Autowired
-	private ProgramUrlRepo programUrlRepo;
+    @Autowired
+    private ProgramUrlRepo programUrlRepo;
 
-	@Autowired
-	private AlarmRepo alarmRepo;
+    @Autowired
+    private AlarmRepo alarmRepo;
 
-	@Autowired
-	private UrlAlarmRepo urlAlarmRepo;
+    @Autowired
+    private UrlAlarmRepo urlAlarmRepo;
 
-	@Autowired
-	private Environment env;
+    @Autowired
+    private Environment env;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private SysConfService sysConfService;
+    @Autowired
+    private SysConfService sysConfService;
 
-	@Override
-	public void run(String... args) throws Exception {
-		final String userId = Const.System.systemAdminUserId;
-		final String urlPrefix = "http://localhost:%s";
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-		//@formatter:off
+    @Override
+    public void run(String... args) throws Exception {
+        final String userId = Const.System.systemAdminUserId;
+        final String urlPrefix = "http://localhost:%s";
+
+        //@formatter:off
         ProgramEntity programParam = ProgramEntity.builder()
                 .programName("Test Program Num 1")
                 .createdUserId(userId)
@@ -177,19 +179,26 @@ public class TempAppRunner implements CommandLineRunner {
 		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
         //@formatter:on
-		userService.add(UserEntity.builder().email("akageun@gmail.com").passWd("q1w2e3Q!").userId(Const.System.systemAdminUserId).enable(true).locked(false).build());
+        userService.add(UserEntity.builder()
+                .email("akageun@gmail.com")
+                .passWd(passwordEncoder.encode("q1w2e3Q!"))
+                .userId(Const.System.systemAdminUserId)
+                .enable(true)
+                .locked(false)
+                .build()
+        );
 
 
-		initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.
-	}
+        initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.
+    }
 
-	private void initSystemConfig() {
-		for (SysConfCd value : SysConfCd.values()) {
-			Optional<SysConfEntity> dbInfo = sysConfService.get(value.name());
-			if (dbInfo.isPresent()) {
-				continue;
-			}
-			//@formatter:off
+    private void initSystemConfig() {
+        for (SysConfCd value : SysConfCd.values()) {
+            Optional<SysConfEntity> dbInfo = sysConfService.get(value.name());
+            if (dbInfo.isPresent()) {
+                continue;
+            }
+            //@formatter:off
 			SysConfEntity sysConfEntity = SysConfEntity.builder()
 				.confCd(value.name())
 				.confValue(value.getDefaultValue())
@@ -198,8 +207,8 @@ public class TempAppRunner implements CommandLineRunner {
 				.build();
 			//@formatter:on
 
-			sysConfService.add(sysConfEntity);
-		}
-	}
+            sysConfService.add(sysConfEntity);
+        }
+    }
 
 }

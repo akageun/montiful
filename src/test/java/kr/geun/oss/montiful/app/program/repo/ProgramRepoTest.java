@@ -33,6 +33,7 @@ public class ProgramRepoTest {
         Assert.assertEquals(dbInfo.getProgramName(), dbParam.getProgramName());
     }
 
+    @Ignore
     @Test
     public void modifyTest() {
         ProgramEntity dbParam = ProgramEntity.builder()
