@@ -5,8 +5,8 @@ import kr.geun.oss.montiful.app.alarm.common.cd.AlarmManageSearchTypeCd;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.repo.AlarmRepo;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
-import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
-import kr.geun.oss.montiful.app.redis.publisher.service.RedisPublisher;
+import kr.geun.oss.montiful.core.redis.cd.RedisTopicCd;
+import kr.geun.oss.montiful.core.redis.publisher.service.RedisPublisher;
 import kr.geun.oss.montiful.app.system.cd.SysConfCd;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;
@@ -46,10 +46,18 @@ public class AlarmService {
 	@Autowired
 	private SysConfService sysConfService;
 
+	/**
+	 * 리스트 페이지 조회
+	 *
+	 * @param pageable
+	 * @param searchType : 검색타입
+	 * @param searchValue : 검색 값
+	 * @return
+	 */
 	public Page<AlarmEntity> page(Pageable pageable, String searchType, String searchValue) {
 		AlarmManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(AlarmManageSearchTypeCd.class, searchType);
 
-		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {
+		if (CmnUtils.isSearchable(searchTypeCd, searchValue)) { //검색조건이 있을 경우
 			return alarmRepo.findPage(pageable, searchTypeCd, searchValue);
 		}
 

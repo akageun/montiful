@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.app.redis.cd;
+package kr.geun.oss.montiful.core.redis.cd;
 
 /**
  * Redis Topic Code

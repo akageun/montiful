@@ -16,57 +16,54 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class AlarmCommonModule extends BaseController {
 
-	@Autowired
-	protected AlarmService alarmService;
+    @Autowired
+    protected AlarmService alarmService;
 
-	//@formatter:off
-	protected static final ObjectMapper OM = new ObjectMapper()
-		.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
-		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-		.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-	//@formatter:on
+    protected static final ObjectMapper OM = new ObjectMapper()
+            .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
-	/**
-	 * init Alarm Entity
-	 *
-	 * @param alarmName
-	 * @param alarmChannelCd
-	 * @param alarmValue
-	 * @param memo
-	 * @return
-	 */
-	protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
-		return initAlarm(alarmName, alarmChannelCd, alarmValue, memo, null);
-	}
+    /**
+     * init Alarm Entity
+     *
+     * @param alarmName
+     * @param alarmChannelCd
+     * @param alarmValue
+     * @param memo
+     * @return
+     */
+    protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
+        return initAlarm(alarmName, alarmChannelCd, alarmValue, memo, null);
+    }
 
-	/**
-	 * init Alarm Entity
-	 *
-	 * @param alarmName
-	 * @param alarmChannelCd
-	 * @param alarmValue
-	 * @param memo
-	 * @param alarmIdx
-	 * @return
-	 */
-	protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
-		String userId = SecUtils.userId();
-		//@formatter:off
+    /**
+     * init Alarm Entity
+     *
+     * @param alarmName
+     * @param alarmChannelCd
+     * @param alarmValue
+     * @param memo
+     * @param alarmIdx
+     * @return
+     */
+    protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
+        String userId = SecUtils.userId();
+
         AlarmEntity alarmEntity = AlarmEntity.builder()
                 .alarmName(alarmName)
                 .alarmChannel(alarmChannelCd.name())
                 .alarmValue(alarmValue)
                 .memo(memo)
                 .updatedUserId(userId)
-            .build();
-        //@formatter:on
+                .build();
 
-		if (alarmIdx != null) {
-			alarmEntity.setAlarmIdx(alarmIdx);
-		} else {
-			alarmEntity.setCreatedUserId(userId);
-		}
+        if (alarmIdx != null) {
+            alarmEntity.setAlarmIdx(alarmIdx);
+        } else {
+            alarmEntity.setCreatedUserId(userId);
+        }
 
-		return alarmEntity;
-	}
+        return alarmEntity;
+    }
 }

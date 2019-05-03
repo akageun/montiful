@@ -2,9 +2,8 @@ package kr.geun.oss.montiful.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
-import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
-import kr.geun.oss.montiful.app.redis.subscriber.AlarmSubscriber;
-import kr.geun.oss.montiful.app.url.models.UrlEntity;
+import kr.geun.oss.montiful.core.redis.cd.RedisTopicCd;
+import kr.geun.oss.montiful.core.redis.subscriber.AlarmSubscriber;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

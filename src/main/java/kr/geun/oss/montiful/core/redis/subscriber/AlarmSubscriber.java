@@ -1,4 +1,4 @@
-package kr.geun.oss.montiful.app.redis.subscriber;
+package kr.geun.oss.montiful.core.redis.subscriber;
 
 import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;

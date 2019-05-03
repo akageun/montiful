@@ -1,6 +1,6 @@
-package kr.geun.oss.montiful.app.redis.publisher.service;
+package kr.geun.oss.montiful.core.redis.publisher.service;
 
-import kr.geun.oss.montiful.app.redis.cd.RedisTopicCd;
+import kr.geun.oss.montiful.core.redis.cd.RedisTopicCd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

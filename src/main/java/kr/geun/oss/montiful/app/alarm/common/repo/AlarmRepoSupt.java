@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- *
+ * Alarm Repository
  *
  * @author akageun
  */
 public interface AlarmRepoSupt {
-	Page<AlarmEntity> findPage(Pageable pageable, AlarmManageSearchTypeCd searchTypeCd, String searchValue);
+
+
+    Page<AlarmEntity> findPage(Pageable pageable, AlarmManageSearchTypeCd searchTypeCd, String searchValue);
 }
