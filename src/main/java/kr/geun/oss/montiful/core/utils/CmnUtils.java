@@ -13,51 +13,52 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class CmnUtils {
 
-	public static ModelAndView mav(String viewName) {
-		ModelAndView mav = new ModelAndView();
-		mav.setStatus(HttpStatus.OK);
-		mav.setViewName(viewName);
-		return mav;
-	}
+    public static ModelAndView mav(String viewName) {
+        ModelAndView mav = new ModelAndView();
+        mav.setStatus(HttpStatus.OK);
+        mav.setViewName(viewName);
+        return mav;
+    }
 
-	public static ModelAndView mav(HttpStatus status, String viewName) {
-		ModelAndView mav = new ModelAndView();
-		mav.setStatus(status);
-		mav.setViewName(viewName);
-		return mav;
-	}
+    public static ModelAndView mav(HttpStatus status, String viewName) {
+        ModelAndView mav = new ModelAndView();
+        mav.setStatus(status);
+        mav.setViewName(viewName);
+        return mav;
+    }
 
-	public static <T> T copyProperties(Object param, Class<T> tClass) throws IllegalAccessException, InstantiationException {
-		T newInstance = tClass.newInstance();
-		BeanUtils.copyProperties(param, newInstance);
+    public static <T> T copyProperties(Object param, Class<T> tClass) throws IllegalAccessException, InstantiationException {
+        T newInstance = tClass.newInstance();
+        BeanUtils.copyProperties(param, newInstance);
 
-		return newInstance;
-	}
+        return newInstance;
+    }
 
-	public static <E extends Enum<E>> boolean isSearchable(E searchType, String searchValue) {
-		return searchType != null && StringUtils.isNotBlank(searchValue);
-	}
+    public static <E extends Enum<E>> boolean isSearchable(E searchType, String searchValue) {
+        return searchType != null && StringUtils.isNotBlank(searchValue);
+    }
 
-	public static <E extends Enum<E>> E defaultEnumCode(E enm, E defaultEnum) {
+    /**
+     * 문자열을 지정한 Enum class 에서 enum 값으로 가지고옴
+     * - 없을 경우 default 값으로 리턴
+     *
+     * @param enumClass
+     * @param enumValue
+     * @param defaultEnum
+     * @param <E>
+     * @return
+     */
+    public static <E extends Enum<E>> E defaultEnumCode(Class<E> enumClass, String enumValue, E defaultEnum) {
 
-		if (enm == null) {
-			return defaultEnum;
-		}
+        if (enumValue == null) {
+            return defaultEnum;
+        }
 
-		return enm;
-	}
+        E tmpEnum = EnumUtils.getEnum(enumClass, enumValue);
+        if (tmpEnum == null) {
+            return defaultEnum;
+        }
 
-	public static <E extends Enum<E>> E defaultEnumCodeStr(Class<E> enm, String enumValue, E defaultEnum) {
-
-		if (enumValue == null) {
-			return defaultEnum;
-		}
-
-		E tmpEnum = EnumUtils.getEnum(enm, enumValue);
-		if (tmpEnum == null) {
-			return defaultEnum;
-		}
-
-		return tmpEnum;
-	}
+        return tmpEnum;
+    }
 }

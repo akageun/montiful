@@ -8,15 +8,15 @@ import org.junit.Test;
 @Slf4j
 public class CmnUtilsTest {
 
-	@Test
-	public void defaultEnumSettingTest() {
+    @Test
+    public void defaultEnumSettingTest() {
 
-		ProgramManageSearchTypeCd result = CmnUtils.defaultEnumCode(null, ProgramManageSearchTypeCd.MM);
-		ProgramManageSearchTypeCd result2 = CmnUtils.defaultEnumCode(ProgramManageSearchTypeCd.U, ProgramManageSearchTypeCd.MM);
+        ProgramManageSearchTypeCd result = CmnUtils.defaultEnumCode(null, null, ProgramManageSearchTypeCd.MM);
+        ProgramManageSearchTypeCd result2 = CmnUtils.defaultEnumCode(ProgramManageSearchTypeCd.class, ProgramManageSearchTypeCd.U.name(), ProgramManageSearchTypeCd.MM);
 
-		Assert.assertEquals(ProgramManageSearchTypeCd.MM, result);
-		Assert.assertEquals(ProgramManageSearchTypeCd.U, result2);
+        Assert.assertEquals(result, ProgramManageSearchTypeCd.MM);
+        Assert.assertEquals(result2, ProgramManageSearchTypeCd.U);
 
-	}
+    }
 
 }
