@@ -1,6 +1,6 @@
 package kr.geun.oss.montiful.app.program.service;
 
-import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
+import kr.geun.oss.montiful.app.program.cd.ManageProgramSearchTypeCd;
 import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
@@ -47,7 +47,7 @@ public class ProgramService {
      * @return
      */
     public Page<ProgramDTO.PageRes> page(Pageable pageable, String searchType, String searchValue) {
-        ProgramManageSearchTypeCd searchTypeCd = EnumUtils.getEnum(ProgramManageSearchTypeCd.class, searchType);
+        ManageProgramSearchTypeCd searchTypeCd = EnumUtils.getEnum(ManageProgramSearchTypeCd.class, searchType);
 
         boolean isSearchMode = false;
         if (CmnUtils.isSearchable(searchTypeCd, searchValue)) {

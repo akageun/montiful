@@ -2,7 +2,7 @@ package kr.geun.oss.montiful.app.program.repo.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
-import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
+import kr.geun.oss.montiful.app.program.cd.ManageProgramSearchTypeCd;
 import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.QProgramEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepoSupt;
@@ -21,19 +21,18 @@ import org.springframework.data.domain.Pageable;
 @Slf4j
 public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 
-	/**
-	 *
-	 * @param pageable
-	 * @param searchType
-	 * @param searchValue
-	 * @param isSearchMode
-	 * @return
-	 */
-	@Override
-	public Page<ProgramDTO.PageRes> findPage(Pageable pageable, ProgramManageSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
-		QProgramEntity qProgramEntity = QProgramEntity.programEntity;
+    /**
+     * @param pageable
+     * @param searchType
+     * @param searchValue
+     * @param isSearchMode
+     * @return
+     */
+    @Override
+    public Page<ProgramDTO.PageRes> findPage(Pageable pageable, ManageProgramSearchTypeCd searchType, String searchValue, boolean isSearchMode) {
+        QProgramEntity qProgramEntity = QProgramEntity.programEntity;
 
-		//@formatter:off
+        //@formatter:off
 		JPAQuery<ProgramDTO.PageRes> jpaQuery = getJpaQueryFactory()
 			.select(
 				Projections.fields(ProgramDTO.PageRes.class,
@@ -57,7 +56,7 @@ public class ProgramRepoImpl extends CmnRepoModule implements ProgramRepoSupt {
 			.offset(pageable.getOffset());
 		//@formatter:on
 
-		return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
-	}
+        return new PageImpl<>(jpaQuery.fetch(), pageable, jpaQuery.fetchCount());
+    }
 
 }

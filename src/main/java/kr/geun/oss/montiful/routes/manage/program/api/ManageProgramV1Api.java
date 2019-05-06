@@ -1,12 +1,12 @@
 package kr.geun.oss.montiful.routes.manage.program.api;
 
-import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
 import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.SecUtils;
+import kr.geun.oss.montiful.routes.manage.program.dto.ManageProgramDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 /**
- * Program Api
+ * Program Manage Api
  *
  * @author akageun
  */
@@ -71,7 +71,7 @@ public class ManageProgramV1Api {
      */
     @PostMapping(value = "")
     public ResponseEntity<Res> add(
-            @Valid ProgramDTO.AddReq param,
+            @Valid ManageProgramDTO.AddReq param,
             BindingResult result
     ) {
 
@@ -107,7 +107,7 @@ public class ManageProgramV1Api {
      */
     @PutMapping(value = "")
     public ResponseEntity<Res> modify(
-            @RequestBody @Valid ProgramDTO.ModifyReq param,
+            @RequestBody @Valid ManageProgramDTO.ModifyReq param,
             BindingResult result
     ) {
 
@@ -147,31 +147,33 @@ public class ManageProgramV1Api {
      * @param result
      * @return
      */
-    @GetMapping("/url/search")
-    public ResponseEntity<Res> urlSearch(
-            @Valid ProgramDTO.UrlSearch param,
+    @GetMapping("/search")
+    public ResponseEntity<Res> search(
+            @Valid ManageProgramDTO.Search param,
             BindingResult result
     ) {
-        
+
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
         }
 
-        List<UrlEntity> searchList = Optional.ofNullable(urlService.urlNameSearch(param.getKeyword())).orElseGet(Collections::emptyList);
+        List<ProgramEntity> searchList = Optional
+                .ofNullable(programService.search(param.getKeyword()))
+                .orElseGet(Collections::emptyList);
 
         return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
     }
 
     /**
-     * Search API
+     * URL Search API
      *
      * @param param
      * @param result
      * @return
      */
-    @GetMapping("/search")
-    public ResponseEntity<Res> search(
-            @Valid ProgramDTO.Search param,
+    @GetMapping("/url/search")
+    public ResponseEntity<Res> urlSearch(
+            @Valid ManageProgramDTO.UrlSearch param,
             BindingResult result
     ) {
 
@@ -179,8 +181,11 @@ public class ManageProgramV1Api {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
         }
 
-        List<ProgramEntity> searchList = Optional.ofNullable(programService.search(param.getKeyword())).orElseGet(Collections::emptyList);
+        List<UrlEntity> searchList = Optional
+                .ofNullable(urlService.urlNameSearch(param.getKeyword()))
+                .orElseGet(Collections::emptyList);
 
         return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
     }
+
 }

@@ -5,7 +5,8 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <title>Program Manage</title>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
+          rel="stylesheet"/>
     <link th:href="@{/webjars/select2/4.0.5/css/select2.min.css}" rel="stylesheet"/>
 </head>
 <div layout:fragment="page_content" id="page_content">
@@ -56,7 +57,8 @@
                                         </div>
                                         <div class=" form-group">
                                             <input type="text" class="form-control form-control-sm" name="sv"
-                                                   placeholder="Entered Search Text!" th:value="${paramInfo.sv}"
+                                                   placeholder="Entered Search Text!"
+                                                   th:value="${paramInfo.sv}"
                                                    onkeydown="enterSearch();"/>
                                         </div>
                                         <div class="form-group">
@@ -71,7 +73,8 @@
                                     <div class="form-inline float-right">
                                         <div class="form-group">
 
-                                            <select class="form-control form-control-sm" name="sot" onchange="search();">
+                                            <select class="form-control form-control-sm" name="sot"
+                                                    onchange="search();">
                                                 <option th:each="typeCd : ${sortTypeCd}"
                                                         th:value="${typeCd.name()}"
                                                         th:text="${typeCd.cdNm}"
@@ -81,7 +84,8 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <select class="form-control form-control-sm" name="sod" onchange="search();">
+                                            <select class="form-control form-control-sm" name="sod"
+                                                    onchange="search();">
                                                 <option th:each="directionCd : ${sortDirectionCd}"
                                                         th:value="${directionCd.name()}"
                                                         th:text="${directionCd.name()}"
@@ -96,7 +100,8 @@
                                                 <option value="10" th:selected="${paramInfo.ez eq 10}">10 Row</option>
                                                 <option value="20" th:selected="${paramInfo.ez eq 20}">20 Row</option>
                                                 <option value="50" th:selected="${paramInfo.ez eq 50}">50 Row</option>
-                                                <option value="100" th:selected="${paramInfo.ez eq 100}">100 Row</option>
+                                                <option value="100" th:selected="${paramInfo.ez eq 100}">100 Row
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -131,7 +136,8 @@
                                     <td>
                                         <div th:with="condition=${#strings.isEmpty(result.programName)} == false and ${#strings.length(result.programName)} > 30"
                                              th:remove="tag">
-                                                        <span th:if="${condition}" th:text="|${#strings.substring(result.programName, 0, 30)}...|"
+                                                        <span th:if="${condition}"
+                                                              th:text="|${#strings.substring(result.programName, 0, 30)}...|"
                                                               th:remove="tag"></span>
                                             <span th:unless="${condition}" th:text="${result.programName}"></span>
                                         </div>
@@ -144,9 +150,11 @@
                                     </td>
 
                                     <td class="text-center" th:text="${result.createdUserId}"></td>
-                                    <td class="text-center" th:text="${#temporals.format(result.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                                    <td class="text-center"
+                                        th:text="${#temporals.format(result.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                     <td class="text-center" th:text="${result.updatedUserId}"></td>
-                                    <td class="text-center" th:text="${#temporals.format(result.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                                    <td class="text-center"
+                                        th:text="${#temporals.format(result.updatedAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
                                 </tr>
 
                                 <tr th:unless="${conditionList}">
@@ -156,7 +164,8 @@
                             </table>
 
                             <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center" paging:pagination="${pagination}" jsFuncName="movePageCustom"
+                                <ul class="pagination justify-content-center" paging:pagination="${pagination}"
+                                    jsFuncName="movePageCustom"
                                     noEmpty="true">
                                 </ul>
                             </nav>

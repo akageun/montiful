@@ -3,12 +3,12 @@ package kr.geun.oss.montiful.routes.manage.url.web;
 import kr.geun.oss.montiful.app.url.cd.StatusCheckTypeCd;
 import kr.geun.oss.montiful.app.url.cd.UrlManageSearchTypeCd;
 import kr.geun.oss.montiful.app.url.cd.UrlManageSortTypeCd;
-import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
+import kr.geun.oss.montiful.routes.manage.url.dto.ManageUrlDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class UrlManageWeb extends BaseController {
+public class ManageUrlWeb extends BaseController {
 
     @Autowired
     private UrlService urlService;
@@ -50,14 +50,14 @@ public class UrlManageWeb extends BaseController {
      */
     @GetMapping("/url")
     public ModelAndView getUrlPage(
-            @Valid UrlDTO.PageReq param,
+            @Valid ManageUrlDTO.PageReq param,
             BindingResult result
     ) {
 
         if (result.hasErrors()) {
             return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
         }
-        UrlManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UrlManageSortTypeCd.class, param.getSot(), UrlManageSortTypeCd.IDX);
+        UrlManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCode(UrlManageSortTypeCd.class, param.getSot(), UrlManageSortTypeCd.IDX);
 
         Pageable pageable = setCmnPageable(param, sortTypeCd);
 

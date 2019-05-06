@@ -1,14 +1,13 @@
-package kr.geun.oss.montiful.routes.manage.alarm.web;
+package kr.geun.oss.montiful.routes.manage.program.web;
 
-import kr.geun.oss.montiful.app.alarm.common.cd.AlarmChannelCd;
-import kr.geun.oss.montiful.app.alarm.common.cd.AlarmManageSearchTypeCd;
-import kr.geun.oss.montiful.app.alarm.common.cd.AlarmManageSortTypeCd;
-import kr.geun.oss.montiful.app.alarm.common.dto.AlarmDTO;
-import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
-import kr.geun.oss.montiful.app.alarm.common.service.AlarmService;
+import kr.geun.oss.montiful.app.program.cd.ManageProgramSearchTypeCd;
+import kr.geun.oss.montiful.app.program.cd.ManageProgramSortTypeCd;
+import kr.geun.oss.montiful.app.program.dto.ProgramDTO;
+import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
+import kr.geun.oss.montiful.routes.manage.program.dto.ManageProgramDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,28 +23,28 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 /**
- * Alarm Manage Web Controller
+ * Program Manage Web Controller
  *
  * @author akageun
  */
 @Slf4j
 @Controller
 @RequestMapping("/manage")
-public class AlarmManageWeb extends BaseController {
+public class ManageProgramWeb extends BaseController {
 
     @Autowired
-    private AlarmService alarmService;
+    private ProgramService programService;
 
     /**
-     * Alarm Page
+     * Program Page
      *
      * @param param
      * @param result
      * @return
      */
-    @GetMapping("/alarm")
-    public ModelAndView getAlarmPage(
-            @Valid AlarmDTO.PageReq param,
+    @GetMapping(value = "/program")
+    public ModelAndView getProgramPage(
+            @Valid ManageProgramDTO.PageReq param,
             BindingResult result
     ) {
 
@@ -53,24 +52,24 @@ public class AlarmManageWeb extends BaseController {
             return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
         }
 
-        AlarmManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCode(AlarmManageSortTypeCd.class, param.getSot(), AlarmManageSortTypeCd.IDX);
-
+        ManageProgramSortTypeCd sortTypeCd = CmnUtils.defaultEnumCode(ManageProgramSortTypeCd.class, param.getSot(), ManageProgramSortTypeCd.IDX);
         Pageable pageable = setCmnPageable(param, sortTypeCd);
 
-        Page<AlarmEntity> rtnList = alarmService.page(pageable, param.getSt(), param.getSv());
+        Page<ProgramDTO.PageRes> rtnList = programService.page(pageable, param.getSt(), param.getSv());
 
-        ModelAndView mav = new ModelAndView("manage/alarm/alarmManage");
+        ModelAndView mav = new ModelAndView("manage/program/programManage");
 
-        mav.addObject("searchTypeCd", AlarmManageSearchTypeCd.values());
+        mav.addObject("searchTypeCd", ManageProgramSearchTypeCd.values());
 
-        mav.addObject("sortTypeCd", AlarmManageSortTypeCd.values());
+        mav.addObject("sortTypeCd", ManageProgramSortTypeCd.values());
         mav.addObject("sortDirectionCd", Sort.Direction.values());
 
         mav.addObject("paramInfo", param);
-        mav.addObject("alarmChannelCd", AlarmChannelCd.values());
         mav.addObject("resultList", rtnList);
+
         setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
         return mav;
     }
+
 }

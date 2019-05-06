@@ -23,8 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 /**
- *
- *
  * @author akageun
  */
 @Slf4j
@@ -32,32 +30,32 @@ import javax.validation.Valid;
 @RequestMapping("/system")
 public class UserManageWeb extends BaseController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@GetMapping("/user")
-	public ModelAndView systemUserManage(@Valid UserDTO.PageReq param, BindingResult result) {
-		if (result.hasErrors()) {
-			return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
-		}
+    @GetMapping("/user")
+    public ModelAndView systemUserManage(@Valid UserDTO.PageReq param, BindingResult result) {
+        if (result.hasErrors()) {
+            return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
+        }
 
-		UserManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCodeStr(UserManageSortTypeCd.class, param.getSot(), UserManageSortTypeCd.C);
-		Pageable pageable = setCmnPageable(param, sortTypeCd);
+        UserManageSortTypeCd sortTypeCd = CmnUtils.defaultEnumCode(UserManageSortTypeCd.class, param.getSot(), UserManageSortTypeCd.C);
+        Pageable pageable = setCmnPageable(param, sortTypeCd);
 
-		Page<UserEntity> rtnList = userService.page(pageable, param.getSt(), param.getSv());
+        Page<UserEntity> rtnList = userService.page(pageable, param.getSt(), param.getSv());
 
-		ModelAndView mav = new ModelAndView("system/userManage");
+        ModelAndView mav = new ModelAndView("system/userManage");
 
-		mav.addObject("searchTypeCd", UserManageSearchTypeCd.values());
+        mav.addObject("searchTypeCd", UserManageSearchTypeCd.values());
 
-		mav.addObject("sortTypeCd", UserManageSortTypeCd.values());
-		mav.addObject("sortDirectionCd", Sort.Direction.values());
+        mav.addObject("sortTypeCd", UserManageSortTypeCd.values());
+        mav.addObject("sortDirectionCd", Sort.Direction.values());
 
-		mav.addObject("paramInfo", param);
-		mav.addObject("resultList", rtnList);
+        mav.addObject("paramInfo", param);
+        mav.addObject("resultList", rtnList);
 
-		setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
+        setPage(mav, rtnList, Const.Page.DEFAULT_PAGE_BLOCK_SIZE);
 
-		return mav;
-	}
+        return mav;
+    }
 }

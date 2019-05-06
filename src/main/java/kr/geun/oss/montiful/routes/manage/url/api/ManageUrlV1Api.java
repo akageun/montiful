@@ -1,11 +1,11 @@
 package kr.geun.oss.montiful.routes.manage.url.api;
 
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
-import kr.geun.oss.montiful.app.url.dto.UrlDTO;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.SecUtils;
+import kr.geun.oss.montiful.routes.manage.url.dto.ManageUrlDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/manage/url/api/v1")
-public class UrlV1Api {
+public class ManageUrlV1Api {
 
     @Autowired
     private UrlService urlService;
@@ -51,7 +51,7 @@ public class UrlV1Api {
 
     @PostMapping(value = "")
     public ResponseEntity<UrlEntity> addUrl(
-            @Valid UrlDTO.Add param,
+            @Valid ManageUrlDTO.Add param,
             BindingResult result
     ) {
 
@@ -84,7 +84,7 @@ public class UrlV1Api {
 
     @PutMapping(value = "")
     public ResponseEntity<UrlEntity> modifyUrl(
-            @RequestBody @Valid UrlDTO.Modify param,
+            @RequestBody @Valid ManageUrlDTO.Modify param,
             BindingResult result
     ) {
 

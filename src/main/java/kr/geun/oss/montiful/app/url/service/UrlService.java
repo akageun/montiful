@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -126,17 +127,19 @@ public class UrlService {
     }
 
     private void saveAllAlarmIdxs(Long urlIdx, String updatedUserId, List<Long> alarmIdxs) {
-        if (alarmIdxs != null && alarmIdxs.isEmpty() == false) {
-            List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
-                    UrlAlarmEntity.builder()
-                            .alarmIdx(idx)
-                            .urlIdx(urlIdx)
-                            .createdUserId(updatedUserId)
-                            .build()
-            ).collect(Collectors.toList());
-
-            urlAlarmRepo.saveAll(programUrlEntities);
+        if (CollectionUtils.isEmpty(alarmIdxs)) {
+            return;
         }
+
+        List<UrlAlarmEntity> programUrlEntities = alarmIdxs.stream().map(idx ->
+                UrlAlarmEntity.builder()
+                        .alarmIdx(idx)
+                        .urlIdx(urlIdx)
+                        .createdUserId(updatedUserId)
+                        .build()
+        ).collect(Collectors.toList());
+
+        urlAlarmRepo.saveAll(programUrlEntities);
     }
 
     /**

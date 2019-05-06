@@ -1,6 +1,6 @@
 package kr.geun.oss.montiful.core.utils;
 
-import kr.geun.oss.montiful.app.program.cd.ProgramManageSearchTypeCd;
+import kr.geun.oss.montiful.app.program.cd.ManageProgramSearchTypeCd;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,11 +11,11 @@ public class CmnUtilsTest {
     @Test
     public void defaultEnumSettingTest() {
 
-        ProgramManageSearchTypeCd result = CmnUtils.defaultEnumCode(null, null, ProgramManageSearchTypeCd.MM);
-        ProgramManageSearchTypeCd result2 = CmnUtils.defaultEnumCode(ProgramManageSearchTypeCd.class, ProgramManageSearchTypeCd.U.name(), ProgramManageSearchTypeCd.MM);
+        ManageProgramSearchTypeCd result = CmnUtils.defaultEnumCode(null, null, ManageProgramSearchTypeCd.MM);
+        ManageProgramSearchTypeCd result2 = CmnUtils.defaultEnumCode(ManageProgramSearchTypeCd.class, ManageProgramSearchTypeCd.U.name(), ManageProgramSearchTypeCd.MM);
 
-        Assert.assertEquals(result, ProgramManageSearchTypeCd.MM);
-        Assert.assertEquals(result2, ProgramManageSearchTypeCd.U);
+        Assert.assertEquals(result, ManageProgramSearchTypeCd.MM);
+        Assert.assertEquals(result2, ManageProgramSearchTypeCd.U);
 
     }
 
