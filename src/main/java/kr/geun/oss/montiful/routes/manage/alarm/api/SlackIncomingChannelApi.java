@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- *
+ * Alarm Manage
+ * - slack incoming
  *
  * @author akageun
  */
@@ -23,45 +24,67 @@ import javax.validation.Valid;
 @RequestMapping("/manage/alarm/api/v1/slack/incoming")
 public class SlackIncomingChannelApi extends AlarmCommonModule {
 
-	@PostMapping(value = "")
-	public ResponseEntity<Res> add(@Valid ChannelSlackIncomingDTO.Add param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+    /**
+     * 추가.
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PostMapping(value = "")
+    public ResponseEntity<Res> add(
+            @Valid ChannelSlackIncomingDTO.Add param,
+            BindingResult result
+    ) {
 
-		try {
-			AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
-				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class)), param.getMemo());
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-			AlarmEntity add = alarmService.add(notificationEntity);
+        try {
+            String alarmValue = OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class));
 
-			return ResponseEntity.ok(Res.of(true, "SUCCESS", add));
+            AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING, alarmValue, param.getMemo());
 
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
-		}
-	}
+            alarmService.add(notificationEntity);
 
-	@PutMapping(value = "")
-	public ResponseEntity<Res> modify(@RequestBody @Valid ChannelSlackIncomingDTO.Modify param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
 
-		try {
-			AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING,
-				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class)), param.getMemo(),
-				param.getAlarmIdx());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
+        }
+    }
 
-			AlarmEntity modify = alarmService.modify(notificationEntity);
+    /**
+     * 수정
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PutMapping(value = "")
+    public ResponseEntity<Res> modify(
+            @RequestBody @Valid ChannelSlackIncomingDTO.Modify param,
+            BindingResult result
+    ) {
 
-			return ResponseEntity.ok(Res.of(true, "SUCCESS", modify));
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
-		}
-	}
+        try {
+            String alarmValue = OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelSlackIncomingDTO.AlarmValue.class));
+
+            AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING, alarmValue, param.getMemo(), param.getAlarmIdx());
+            alarmService.modify(notificationEntity);
+
+            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
+        }
+    }
 
 }

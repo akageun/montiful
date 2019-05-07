@@ -59,9 +59,13 @@ public class AlarmCommonModule extends BaseController {
                 .build();
 
         if (alarmIdx != null) {
-            alarmEntity.setAlarmIdx(alarmIdx);
+            alarmEntity.toBuilder()
+                    .alarmIdx(alarmIdx)
+                    .build();
         } else {
-            alarmEntity.setCreatedUserId(userId);
+            alarmEntity.toBuilder()
+                    .createdUserId(userId)
+                    .build();
         }
 
         return alarmEntity;

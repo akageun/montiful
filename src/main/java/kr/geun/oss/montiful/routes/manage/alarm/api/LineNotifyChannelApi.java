@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- *
+ * Alarm Manage
+ * - Line Notify
  *
  * @author akageun
  */
@@ -23,42 +24,66 @@ import javax.validation.Valid;
 @RequestMapping("/manage/alarm/api/v1/line/notify")
 public class LineNotifyChannelApi extends AlarmCommonModule {
 
-	@PostMapping(value = "")
-	public ResponseEntity<Res> add(@Valid ChannelLineNotifyDTO.Add param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+    /**
+     * 추가
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PostMapping(value = "")
+    public ResponseEntity<Res> add(
+            @Valid ChannelLineNotifyDTO.Add param,
+            BindingResult result
+    ) {
 
-		try {
-			AlarmEntity alarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
-				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class)), param.getMemo());
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
 
-			AlarmEntity alarmEntity1 = alarmService.add(alarmEntity);
+        try {
+            String alarmValue = OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class));
 
-			return ResponseEntity.ok(Res.of(true, "SUCCESS", alarmEntity1));
+            AlarmEntity alarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY, alarmValue, param.getMemo());
 
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
-		}
-	}
+            alarmService.add(alarmEntity);
 
-	@PutMapping(value = "")
-	public ResponseEntity<Res> modify(@RequestBody @Valid ChannelLineNotifyDTO.Modify param, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
-		}
+            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
 
-		try {
-			AlarmEntity AlarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY,
-				OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class)), param.getMemo(), param.getAlarmIdx());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
+        }
+    }
 
-			AlarmEntity alarmEntity1 = alarmService.modify(AlarmEntity);
+    /**
+     * 수정
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @PutMapping(value = "")
+    public ResponseEntity<Res> modify(
+            @RequestBody @Valid ChannelLineNotifyDTO.Modify param,
+            BindingResult result
+    ) {
 
-			return ResponseEntity.ok(Res.of(true, "SUCCESS", alarmEntity1));
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
-		}
-	}
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+        }
+
+        try {
+            String alarmValue = OM.writeValueAsString(CmnUtils.copyProperties(param, ChannelLineNotifyDTO.AlarmValue.class));
+
+            AlarmEntity AlarmEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.LINE_NOTIFY, alarmValue, param.getMemo(), param.getAlarmIdx());
+
+            alarmService.modify(AlarmEntity);
+
+            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));
+        }
+    }
 }
