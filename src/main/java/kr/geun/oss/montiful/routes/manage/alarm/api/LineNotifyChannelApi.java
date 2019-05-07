@@ -48,7 +48,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
 
             alarmService.add(alarmEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -80,7 +80,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
 
             alarmService.modify(AlarmEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Res.of(false, "SYSTEM_ERROR"));

@@ -1,9 +1,9 @@
 package kr.geun.oss.montiful.routes.user.api;
 
-import kr.geun.oss.montiful.app.user.dto.UserDTO;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.service.UserService;
 import kr.geun.oss.montiful.core.response.Res;
+import kr.geun.oss.montiful.routes.user.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -104,13 +104,18 @@ public class UserV1Api {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "이미 존재하는 아이디 입니다."));
         }
 
-        UserEntity userEntity = UserEntity.builder()
-                .userId(param.getUserId())
-                .passWd(passwordEncoder.encode(param.getPassWd()))
-                .email(param.getEmail())
-                .build();
+        try {
+            UserEntity userEntity = UserEntity.builder()
+                    .userId(param.getUserId())
+                    .passWd(passwordEncoder.encode(param.getPassWd()))
+                    .email(param.getEmail())
+                    .build();
 
-        userService.add(userEntity);
+            userService.add(userEntity);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
 
         return ResponseEntity.ok(Res.ok());
     }
@@ -127,9 +132,9 @@ public class UserV1Api {
             HttpServletRequest req,
             HttpServletResponse res
     ) {
-        
+
         userService.logout(req, res);
 
-        return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+        return ResponseEntity.ok(Res.ok());
     }
 }

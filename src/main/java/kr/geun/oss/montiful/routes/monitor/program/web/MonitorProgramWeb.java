@@ -29,7 +29,7 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @RequestMapping("/monitor")
-public class ProgramMonitorWeb extends BaseController {
+public class MonitorProgramWeb extends BaseController {
 
     @Autowired
     private ProgramService programService;

@@ -2,12 +2,12 @@ package kr.geun.oss.montiful.routes.system.user.web;
 
 import kr.geun.oss.montiful.app.user.cd.UserManageSearchTypeCd;
 import kr.geun.oss.montiful.app.user.cd.UserManageSortTypeCd;
-import kr.geun.oss.montiful.app.user.dto.UserDTO;
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.service.UserService;
 import kr.geun.oss.montiful.core.constants.Const;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import kr.geun.oss.montiful.core.web.BaseController;
+import kr.geun.oss.montiful.routes.system.user.dto.SystemUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,13 +28,17 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/system")
-public class UserManageWeb extends BaseController {
+public class SystemUserManageWeb extends BaseController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping("/user")
-    public ModelAndView systemUserManage(@Valid UserDTO.PageReq param, BindingResult result) {
+    public ModelAndView systemUserManage(
+            @Valid SystemUserDTO.PageReq param,
+            BindingResult result
+    ) {
+
         if (result.hasErrors()) {
             return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
         }

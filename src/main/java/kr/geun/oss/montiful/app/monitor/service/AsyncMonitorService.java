@@ -16,75 +16,78 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
- *
  * @author akageun
  */
 @Slf4j
 @Service
 public class AsyncMonitorService {
 
-	@Autowired
-	private RedisTemplate<String, MonitorDTO.CheckReq> checkReqRedisTemplate;
+    @Autowired
+    private RedisTemplate<String, MonitorDTO.CheckReq> checkReqRedisTemplate;
 
-	@Autowired
-	private UrlService urlService;
+    @Autowired
+    private UrlService urlService;
 
-	@Autowired
-	private AlarmService alarmService;
+    @Autowired
+    private AlarmService alarmService;
 
-	@Autowired
-	private MonitorHistService monitorHistService;
+    @Autowired
+    private MonitorHistService monitorHistService;
 
-	/**
-	 * Health Check Monitoring
-	 *
-	 * @param runTime
-	 * @param redisKey
-	 */
-	@Async
-	public void asyncMonitorCheck(Long runTime, String redisKey) {
-		log.debug("Execute method asynchronously - {}", Thread.currentThread().getName());
+    /**
+     * Health Check Monitoring
+     *
+     * @param runTime
+     * @param redisKey
+     */
+    @Async
+    public void asyncMonitorCheck(Long runTime, String redisKey) {
+        log.debug("Execute method asynchronously - {}", Thread.currentThread().getName());
 
-		MonitorDTO.CheckReq entity;
-		List<MonitorDTO.CheckRes> allList = new ArrayList<>();
-		List<MonitorDTO.CheckRes> chgTargetList = new ArrayList<>();
-		do {
-			Optional<MonitorDTO.CheckRes> checkRes;
+        MonitorDTO.CheckReq entity;
+        List<MonitorDTO.CheckRes> allList = new ArrayList<>();
+        List<MonitorDTO.CheckRes> chgTargetList = new ArrayList<>();
+        do {
+            Optional<MonitorDTO.CheckRes> checkRes;
 
-			entity = checkReqRedisTemplate.opsForList().rightPop(redisKey);
-			if (entity == null) {
-				break;
+            entity = checkReqRedisTemplate.opsForList().rightPop(redisKey);
+            if (entity == null) {
+                break;
 
-			}
-			HealthStatusCd preHealthStatusCd = EnumUtils.getEnum(HealthStatusCd.class, entity.getHealthStatusCd());
-			if (preHealthStatusCd == null) {
-				checkRes = Optional.of(MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.WARNING).resultMsg("설정값이 잘못되었습니다.").build());
+            }
 
-			} else {
+            HealthStatusCd preHealthStatusCd = EnumUtils.getEnum(HealthStatusCd.class, entity.getHealthStatusCd());
+            if (preHealthStatusCd == null) {
+                checkRes = Optional.of(MonitorDTO.CheckRes.builder()
+                        .healthStatusCd(HealthStatusCd.WARNING)
+                        .resultMsg("설정값이 잘못되었습니다.")
+                        .build());
 
-				checkRes = urlService.healthCheck(entity);
-				if (checkRes.isPresent() == false) {
-					continue;
-				}
-			}
+            } else {
 
-			MonitorDTO.CheckRes urlEntity = checkRes.get();
-			urlEntity.setRuntime(runTime);
-			urlEntity.setUrlIdx(entity.getUrlIdx());
-			urlEntity.setUrlName(entity.getUrlName());
-			urlEntity.setPreHealthStatusCheckCd(preHealthStatusCd);
+                checkRes = urlService.healthCheck(entity);
+                if (checkRes.isPresent() == false) {
+                    continue;
+                }
+            }
 
-			if (urlEntity.getHealthStatusCd() != preHealthStatusCd) {
-				chgTargetList.add(urlEntity);
-			}
+            //TODO toBuilder로 변경
+            MonitorDTO.CheckRes urlEntity = checkRes.get();
+            urlEntity.setRuntime(runTime);
+            urlEntity.setUrlIdx(entity.getUrlIdx());
+            urlEntity.setUrlName(entity.getUrlName());
+            urlEntity.setPreHealthStatusCheckCd(preHealthStatusCd);
 
-			allList.add(urlEntity);
+            if (urlEntity.getHealthStatusCd() != preHealthStatusCd) {
+                chgTargetList.add(urlEntity);
+            }
 
-		} while (entity != null);
+            allList.add(urlEntity);
 
-		urlService.modifyHealthStatusCheck(chgTargetList); //IN Query로 현재 상태 업데이트
-		alarmService.alarmPublisher(chgTargetList); //알림용 publisher에 등록
-		monitorHistService.saveMonitorAllHist(runTime, allList); //TTL 지정해서 redis에 추가함.
-	}
+        } while (entity != null);
+
+        urlService.modifyHealthStatusCheck(chgTargetList); //IN Query로 현재 상태 업데이트
+        alarmService.alarmPublisher(chgTargetList); //알림용 publisher에 등록
+        monitorHistService.saveMonitorAllHist(runTime, allList); //TTL 지정해서 redis에 추가함.
+    }
 }

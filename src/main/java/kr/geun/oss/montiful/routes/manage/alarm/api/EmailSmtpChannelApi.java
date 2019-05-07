@@ -44,7 +44,7 @@ public class EmailSmtpChannelApi extends AlarmCommonModule {
 
             alarmService.add(alarmEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -73,7 +73,7 @@ public class EmailSmtpChannelApi extends AlarmCommonModule {
 
             alarmService.modify(AlarmEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);

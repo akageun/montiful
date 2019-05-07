@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * URL 관리 API V1
+ *
  * @author akageun
  */
 @Slf4j
@@ -29,6 +31,12 @@ public class ManageUrlV1Api {
     @Autowired
     private UrlService urlService;
 
+    /**
+     * 단건조회
+     *
+     * @param urlIdx
+     * @return
+     */
     @GetMapping(value = "/{urlIdx}")
     public ResponseEntity<Res> getUrl(
             @PathVariable Long urlIdx
@@ -49,67 +57,93 @@ public class ManageUrlV1Api {
         return ResponseEntity.ok().body(Res.of(true, "SUCCESS", rtnMap));
     }
 
+    /**
+     * 저장
+     *
+     * @param param
+     * @param result
+     * @return
+     */
     @PostMapping(value = "")
-    public ResponseEntity<UrlEntity> addUrl(
+    public ResponseEntity<Res> addUrl(
             @Valid ManageUrlDTO.Add param,
             BindingResult result
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UrlEntity());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
         }
 
         //TODO : 중복된 이름 검색
 
-        String userId = SecUtils.userId();
+        try {
 
-        UrlEntity dbInfo = UrlEntity.builder()
-                .urlName(param.getUrlName())
-                .url(param.getUrl())
-                .memo(param.getMemo())
-                .healthStatusCd(HealthStatusCd.HEALTH.name())
-                .connectionTimeout(param.getConnectionTimeout())
-                .readTimeout(param.getReadTimeout())
-                .statusCheckTypeCd(param.getStatusCheckTypeCd())
-                .statusCheckValue(param.getStatusCheckValue())
-                .method(param.getMethod())
-                .createdUserId(userId)
-                .updatedUserId(userId)
-                .build();
+            String userId = SecUtils.userId();
 
-        urlService.add(dbInfo, param.getAlarmIdxs());
+            UrlEntity dbInfo = UrlEntity.builder()
+                    .urlName(param.getUrlName())
+                    .url(param.getUrl())
+                    .memo(param.getMemo())
+                    .healthStatusCd(HealthStatusCd.HEALTH.name())
+                    .connectionTimeout(param.getConnectionTimeout())
+                    .readTimeout(param.getReadTimeout())
+                    .statusCheckTypeCd(param.getStatusCheckTypeCd())
+                    .statusCheckValue(param.getStatusCheckValue())
+                    .method(param.getMethod())
+                    .createdUserId(userId)
+                    .updatedUserId(userId)
+                    .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UrlEntity());
+            urlService.add(dbInfo, param.getAlarmIdxs());
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Res.ok());
     }
 
+    /**
+     * 수정
+     *
+     * @param param
+     * @param result
+     * @return
+     */
     @PutMapping(value = "")
-    public ResponseEntity<UrlEntity> modifyUrl(
+    public ResponseEntity<Res> modifyUrl(
             @RequestBody @Valid ManageUrlDTO.Modify param,
             BindingResult result
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UrlEntity());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
         }
 
-        String userId = SecUtils.userId();
+        try {
+            String userId = SecUtils.userId();
 
-        UrlEntity dbInfo = UrlEntity.builder()
-                .urlIdx(param.getUrlIdx())
-                .urlName(param.getUrlName())
-                .url(param.getUrl())
-                .memo(param.getMemo())
-                .healthStatusCd(param.getHealthStatusCd())
-                .connectionTimeout(param.getConnectionTimeout())
-                .readTimeout(param.getReadTimeout())
-                .statusCheckTypeCd(param.getStatusCheckTypeCd())
-                .statusCheckValue(param.getStatusCheckValue())
-                .method(param.getMethod())
-                .updatedUserId(userId)
-                .build();
+            UrlEntity dbInfo = UrlEntity.builder()
+                    .urlIdx(param.getUrlIdx())
+                    .urlName(param.getUrlName())
+                    .url(param.getUrl())
+                    .memo(param.getMemo())
+                    .healthStatusCd(param.getHealthStatusCd())
+                    .connectionTimeout(param.getConnectionTimeout())
+                    .readTimeout(param.getReadTimeout())
+                    .statusCheckTypeCd(param.getStatusCheckTypeCd())
+                    .statusCheckValue(param.getStatusCheckValue())
+                    .method(param.getMethod())
+                    .updatedUserId(userId)
+                    .build();
 
-        urlService.modify(dbInfo, param.getAlarmIdxs());
+            urlService.modify(dbInfo, param.getAlarmIdxs());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new UrlEntity());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+
+        return ResponseEntity.ok(Res.of(true, "SUCCESS"));
     }
 }

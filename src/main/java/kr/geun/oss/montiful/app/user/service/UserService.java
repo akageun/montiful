@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,9 +83,11 @@ public class UserService {
      *
      * @param param
      */
+    @Transactional
     public void add(UserEntity param) {
         userRepo.save(param);
 
+        //TODO: 이동??
         UserAuthorityEntity authParam = UserAuthorityEntity.builder()
                 .userId(param.getUserId())
                 .authorityCd(AuthorityCd.NORMAL.roleCd())

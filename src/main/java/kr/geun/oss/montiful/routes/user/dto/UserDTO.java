@@ -1,33 +1,19 @@
-package kr.geun.oss.montiful.app.user.dto;
+package kr.geun.oss.montiful.routes.user.dto;
 
-import kr.geun.oss.montiful.core.dto.CmnPageModule;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * User DTO
- *
  * @author akageun
  */
 public class UserDTO {
 
     @Getter
     @AllArgsConstructor
-    public static class PageReq extends CmnPageModule {
-        private String st; //SearchType
-        private String sv; //SearchValue TODO : Create Search Custom Valid Annotation(Length...)
-
-    }
-
-
-    @Data
-    @NoArgsConstructor
     public static class SingUpReq {
 
         @NotBlank
@@ -42,8 +28,8 @@ public class UserDTO {
         private String email;
     }
 
-    @Data
-    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
     public static class LoginReq {
 
         @NotBlank
@@ -54,4 +40,5 @@ public class UserDTO {
 
         private boolean remember;
     }
+
 }

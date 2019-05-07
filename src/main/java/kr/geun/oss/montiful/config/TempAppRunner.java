@@ -66,12 +66,11 @@ public class TempAppRunner implements CommandLineRunner {
         final String userId = Const.System.systemAdminUserId;
         final String urlPrefix = "http://localhost:%s";
 
-        //@formatter:off
         ProgramEntity programParam = ProgramEntity.builder()
                 .programName("Test Program Num 1")
                 .createdUserId(userId)
                 .updatedUserId(userId)
-            .build();
+                .build();
 
         ProgramEntity rtnProgramInfo = programRepo.save(programParam);
 
@@ -79,114 +78,115 @@ public class TempAppRunner implements CommandLineRunner {
                 .programName("Test Program Num 2")
                 .createdUserId(userId)
                 .updatedUserId(userId)
-            .build();
+                .build();
 
         ProgramEntity rtnProgramInfo2 = programRepo.save(programParam2);
 
         IntStream.range(3, 10).forEach(i -> programRepo.save(ProgramEntity.builder()
-			.programName("Test Program Num " + i)
-			.createdUserId(userId)
-			.updatedUserId(userId)
-			.build())
-		);
+                .programName("Test Program Num " + i)
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build())
+        );
 
         UrlEntity u1 = UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api")
-				.urlName("테스트 11111222222221")
-				.connectionTimeout(200)
-				.readTimeout(500)
-				.healthStatusCd(HealthStatusCd.HEALTH.name())
-				.method(HttpMethod.GET.name())
-				.statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
-				.createdUserId(userId)
-				.updatedUserId(userId)
-              .build();
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api")
+                .urlName("테스트 11111222222221")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.HEALTH.name())
+                .method(HttpMethod.GET.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
         urlRepo.save(u1);
 
         UrlEntity u2 = UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api")
-				.urlName("테스트5437345751")
-				.connectionTimeout(200)
-				.readTimeout(500)
-				.healthStatusCd(HealthStatusCd.HEALTH.name())
-				.method(HttpMethod.POST.name())
-				.statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
-				.createdUserId(userId)
-				.updatedUserId(userId)
-              .build();
-		urlRepo.save(u2);
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api")
+                .urlName("테스트5437345751")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.HEALTH.name())
+                .method(HttpMethod.POST.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
+        urlRepo.save(u2);
 
-        UrlEntity u3 =UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api2")
-			.urlName("테스트 6342262346")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.HEALTH.name())
-                    .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
-                    .statusCheckValue("OK")
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
-              .build();
+        UrlEntity u3 = UrlEntity.builder()
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api2")
+                .urlName("테스트 6342262346")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.HEALTH.name())
+                .method(HttpMethod.GET.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
+                .statusCheckValue("OK")
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
         urlRepo.save(u3);
 
         UrlEntity u4 = UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api2")
-			.urlName("테스트 23525235")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.ERROR.name())
-                    .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
-              .build();
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api2")
+                .urlName("테스트 23525235")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.ERROR.name())
+                .method(HttpMethod.POST.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.ONLY_200_CHECK.name())
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
         urlRepo.save(u4);
 
         UrlEntity u5 = UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api3")
-			.urlName("테스트 ㅁㄴㄹㅇㅁㄴㅇㄻㄴ")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.ERROR.name())
-                    .method(HttpMethod.GET.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SUCCESS_2XX_CHECK.name())
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
-              .build();
-		urlRepo.save(u5);
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api3")
+                .urlName("테스트 ㅁㄴㄹㅇㅁㄴㅇㄻㄴ")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.ERROR.name())
+                .method(HttpMethod.GET.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.SUCCESS_2XX_CHECK.name())
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
+        urlRepo.save(u5);
 
-          UrlEntity u6 = UrlEntity.builder()
-                .url(String.format(urlPrefix, env.getRequiredProperty("server.port"))+"/sample/health/check/api3")
-			  	.urlName("테스트 11")
-                    .connectionTimeout(200)
-                    .readTimeout(500)
-                    .healthStatusCd(HealthStatusCd.WARNING.name())
-                    .method(HttpMethod.POST.name())
-                    .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
-                    .statusCheckValue("OK")
-                    .createdUserId(userId)
-                    .updatedUserId(userId)
-              .build();
-		urlRepo.save(u6);
+        UrlEntity u6 = UrlEntity.builder()
+                .url(String.format(urlPrefix, env.getRequiredProperty("server.port")) + "/sample/health/check/api3")
+                .urlName("테스트 11")
+                .connectionTimeout(200)
+                .readTimeout(500)
+                .healthStatusCd(HealthStatusCd.WARNING.name())
+                .method(HttpMethod.POST.name())
+                .statusCheckTypeCd(StatusCheckTypeCd.SAME_STRING.name())
+                .statusCheckValue("OK")
+                .createdUserId(userId)
+                .updatedUserId(userId)
+                .build();
+        urlRepo.save(u6);
 
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u2.getUrlIdx()).createdUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u3.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u2.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo.getProgramIdx()).urlIdx(u3.getUrlIdx()).createdUserId(userId).build());
 
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u4.getUrlIdx()).createdUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u5.getUrlIdx()).createdUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).build());
-		programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u4.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u5.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u6.getUrlIdx()).createdUserId(userId).build());
+        programUrlRepo.save(ProgramUrlEntity.builder().programIdx(rtnProgramInfo2.getProgramIdx()).urlIdx(u1.getUrlIdx()).createdUserId(userId).build());
 
-        //@formatter:on
-        userService.add(UserEntity.builder()
+
+        UserEntity userEntityParam = UserEntity.builder()
                 .email("akageun@gmail.com")
                 .passWd(passwordEncoder.encode("q1w2e3Q!"))
                 .userId(Const.System.systemAdminUserId)
                 .enable(true)
                 .locked(false)
-                .build()
-        );
+                .build();
+
+        userService.add(userEntityParam);
 
 
         initSystemConfig(); //TODO : 실서비스 때는 삭제해야함.

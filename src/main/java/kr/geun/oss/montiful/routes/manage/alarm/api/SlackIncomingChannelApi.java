@@ -48,7 +48,7 @@ public class SlackIncomingChannelApi extends AlarmCommonModule {
 
             alarmService.add(notificationEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -79,7 +79,7 @@ public class SlackIncomingChannelApi extends AlarmCommonModule {
             AlarmEntity notificationEntity = initAlarm(param.getAlarmName(), AlarmChannelCd.SLACK_INCOMING, alarmValue, param.getMemo(), param.getAlarmIdx());
             alarmService.modify(notificationEntity);
 
-            return ResponseEntity.ok(Res.of(true, "SUCCESS"));
+            return ResponseEntity.ok(Res.ok());
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
