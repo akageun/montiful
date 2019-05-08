@@ -66,6 +66,12 @@ public class AlarmService {
         return alarmRepo.findAll(pageable);
     }
 
+    /**
+     * 단건조회
+     *
+     * @param alarmIdx
+     * @return
+     */
     public Optional<AlarmEntity> get(Long alarmIdx) {
         return alarmRepo.findById(alarmIdx);
     }
@@ -86,10 +92,22 @@ public class AlarmService {
         return searchList;
     }
 
+    /**
+     * 알람 추가.
+     *
+     * @param param
+     * @return
+     */
     public AlarmEntity add(AlarmEntity param) {
         return alarmRepo.save(param);
     }
 
+    /**
+     * 알람 수정
+     *
+     * @param param
+     * @return
+     */
     public AlarmEntity modify(AlarmEntity param) {
         return alarmRepo.save(param);
     }
@@ -109,7 +127,10 @@ public class AlarmService {
             return;
         }
 
-        list.forEach(info -> redisPublisher.publish(RedisTopicCd.NOTIFY, info));
+        for (MonitorDTO.CheckRes info : list) {
+            redisPublisher.publish(RedisTopicCd.NOTIFY, info);
+        }
+
     }
 
     /**
@@ -124,15 +145,16 @@ public class AlarmService {
             return;
         }
 
-        notifyEntities.forEach(info -> {
+        for (AlarmEntity info : notifyEntities) {
             AlarmChannelCd notificationChannelCd = EnumUtils.getEnum(AlarmChannelCd.class, info.getAlarmChannel());
             if (notificationChannelCd == null) {
-                log.error("등록되지 않은 알람 발송 : {} ", info.getAlarmChannel());
+                log.error("등록되지 않은 알람 발송 : {}, object: {}", info.getAlarmChannel(), info);
                 return;
             }
 
             IAlarmChannelService notificationChannelService = (IAlarmChannelService) applicationContext.getBean(notificationChannelCd.getBeanName());
             notificationChannelService.asyncSendMsg(checkRes, info.getAlarmValue());
-        });
+        }
+
     }
 }

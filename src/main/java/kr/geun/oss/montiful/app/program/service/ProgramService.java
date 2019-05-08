@@ -6,7 +6,8 @@ import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.models.ProgramUrlEntity;
 import kr.geun.oss.montiful.app.program.repo.ProgramRepo;
 import kr.geun.oss.montiful.app.program.repo.ProgramUrlRepo;
-import kr.geun.oss.montiful.core.response.Res;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,16 +77,16 @@ public class ProgramService {
      * @param programIdx
      * @return
      */
-    public Res valid(String programName, Long programIdx) {
+    public void valid(String programName, Long programIdx) throws BaseException {
         ProgramEntity existCheck = programRepo.findByProgramName(programName);
         if (existCheck != null) {
 
+            //TODO : TC 작성 필요
             if (programIdx == null || existCheck.getProgramIdx().equals(programIdx) == false) {
-                return Res.of(false, "이미 존재하는 프로그램 이름입니다.");
+                throw new BaseException(ErrorCd.NOT_VALID_REQUEST, "이미 존재하는 프로그램 이름입니다.");
             }
         }
 
-        return Res.ok();
     }
 
     /**
@@ -150,6 +152,11 @@ public class ProgramService {
      * @return
      */
     public List<ProgramEntity> search(String keyword) {
-        return programRepo.findByProgramNameStartingWithOrMemoStartsWith(keyword, keyword);
+        List<ProgramEntity> programEntities = programRepo.findByProgramNameStartingWithOrMemoStartsWith(keyword, keyword);
+        if (CollectionUtils.isEmpty(programEntities)) {
+            return Collections.emptyList();
+        }
+
+        return programEntities;
     }
 }

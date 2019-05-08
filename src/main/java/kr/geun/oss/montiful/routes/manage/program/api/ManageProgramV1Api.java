@@ -17,7 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Program Manage Api
@@ -81,10 +84,7 @@ public class ManageProgramV1Api {
             throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
-        Res res = programService.valid(param.getProgramName(), null);
-        if (res.getResult() == false) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-        }
+        programService.valid(param.getProgramName(), null);
 
         String userId = SecUtils.userId();
 
@@ -95,9 +95,9 @@ public class ManageProgramV1Api {
                 .updatedUserId(userId)
                 .build();
 
-        ProgramEntity dbInfo = programService.add(addParam, param.getUrlIdxs());
+        programService.add(addParam, param.getUrlIdxs());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Res.of(true, "SUCCESS", dbInfo));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Res.of(true, "SUCCESS"));
     }
 
     /**
@@ -123,10 +123,7 @@ public class ManageProgramV1Api {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Res.of(false, "데이터가 없습니다."));
         }
 
-        Res res = programService.valid(param.getProgramName(), param.getProgramIdx());
-        if (res.getResult() == false) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-        }
+        programService.valid(param.getProgramName(), param.getProgramIdx());
 
         String userId = SecUtils.userId();
 
@@ -137,9 +134,9 @@ public class ManageProgramV1Api {
                 .updatedUserId(userId)
                 .build();
 
-        ProgramEntity dbInfo = programService.modify(modifyParam, param.getUrlIdxs());
+        programService.modify(modifyParam, param.getUrlIdxs());
 
-        return ResponseEntity.status(HttpStatus.OK).body(Res.of(true, "SUCCESS", dbInfo));
+        return ResponseEntity.status(HttpStatus.OK).body(Res.of(true, "SUCCESS"));
     }
 
     /**
@@ -156,12 +153,10 @@ public class ManageProgramV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
-        List<ProgramEntity> searchList = Optional
-                .ofNullable(programService.search(param.getKeyword()))
-                .orElseGet(Collections::emptyList);
+        List<ProgramEntity> searchList = programService.search(param.getKeyword());
 
         return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
     }
@@ -180,12 +175,10 @@ public class ManageProgramV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "파라미터 오류"));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
-        List<UrlEntity> searchList = Optional
-                .ofNullable(urlService.urlNameSearch(param.getKeyword()))
-                .orElseGet(Collections::emptyList);
+        List<UrlEntity> searchList = urlService.urlNameSearch(param.getKeyword());
 
         return ResponseEntity.ok(Res.of(true, "SUCCESS", searchList));
     }

@@ -150,7 +150,13 @@ public class UrlService {
      * @return
      */
     public List<UrlEntity> urlNameSearch(String keyword) {
-        return urlRepo.findByUrlNameStartingWith(keyword);
+        List<UrlEntity> urlEntities = urlRepo.findByUrlNameStartingWith(keyword);
+
+        if (CollectionUtils.isEmpty(urlEntities)) {
+            return Collections.emptyList();
+        }
+
+        return urlEntities;
     }
 
     /**

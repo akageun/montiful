@@ -33,8 +33,14 @@ public class AlarmCommonModule extends BaseController {
      * @param memo
      * @return
      */
-    protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
-        return initAlarm(alarmName, alarmChannelCd, alarmValue, memo, null);
+    protected final AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
+        String userId = SecUtils.userId();
+
+        AlarmEntity.AlarmEntityBuilder initAlarmBuilder = initAlarmBuilder(alarmName, alarmChannelCd, alarmValue, memo, userId);
+
+        return initAlarmBuilder
+                .createdUserId(userId)
+                .build();
     }
 
     /**
@@ -47,23 +53,31 @@ public class AlarmCommonModule extends BaseController {
      * @param alarmIdx
      * @return
      */
-    protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
+    protected final AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
         String userId = SecUtils.userId();
 
-        AlarmEntity.AlarmEntityBuilder alarmEntity = AlarmEntity.builder()
+        AlarmEntity.AlarmEntityBuilder initAlarmBuilder = initAlarmBuilder(alarmName, alarmChannelCd, alarmValue, memo, userId);
+
+        return initAlarmBuilder.alarmIdx(alarmIdx).build();
+    }
+
+    /**
+     * init Alarm
+     *
+     * @param alarmName
+     * @param alarmChannelCd
+     * @param alarmValue
+     * @param memo
+     * @param userId
+     * @return
+     */
+    private AlarmEntity.AlarmEntityBuilder initAlarmBuilder(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, String userId) {
+        return AlarmEntity.builder()
                 .alarmName(alarmName)
                 .alarmChannel(alarmChannelCd.name())
                 .alarmValue(alarmValue)
                 .memo(memo)
                 .updatedUserId(userId);
-
-        if (alarmIdx != null) {
-            alarmEntity.alarmIdx(alarmIdx);
-        } else {
-            alarmEntity.createdUserId(userId);
-        }
-
-        return alarmEntity.build();
     }
 
 }

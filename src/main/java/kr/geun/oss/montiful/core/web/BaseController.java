@@ -25,7 +25,7 @@ public class BaseController {
      * @param rtnList
      * @param pageBlockSize
      */
-    protected void setPage(ModelAndView mav, Page rtnList, int pageBlockSize) {
+    protected final void setPage(ModelAndView mav, Page rtnList, int pageBlockSize) {
         PaginationInfo pageInfo = PaginationInfo.of(
                 rtnList.getNumber(),
                 rtnList.getNumberOfElements(),
@@ -45,7 +45,7 @@ public class BaseController {
      * @param <B>
      * @return
      */
-    protected <B extends CmnPageModule> Pageable setCmnPageable(B param, ISortTypeCd sortTypeCd) {
+    protected final <B extends CmnPageModule> Pageable setCmnPageable(B param, ISortTypeCd sortTypeCd) {
 
         Sort.Direction direction = CmnUtils.defaultEnumCode(Sort.Direction.class, StringUtils.upperCase(param.getSod()), Sort.Direction.DESC);
 

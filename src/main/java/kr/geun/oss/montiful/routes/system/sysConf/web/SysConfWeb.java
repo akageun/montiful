@@ -34,6 +34,13 @@ public class SysConfWeb extends BaseController {
     @Autowired
     private SysConfService sysConfService;
 
+    /**
+     * System Config 페이지
+     *
+     * @param param
+     * @param result
+     * @return
+     */
     @GetMapping("/configuration")
     public ModelAndView systemConfigPage(
             @Valid SysConfDTO.PageReq param,

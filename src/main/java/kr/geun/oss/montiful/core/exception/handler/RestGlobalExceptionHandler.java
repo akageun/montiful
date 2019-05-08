@@ -16,6 +16,6 @@ public class RestGlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<Res> baseException(BaseException e) {
-        return ResponseEntity.status(e.getErrorCd().getHttpStatus()).body(Res.of(false, e.getErrorCd().getMsg()));
+        return ResponseEntity.status(e.getErrorCd().getHttpStatus()).body(Res.of(false, e.getMsg()));
     }
 }
