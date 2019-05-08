@@ -6,7 +6,7 @@ import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.repo.AlarmRepo;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.core.redis.cd.RedisTopicCd;
-import kr.geun.oss.montiful.core.redis.publisher.service.RedisPublisher;
+import kr.geun.oss.montiful.core.redis.publisher.RedisPublisher;
 import kr.geun.oss.montiful.app.system.cd.SysConfCd;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
 import kr.geun.oss.montiful.app.url.repo.UrlAlarmRepo;

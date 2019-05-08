@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.stereotype.Component;
 
 /**
  * Alarm Redis Subscriber
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
  * @author akageun
  */
 @Slf4j
-@Component
 public class AlarmSubscriber implements MessageListener {
 
     @Autowired
@@ -23,7 +21,8 @@ public class AlarmSubscriber implements MessageListener {
 
     /**
      * Callback for processing received objects through Redis.
-     *  @param message message must not be {@literal null}.
+     *
+     * @param message message must not be {@literal null}.
      * @param pattern pattern matching the channel (if specified) - can be {@literal null}.
      */
     @Override
