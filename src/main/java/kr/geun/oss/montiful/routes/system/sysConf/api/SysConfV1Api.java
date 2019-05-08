@@ -2,6 +2,8 @@ package kr.geun.oss.montiful.routes.system.sysConf.api;
 
 import kr.geun.oss.montiful.app.system.models.SysConfEntity;
 import kr.geun.oss.montiful.app.system.service.SysConfService;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.response.Res;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public class SysConfV1Api {
             @PathVariable String confCd
     ) {
         if (StringUtils.isBlank(confCd)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         Optional<SysConfEntity> urlEntity = sysConfService.get(confCd);

@@ -3,6 +3,8 @@ package kr.geun.oss.montiful.routes.manage.alarm.api;
 import kr.geun.oss.montiful.app.alarm.channel.lineNotify.dto.ChannelLineNotifyDTO;
 import kr.geun.oss.montiful.app.alarm.common.cd.AlarmChannelCd;
 import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.CmnUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +40,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         try {
@@ -70,7 +72,7 @@ public class LineNotifyChannelApi extends AlarmCommonModule {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         try {

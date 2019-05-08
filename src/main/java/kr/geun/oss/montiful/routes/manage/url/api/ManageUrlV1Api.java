@@ -3,6 +3,8 @@ package kr.geun.oss.montiful.routes.manage.url.api;
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import kr.geun.oss.montiful.routes.manage.url.dto.ManageUrlDTO;
@@ -43,7 +45,7 @@ public class ManageUrlV1Api {
     ) {
 
         if (urlIdx == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
         Optional<UrlEntity> urlEntity = urlService.get(urlIdx);
         if (urlEntity.isPresent() == false) {
@@ -71,7 +73,7 @@ public class ManageUrlV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         //TODO : 중복된 이름 검색
@@ -117,7 +119,7 @@ public class ManageUrlV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         try {

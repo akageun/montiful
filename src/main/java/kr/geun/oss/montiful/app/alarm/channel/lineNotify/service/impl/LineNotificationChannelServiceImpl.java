@@ -1,7 +1,6 @@
 package kr.geun.oss.montiful.app.alarm.channel.lineNotify.service.impl;
 
 import kr.geun.oss.montiful.app.alarm.channel.lineNotify.dto.ChannelLineNotifyDTO;
-import kr.geun.oss.montiful.app.alarm.common.models.AlarmEntity;
 import kr.geun.oss.montiful.app.alarm.common.service.ChannelServiceModule;
 import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
@@ -14,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,51 +29,50 @@ import org.springframework.web.client.RestTemplate;
 @Service(Const.BeanNm.LINE_NOTIFY)
 public class LineNotificationChannelServiceImpl extends ChannelServiceModule implements IAlarmChannelService {
 
-	private static final String LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify";
+    private static final String LINE_NOTIFY_URL = "https://notify-api.line.me/api/notify";
 
-	@Override
-	public void send(MonitorDTO.CheckRes checkRes, AlarmEntity param) {
-		try {
-			ChannelLineNotifyDTO.AlarmValue value = OM.readValue(param.getAlarmValue(), ChannelLineNotifyDTO.AlarmValue.class);
+    @Async
+    @Override
+    public void asyncSendMsg(MonitorDTO.CheckRes checkRes, String alarmValue) {
 
-			RestTemplate restTemplate = new RestTemplate();
+        try {
+            ChannelLineNotifyDTO.AlarmValue value = convertAlarmValue(alarmValue, ChannelLineNotifyDTO.AlarmValue.class);
 
-			MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-			header.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE); //헤더셋팅
-			header.set("Authorization", String.format("Bearer %s", value.getAccessToken())); //헤더셋팅
+            //TODO : Bean으로 만들거나, Pool, connectionTimeout등 설정해야함
+            RestTemplate restTemplate = new RestTemplate();
 
-			MultiValueMap<String, Object> param2 = new LinkedMultiValueMap<>();
-			param2.set("message", getMessage(checkRes));
+            MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+            header.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE); //헤더셋팅
+            header.set("Authorization", String.format("Bearer %s", value.getAccessToken())); //헤더셋팅
 
-			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(param2, header);
+            MultiValueMap<String, Object> sendParam = new LinkedMultiValueMap<>();
+            sendParam.set("message", getMessage(checkRes));
 
-			ResponseEntity<LineNotifySendMsg> tt = restTemplate.exchange(LINE_NOTIFY_URL, HttpMethod.POST, request, LineNotifySendMsg.class);
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(sendParam, header);
 
-			log.debug("tt : {} ", tt.getStatusCode());
-			log.debug("tt : {} ", tt.getBody());
-			log.debug("tt : {} ", tt.getBody().message);
+            ResponseEntity<LineNotifySendMsgRes> tt = restTemplate.exchange(LINE_NOTIFY_URL, HttpMethod.POST, request, LineNotifySendMsgRes.class);
 
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
 
-	}
+    }
 
-	private String getMessage(MonitorDTO.CheckRes checkRes) {
-		StringBuffer sb = new StringBuffer("URL 상태값이 변경되었습니다.");
-		sb.append(String.format("(%s -> %s)", checkRes.getPreHealthStatusCheckCd().name(), checkRes.getHealthStatusCd().name()));
-		sb.append(String.format("URL Name : %s", checkRes.getUrlName()));
-		sb.append(String.format("URL  바로가기. "));
-		sb.append(String.format("%s 소요, %s", checkRes.getResponseTime(), checkRes.getResultMsg()));
+    private String getMessage(MonitorDTO.CheckRes checkRes) {
+        StringBuffer sb = new StringBuffer("URL 상태값이 변경되었습니다.");
+        sb.append(String.format("(%s -> %s)", checkRes.getPreHealthStatusCheckCd().name(), checkRes.getHealthStatusCd().name()));
+        sb.append(String.format("URL Name : %s", checkRes.getUrlName()));
+        sb.append(String.format("URL  바로가기. "));
+        sb.append(String.format("%s 소요, %s", checkRes.getResponseTime(), checkRes.getResultMsg()));
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@Builder
-	@Getter
-	@AllArgsConstructor
-	public static class LineNotifySendMsg {
-		private int status;
-		private String message;
-	}
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class LineNotifySendMsgRes {
+        private int status;
+        private String message;
+    }
 }

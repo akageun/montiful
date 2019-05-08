@@ -7,8 +7,12 @@ import kr.geun.oss.montiful.app.alarm.common.service.ChannelServiceModule;
 import kr.geun.oss.montiful.app.alarm.common.service.IAlarmChannelService;
 import kr.geun.oss.montiful.app.monitor.dto.MonitorDTO;
 import kr.geun.oss.montiful.core.constants.Const;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,11 +25,11 @@ import java.util.List;
 @Service(Const.BeanNm.SLACK_INCOMING)
 public class SlackIncomingChannelServiceImpl extends ChannelServiceModule implements IAlarmChannelService {
 
+    @Async
     @Override
-    public void send(MonitorDTO.CheckRes checkRes, AlarmEntity param) {
-
+    public void asyncSendMsg(MonitorDTO.CheckRes checkRes, String alarmValue) {
         try {
-            ChannelSlackIncomingDTO.AlarmValue value = OM.readValue(param.getAlarmValue(), ChannelSlackIncomingDTO.AlarmValue.class);
+            ChannelSlackIncomingDTO.AlarmValue value = convertAlarmValue(alarmValue, ChannelSlackIncomingDTO.AlarmValue.class);
 
             SlackMessageAttachement dd = SlackMessageAttachement.builder()
                     .text("안녕하세요.")
@@ -36,12 +40,12 @@ public class SlackIncomingChannelServiceImpl extends ChannelServiceModule implem
                     .attachments(Lists.newArrayList(dd))
                     .build();
 
+            //TODO : pool 등 옵션 적용 필요
             new RestTemplate().postForEntity(value.getWebHookUrl(), slackMessage, String.class);
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
     }
 
     @Getter

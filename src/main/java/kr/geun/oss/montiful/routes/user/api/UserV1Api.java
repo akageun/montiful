@@ -2,6 +2,8 @@ package kr.geun.oss.montiful.routes.user.api;
 
 import kr.geun.oss.montiful.app.user.models.UserEntity;
 import kr.geun.oss.montiful.app.user.service.UserService;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.routes.user.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +59,7 @@ public class UserV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         try {
@@ -96,7 +98,7 @@ public class UserV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         Optional<UserEntity> optUserEntity = userService.get(param.getUserId());

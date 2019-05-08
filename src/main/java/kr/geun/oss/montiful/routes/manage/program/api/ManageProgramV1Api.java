@@ -4,6 +4,8 @@ import kr.geun.oss.montiful.app.program.models.ProgramEntity;
 import kr.geun.oss.montiful.app.program.service.ProgramService;
 import kr.geun.oss.montiful.app.url.models.UrlEntity;
 import kr.geun.oss.montiful.app.url.service.UrlService;
+import kr.geun.oss.montiful.core.cd.ErrorCd;
+import kr.geun.oss.montiful.core.exception.BaseException;
 import kr.geun.oss.montiful.core.response.Res;
 import kr.geun.oss.montiful.core.utils.SecUtils;
 import kr.geun.oss.montiful.routes.manage.program.dto.ManageProgramDTO;
@@ -45,7 +47,7 @@ public class ManageProgramV1Api {
     ) {
 
         if (programIdx == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         Optional<ProgramEntity> optionalProgramEntity = programService.get(programIdx);
@@ -76,7 +78,7 @@ public class ManageProgramV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         Res res = programService.valid(param.getProgramName(), null);
@@ -112,7 +114,7 @@ public class ManageProgramV1Api {
     ) {
 
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Res.of(false, "필수 파라미터가 없습니다."));
+            throw new BaseException(ErrorCd.INVALID_PARAMETER);
         }
 
         Optional<ProgramEntity> optionalProgramEntity = programService.get(param.getProgramIdx());

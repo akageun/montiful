@@ -26,15 +26,15 @@ public class BaseController {
      * @param pageBlockSize
      */
     protected void setPage(ModelAndView mav, Page rtnList, int pageBlockSize) {
-        mav.addObject("pagination",
-                PaginationInfo.of(
-                        rtnList.getNumber(),
-                        rtnList.getNumberOfElements(),
-                        rtnList.getTotalElements(),
-                        rtnList.getTotalPages(),
-                        pageBlockSize
-                )
+        PaginationInfo pageInfo = PaginationInfo.of(
+                rtnList.getNumber(),
+                rtnList.getNumberOfElements(),
+                rtnList.getTotalElements(),
+                rtnList.getTotalPages(),
+                pageBlockSize
         );
+
+        mav.addObject("pagination", pageInfo);
     }
 
     /**

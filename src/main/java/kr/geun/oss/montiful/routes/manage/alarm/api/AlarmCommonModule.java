@@ -50,24 +50,20 @@ public class AlarmCommonModule extends BaseController {
     protected AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
         String userId = SecUtils.userId();
 
-        AlarmEntity alarmEntity = AlarmEntity.builder()
+        AlarmEntity.AlarmEntityBuilder alarmEntity = AlarmEntity.builder()
                 .alarmName(alarmName)
                 .alarmChannel(alarmChannelCd.name())
                 .alarmValue(alarmValue)
                 .memo(memo)
-                .updatedUserId(userId)
-                .build();
+                .updatedUserId(userId);
 
         if (alarmIdx != null) {
-            alarmEntity.toBuilder()
-                    .alarmIdx(alarmIdx)
-                    .build();
+            alarmEntity.alarmIdx(alarmIdx);
         } else {
-            alarmEntity.toBuilder()
-                    .createdUserId(userId)
-                    .build();
+            alarmEntity.createdUserId(userId);
         }
 
-        return alarmEntity;
+        return alarmEntity.build();
     }
+
 }
