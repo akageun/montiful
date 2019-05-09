@@ -24,8 +24,7 @@ public enum StatusCheckTypeCd {//@formatter:off
 			}
 
 			if (result.getStatusCode().is2xxSuccessful() == false) {
-				checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-				checkRes.setResultMsg(String.format("%s(%s)로 상태값이 변경되었습니다. OK(2xx)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
+				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("%s(%s)로 상태값이 변경되었습니다. OK(2xx)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
 			}
 
 			return checkRes;
@@ -40,8 +39,7 @@ public enum StatusCheckTypeCd {//@formatter:off
 			}
 
 			if (HttpStatus.OK != result.getStatusCode()) {
-				checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-				checkRes.setResultMsg(String.format("%s(%s)로 상태값이 변경되었습니다. OK(200)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
+				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("%s(%s)로 상태값이 변경되었습니다. OK(200)로 변경이 필요합니다.", result.getStatusCode(), result.getStatusCodeValue()));
 			}
 
     		return checkRes;
@@ -56,18 +54,17 @@ public enum StatusCheckTypeCd {//@formatter:off
 			}
 
 			if (StringUtils.equals(result.getBody(), checkValue)) {
-				checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-				checkRes.setResultMsg(String.format("문자열이 다릅니다. 응답결과 : %s", result.getBody()));
+				checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("문자열이 다릅니다. 응답결과 : %s", result.getBody()));
 			}
 
 			return checkRes;
 		}
 	},
 	//@formatter:on
-	;
+    ;
 
-	private String cdNm;
-	private String description;
+    private String cdNm;
+    private String description;
 
-	public abstract MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue);
+    public abstract MonitorDTO.CheckRes isOk(MonitorDTO.CheckRes checkRes, ResponseEntity<String> result, String checkValue);
 }

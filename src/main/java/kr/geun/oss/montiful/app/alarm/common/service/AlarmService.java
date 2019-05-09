@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -98,6 +99,7 @@ public class AlarmService {
      * @param param
      * @return
      */
+    @Transactional
     public AlarmEntity add(AlarmEntity param) {
         return alarmRepo.save(param);
     }
@@ -108,6 +110,7 @@ public class AlarmService {
      * @param param
      * @return
      */
+    @Transactional
     public AlarmEntity modify(AlarmEntity param) {
         return alarmRepo.save(param);
     }
@@ -118,7 +121,7 @@ public class AlarmService {
      * @param list
      */
     public void alarmPublisher(List<MonitorDTO.CheckRes> list) {
-        if (list.isEmpty()) {
+        if (CollectionUtils.isEmpty(list)) {
             return;
         }
 
@@ -140,7 +143,7 @@ public class AlarmService {
      */
     public void sendAlarm(MonitorDTO.CheckRes checkRes) {
         List<AlarmEntity> notifyEntities = urlAlarmRepo.findUrlAlarmListByUrlIdx(checkRes.getUrlIdx());
-        if (notifyEntities.isEmpty()) {
+        if (CollectionUtils.isEmpty(notifyEntities)) {
             log.debug("등록된 알람이 없습니다.");
             return;
         }

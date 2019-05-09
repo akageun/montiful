@@ -193,7 +193,10 @@ public class UrlService {
         restTemplate.setRequestFactory(clientHttpRequestFactory);
 
         Stopwatch stopwatch = Stopwatch.createStarted();
-        MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder().healthStatusCd(HealthStatusCd.HEALTH).resultMsg("SUCCESS").build();
+        MonitorDTO.CheckRes checkRes = MonitorDTO.CheckRes.builder()
+                .healthStatusCd(HealthStatusCd.HEALTH)
+                .resultMsg("SUCCESS")
+                .build();
 
         try {
             StatusCheckTypeCd statusCheckTypeCd = EnumUtils.getEnum(StatusCheckTypeCd.class, param.getStatusCheckTypeCd());
@@ -228,8 +231,6 @@ public class UrlService {
             }
 
         } catch (RestClientException e) {
-            checkRes.setHealthStatusCd(HealthStatusCd.ERROR);
-
             if (e.getRootCause() instanceof SocketTimeoutException) {
                 checkRes.setHealthAndMsg(HealthStatusCd.ERROR, String.format("SocketTimeout 이 발생했습니다. %s", e.getMessage()));
 

@@ -57,13 +57,12 @@ public class MonitorHistService {
 
         List<Object> keyList = getUrlHistList();
 
-        keyList.forEach(keyObj -> {
+        for (Object keyObj : keyList) {
             Set<MonitorDTO.CheckRes> valueList = checkResRedisTemplate.opsForZSet().range(String.valueOf(keyObj), 0, -1);
             if (valueList.isEmpty() == false) {
                 checkList.addAll(valueList);
             }
-
-        });
+        }
 
         return checkList.stream().collect(Collectors.groupingBy(MonitorDTO.CheckRes::getUrlName));
     }

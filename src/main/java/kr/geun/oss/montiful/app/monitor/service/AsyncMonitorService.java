@@ -72,11 +72,13 @@ public class AsyncMonitorService {
             }
 
             //TODO toBuilder로 변경
-            MonitorDTO.CheckRes urlEntity = checkRes.get();
-            urlEntity.setRuntime(runTime);
-            urlEntity.setUrlIdx(entity.getUrlIdx());
-            urlEntity.setUrlName(entity.getUrlName());
-            urlEntity.setPreHealthStatusCheckCd(preHealthStatusCd);
+            MonitorDTO.CheckRes urlEntity = checkRes.get()
+                    .toBuilder()
+                    .runtime(runTime)
+                    .urlIdx(entity.getUrlIdx())
+                    .urlName(entity.getUrlName())
+                    .preHealthStatusCheckCd(preHealthStatusCd)
+                    .build();
 
             if (urlEntity.getHealthStatusCd() != preHealthStatusCd) {
                 chgTargetList.add(urlEntity);

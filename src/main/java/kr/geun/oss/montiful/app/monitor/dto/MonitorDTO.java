@@ -1,10 +1,7 @@
 package kr.geun.oss.montiful.app.monitor.dto;
 
 import kr.geun.oss.montiful.app.url.cd.HealthStatusCd;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
@@ -16,77 +13,79 @@ import java.time.LocalDateTime;
  */
 public class MonitorDTO {
 
-	@Data
-	@NoArgsConstructor
-	public static class PageReq {
-		@Min(0)
-		private int pageNumber;
-	}
+    @Data
+    @NoArgsConstructor
+    public static class PageReq {
+        @Min(0)
+        private int pageNumber;
+    }
 
-	@Data
-	@NoArgsConstructor
-	public static class ViewerReq {
-		@Min(0)
-		private Long programIdx;
-	}
+    @Data
+    @NoArgsConstructor
+    public static class ViewerReq {
+        @Min(0)
+        private Long programIdx;
+    }
 
-	@Data
-	@NoArgsConstructor
-	public static class CheckReq {
-		private Long urlIdx;
+    @Data
+    @NoArgsConstructor
+    public static class CheckReq {
+        private Long urlIdx;
 
-		private String url;
-		private String urlName;
+        private String url;
+        private String urlName;
 
-		private int connectionTimeout;  //1000 - 10000
-		private int readTimeout; //1000 - 10000
-		private String healthStatusCd; //HEALTH, WARNING, ERROR
-		private String method; //GET, POST
-		private String statusCheckTypeCd; //status_200, status-2xx, same_string
-		private String statusCheckValue;
+        private int connectionTimeout;  //1000 - 10000
+        private int readTimeout; //1000 - 10000
+        private String healthStatusCd; //HEALTH, WARNING, ERROR
+        private String method; //GET, POST
+        private String statusCheckTypeCd; //status_200, status-2xx, same_string
+        private String statusCheckValue;
 
-	}
+    }
 
-	@Data
-	@Builder
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class CheckRes {
-		private Long urlIdx;
-		private String urlName;
+    @Getter
+    @Builder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CheckRes {
+        private Long urlIdx;
+        private String urlName;
 
-		private HealthStatusCd healthStatusCd;
-		private String resultMsg;
-		private Long responseTime;
-		private Long runtime;
+        private HealthStatusCd healthStatusCd;
+        private String resultMsg;
 
-		private HealthStatusCd preHealthStatusCheckCd;
+        @Setter
+        private Long responseTime;
+        private Long runtime;
 
-		public void setHealthAndMsg(HealthStatusCd healthStatusCd, String resultMsg) {
-			this.healthStatusCd = healthStatusCd;
-			this.resultMsg = resultMsg;
-		}
-	}
+        private HealthStatusCd preHealthStatusCheckCd;
 
-	@Data
-	@Builder
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class MonitorHistRes {
-		private Long monitorHistIdx;
-		private Long urlIdx;
-		private String urlName;
-		private String healthStatusCd;
-		private String preHealthStatusCheckCd;
+        public void setHealthAndMsg(HealthStatusCd healthStatusCd, String resultMsg) {
+            this.healthStatusCd = healthStatusCd;
+            this.resultMsg = resultMsg;
+        }
+    }
 
-		private LocalDateTime createdAt;
-	}
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MonitorHistRes {
+        private Long monitorHistIdx;
+        private Long urlIdx;
+        private String urlName;
+        private String healthStatusCd;
+        private String preHealthStatusCheckCd;
 
-	@Data
-	@NoArgsConstructor
-	public static class UrlListReq {
-		@Min(0)
-		private Long programIdx;
+        private LocalDateTime createdAt;
+    }
 
-	}
+    @Data
+    @NoArgsConstructor
+    public static class UrlListReq {
+        @Min(0)
+        private Long programIdx;
+
+    }
 }

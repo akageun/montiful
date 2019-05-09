@@ -5,39 +5,35 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- *
- *
  * @author akageun
  */
 @Getter
 @AllArgsConstructor
 public enum AlarmManageSearchTypeCd implements ISearchTypeCd {
 
-	//@formatter:off
-	IDX("PK", "alarmIdx", Long.class),
-	C("Created User Id","createdUserId", String.class),
-	U("Updated User Id","updatedUserId", String.class),
-	A_NM("Alarm Name","alarmName", String.class),
-	MM("Memo","memo", String.class),
-	//@formatter:on
-	;
+    IDX("PK", "alarmIdx", Long.class),
+    C("Created User Id", "createdUserId", String.class),
+    U("Updated User Id", "updatedUserId", String.class),
+    A_NM("Alarm Name", "alarmName", String.class),
+    MM("Memo", "memo", String.class),
+    ;
 
-	private String cdNm;
-	private String column;
-	private Class searchType;
+    private String cdNm;
+    private String column;
+    private Class searchType;
 
-	@Override
-	public boolean isLongSearch() {
-		if (searchType == Long.class) {
-			return true;
-		}
+    @Override
+    public boolean isLongSearch() {
+        if (searchType == Long.class) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public String getColumnName() {
-		return this.column;
-	}
+    @Override
+    public String getColumnName() {
+        return this.column;
+    }
 
 }

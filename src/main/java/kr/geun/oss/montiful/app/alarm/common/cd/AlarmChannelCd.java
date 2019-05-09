@@ -13,15 +13,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AlarmChannelCd {
 
-	//@formatter:off
-	LINE_NOTIFY("Line Notify",Const.BeanNm.LINE_NOTIFY, "fab fa-line"),
-	EMAIL_SMTP("Email SMTP",Const.BeanNm.EMAIL_SMTP, "fas fa-at"),
-	SLACK_INCOMING("Slack Incoming",Const.BeanNm.SLACK_INCOMING, "fab fa-slack"),
-	//@formatter:off
-	;
+    LINE_NOTIFY("Line Notify", Const.BeanNm.LINE_NOTIFY, "fab fa-line"),
+    EMAIL_SMTP("Email SMTP", Const.BeanNm.EMAIL_SMTP, "fas fa-at"),
+    SLACK_INCOMING("Slack Incoming", Const.BeanNm.SLACK_INCOMING, "fab fa-slack"),
+    ;
 
-	private String cdNm;
-	private String beanName;
-	private String faIconClasses;
+    private String cdNm;
+    private String beanName;
+    private String faIconClasses;
 
 }
