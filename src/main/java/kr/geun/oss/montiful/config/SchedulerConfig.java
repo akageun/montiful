@@ -26,7 +26,7 @@ public class SchedulerConfig {
 	private MonitorService monitorService;
 
 	//@Scheduled(cron = "0 0/1 * * * ?")
-	@Scheduled(cron = "0/15 * * * * ?")
+//	@Scheduled(cron = "0/15 * * * * ?")
 	public void anotherJob() {
 		String confValue = sysConfService.getValue(SysConfCd.URL_HEALTH_CHECK_RUN_YN);
 		if ("N".equals(confValue)) {

@@ -30,13 +30,13 @@ public class EmailSmtpChannelServiceImpl extends ChannelServiceModule implements
             Email email = new SimpleEmail();
             email.setSmtpPort(value.getSmtpPort());
             email.setAuthenticator(new DefaultAuthenticator(value.getAuthUserName(), value.getAuthPassword()));
-            email.setSSLOnConnect(value.isSsl());
+            email.setSSLOnConnect(value.getSsl());
             email.setDebug(false);
             email.setHostName(value.getHostname());
             email.setFrom(value.getFromEmail(), value.getFromName());
 
-            email.setSubject("Hi");
-            email.setMsg("This is a test mail ... :-)");
+            email.setSubject(getSubject(checkRes));
+            email.setMsg(getContentMessage(checkRes));
             email.addTo(value.getToEmail());
             email.send();
 
@@ -45,4 +45,11 @@ public class EmailSmtpChannelServiceImpl extends ChannelServiceModule implements
         }
     }
 
+    private String getSubject(MonitorDTO.CheckRes checkRes) {
+        return "TEST Value";
+    }
+
+    private String getContentMessage(MonitorDTO.CheckRes checkRes) {
+        return "Test Value";
+    }
 }

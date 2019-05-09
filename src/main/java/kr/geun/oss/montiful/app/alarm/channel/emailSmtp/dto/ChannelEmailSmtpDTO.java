@@ -49,8 +49,8 @@ public class ChannelEmailSmtpDTO {
 	@AllArgsConstructor
 	public static class AlarmValue {
 		private String hostname;
-		private int smtpPort;
-		private boolean ssl;
+		private Integer smtpPort;
+		private Boolean ssl;
 		private String authUserName;
 		private String authPassword;
 		private String fromEmail;

@@ -51,7 +51,7 @@ public class SysConfWeb extends BaseController {
             return CmnUtils.mav(HttpStatus.BAD_REQUEST, "err/notFound");
         }
 
-        Pageable pageable = PageRequestWrapper.of(param.getPageNumber(), 20, Sort.by(Sort.Direction.DESC, "confCd"));
+        Pageable pageable = PageRequestWrapper.of(param.getPn(), 0, Sort.by(Sort.Direction.DESC, "confCd"));
         Page<SysConfEntity> rtnList = sysConfService.page(pageable);
 
         ModelAndView mav = new ModelAndView("system/configuration");

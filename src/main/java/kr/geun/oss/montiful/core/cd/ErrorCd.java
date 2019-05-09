@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCd {
     INVALID_PARAMETER(
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
         "필수 파라미터가 없습니다."
     ),
     NOT_VALID_REQUEST(

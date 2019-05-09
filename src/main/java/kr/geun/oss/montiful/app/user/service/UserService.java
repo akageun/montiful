@@ -108,7 +108,7 @@ public class UserService {
      * @param res
      * @throws Exception
      */
-    public void login(String userId, String passWd, boolean remember, HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public void login(String userId, String passWd, Boolean remember, HttpServletRequest req, HttpServletResponse res) throws Exception {
         UserDetails userDetails = simpleDetailSecurityService.loadUserByUsername(userId);
 
         UsernamePasswordAuthenticationToken userNmPassWdAuthToken = new UsernamePasswordAuthenticationToken(userDetails, passWd,

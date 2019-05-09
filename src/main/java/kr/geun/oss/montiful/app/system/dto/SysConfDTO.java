@@ -1,9 +1,8 @@
 package kr.geun.oss.montiful.app.system.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
+import kr.geun.oss.montiful.core.dto.CmnPageModule;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * System Configuration DTO
@@ -12,11 +11,9 @@ import javax.validation.constraints.Min;
  */
 public class SysConfDTO {
 
-    @Data
-    @NoArgsConstructor
-    public static class PageReq {
+    @Getter
+    @AllArgsConstructor
+    public static class PageReq extends CmnPageModule {
 
-        @Min(0)
-        private int pageNumber;
     }
 }

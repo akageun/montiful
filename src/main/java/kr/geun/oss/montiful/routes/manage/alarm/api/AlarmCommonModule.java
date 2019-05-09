@@ -36,11 +36,15 @@ public class AlarmCommonModule extends BaseController {
     protected final AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo) {
         String userId = SecUtils.userId();
 
-        AlarmEntity.AlarmEntityBuilder initAlarmBuilder = initAlarmBuilder(alarmName, alarmChannelCd, alarmValue, memo, userId);
-
-        return initAlarmBuilder
+        return AlarmEntity.builder()
+                .alarmName(alarmName)
+                .alarmChannel(alarmChannelCd.name())
+                .alarmValue(alarmValue)
+                .memo(memo)
                 .createdUserId(userId)
+                .updatedUserId(userId)
                 .build();
+
     }
 
     /**
@@ -56,28 +60,14 @@ public class AlarmCommonModule extends BaseController {
     protected final AlarmEntity initAlarm(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, Long alarmIdx) {
         String userId = SecUtils.userId();
 
-        AlarmEntity.AlarmEntityBuilder initAlarmBuilder = initAlarmBuilder(alarmName, alarmChannelCd, alarmValue, memo, userId);
-
-        return initAlarmBuilder.alarmIdx(alarmIdx).build();
-    }
-
-    /**
-     * init Alarm
-     *
-     * @param alarmName
-     * @param alarmChannelCd
-     * @param alarmValue
-     * @param memo
-     * @param userId
-     * @return
-     */
-    private AlarmEntity.AlarmEntityBuilder initAlarmBuilder(String alarmName, AlarmChannelCd alarmChannelCd, String alarmValue, String memo, String userId) {
         return AlarmEntity.builder()
                 .alarmName(alarmName)
                 .alarmChannel(alarmChannelCd.name())
                 .alarmValue(alarmValue)
                 .memo(memo)
-                .updatedUserId(userId);
+                .updatedUserId(userId)
+                .alarmIdx(alarmIdx)
+                .build();
     }
 
 }

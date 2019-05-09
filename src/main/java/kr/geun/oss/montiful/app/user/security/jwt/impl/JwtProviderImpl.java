@@ -21,46 +21,44 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- *
- *
  * @author akageun
  */
 @Slf4j
 public class JwtProviderImpl implements JwtProvider, InitializingBean {
 
-	private static final String SECRET_KEY = "motifulSecretKey!!@@";
+    private static final String SECRET_KEY = "motifulSecretKey!!@@";
 
-	private static final String JWT_COOKIE_STRING = "montiful_login";
+    private static final String JWT_COOKIE_STRING = "montiful_login";
 
-	private static final String AUTHORITIES_KEY_NM = "auth";
+    private static final String AUTHORITIES_KEY_NM = "auth";
 
-	private static final long TOKEN_EXPIRE = 3600;
-	private static final long REMEMBER_TOKEN_EXPIRE = 3600; //TODO : 값 변경해야함.
+    private static final long TOKEN_EXPIRE = 3600;
+    private static final long REMEMBER_TOKEN_EXPIRE = 3600; //TODO : 값 변경해야함.
 
-	private static final long TOKEN_EXPIRE_MS = TOKEN_EXPIRE * 1000; //1Hours
-	private static final long REMEMBER_TOKEN_EXPIRE_MS = REMEMBER_TOKEN_EXPIRE * 1000; //1Hours
+    private static final long TOKEN_EXPIRE_MS = TOKEN_EXPIRE * 1000; //1Hours
+    private static final long REMEMBER_TOKEN_EXPIRE_MS = REMEMBER_TOKEN_EXPIRE * 1000; //1Hours
 
-	private static final String TOKEN_CREATED_AT = "tca";
+    private static final String TOKEN_CREATED_AT = "tca";
 
-	private static final String COOKIE_PATH = "/";
+    private static final String COOKIE_PATH = "/";
 
-	/**
-	 * 토큰 생성
-	 *
-	 * @param authentication
-	 * @return
-	 */
-	private String generatorToken(Authentication authentication, Boolean rememberMe) {
-		String authorities = SecUtils.getAuthorities(authentication.getAuthorities());
+    /**
+     * 토큰 생성
+     *
+     * @param authentication
+     * @return
+     */
+    private String generatorToken(Authentication authentication, Boolean rememberMe) {
+        String authorities = SecUtils.getAuthorities(authentication.getAuthorities());
 
-		Date expireDate;
-		if (rememberMe) {
-			expireDate = new Date(System.currentTimeMillis() + REMEMBER_TOKEN_EXPIRE_MS);
-		} else {
-			expireDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRE_MS);
-		}
+        Date expireDate;
+        if (rememberMe) {
+            expireDate = new Date(System.currentTimeMillis() + REMEMBER_TOKEN_EXPIRE_MS);
+        } else {
+            expireDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRE_MS);
+        }
 
-		//@formatter:off
+        //@formatter:off
 		return Jwts.builder()
 			.setSubject(authentication.getName())
 			.claim(AUTHORITIES_KEY_NM, authorities)
@@ -69,93 +67,95 @@ public class JwtProviderImpl implements JwtProvider, InitializingBean {
 			.setExpiration(expireDate)
 			.compact();
 		//@formatter:on
-	}
+    }
 
-	/**
-	 * 인증 정보 가져오기
-	 *
-	 * @param req
-	 * @return
-	 */
-	@Override
-	public Authentication getAuthentication(HttpServletRequest req) throws ClaimJwtException {
-		Cookie cookie = WebUtils.getCookie(req, JWT_COOKIE_STRING);
+    /**
+     * 인증 정보 가져오기
+     *
+     * @param req
+     * @return
+     */
+    @Override
+    public Authentication getAuthentication(HttpServletRequest req) throws ClaimJwtException {
+        Cookie cookie = WebUtils.getCookie(req, JWT_COOKIE_STRING);
 
-		if (cookie == null) {
-			return null;
-		}
+        if (cookie == null) {
+            return null;
+        }
 
-		String jwt = cookie.getValue();
-		if (StringUtils.isBlank(jwt)) {
-			return null;
-		}
+        String jwt = cookie.getValue();
+        if (StringUtils.isBlank(jwt)) {
+            return null;
+        }
 
-		Claims claims = getJwtClaims(jwt);
-		if (claims == null) {
-			return null;
-		}
+        Claims claims = getJwtClaims(jwt);
+        if (claims == null) {
+            return null;
+        }
 
-		String userId = claims.getSubject();
+        String userId = claims.getSubject();
 
-		if (claims.getExpiration().before(new Date())) {
-			return null;
-		}
+        if (claims.getExpiration().before(new Date())) {
+            return null;
+        }
 
-		String authoritiesStr = claims.get(AUTHORITIES_KEY_NM).toString();
+        String authoritiesStr = claims.get(AUTHORITIES_KEY_NM).toString();
 
-		Collection<? extends GrantedAuthority> authorities = SecUtils.mapToGrantedAuthorities(authoritiesStr);
+        Collection<? extends GrantedAuthority> authorities = SecUtils.mapToGrantedAuthorities(authoritiesStr);
 
-		return new UsernamePasswordAuthenticationToken(userId, null, authorities);
-	}
+        return new UsernamePasswordAuthenticationToken(userId, null, authorities);
+    }
 
-	/**
-	 * Logout
-	 *
-	 * @param req
-	 * @param res
-	 */
-	@Override
-	public void logout(HttpServletRequest req, HttpServletResponse res) {
-		Cookie cookie = WebUtils.getCookie(req, JWT_COOKIE_STRING);
+    /**
+     * Logout
+     *
+     * @param req
+     * @param res
+     */
+    @Override
+    public void logout(HttpServletRequest req, HttpServletResponse res) {
+        Cookie cookie = WebUtils.getCookie(req, JWT_COOKIE_STRING);
 
-		if (cookie == null) {
-			return;
-		}
+        if (cookie == null) {
+            return;
+        }
 
-		cookie.setPath(COOKIE_PATH);
-		cookie.setMaxAge(0);
-		res.addCookie(cookie);
-	}
+        cookie.setPath(COOKIE_PATH);
+        cookie.setMaxAge(0);
+        res.addCookie(cookie);
+    }
 
-	/**
-	 * User Cookie 생성
-	 *
-	 * @param authentication
-	 * @param rememberMe
-	 * @param res
-	 */
-	@Override
-	public void generateUserCookie(Authentication authentication, Boolean rememberMe, HttpServletResponse res) {
-		String token = generatorToken(authentication, rememberMe);
+    /**
+     * User Cookie 생성
+     *
+     * @param authentication
+     * @param rememberMe
+     * @param res
+     */
+    @Override
+    public void generateUserCookie(Authentication authentication, Boolean rememberMe, HttpServletResponse res) {
+        rememberMe = rememberMe != null ? rememberMe : false;
 
-		Cookie cookie = new Cookie(JWT_COOKIE_STRING, token);
-		if (rememberMe) {
-			cookie.setMaxAge((int) REMEMBER_TOKEN_EXPIRE);
-		} else {
-			cookie.setMaxAge((int) TOKEN_EXPIRE);
-		}
+        String token = generatorToken(authentication, rememberMe);
 
-		cookie.setHttpOnly(true); //XSS공격 차단(javascript 등으로 탈취 막음)
-		cookie.setPath(COOKIE_PATH);
-		res.addCookie(cookie);
-	}
+        Cookie cookie = new Cookie(JWT_COOKIE_STRING, token);
+        if (rememberMe) {
+            cookie.setMaxAge((int) REMEMBER_TOKEN_EXPIRE);
+        } else {
+            cookie.setMaxAge((int) TOKEN_EXPIRE);
+        }
 
-	private Claims getJwtClaims(String token) throws ClaimJwtException {
-		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-	}
+        cookie.setHttpOnly(true); //XSS공격 차단(javascript 등으로 탈취 막음)
+        cookie.setPath(COOKIE_PATH);
+        res.addCookie(cookie);
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
+    private Claims getJwtClaims(String token) throws ClaimJwtException {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    }
 
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
 }

@@ -63,7 +63,7 @@ public class UserV1Api {
         }
 
         try {
-            userService.login(param.getUserId(), param.getPassWd(), param.isRemember(), req, res);
+            userService.login(param.getUserId(), param.getPassWd(), param.getRemember(), req, res);
 
             //TODO : 5회 이상 잘못된 로그인 시도시 잠금
 
